@@ -1,0 +1,616 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		76E064F723CA9C6C007E18C1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76E064F623CA9C6C007E18C1 /* AppDelegate.swift */; };
+		76E064F923CA9C6C007E18C1 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76E064F823CA9C6C007E18C1 /* SceneDelegate.swift */; };
+		76E064FC23CA9C6C007E18C1 /* DhammaTalks.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 76E064FA23CA9C6C007E18C1 /* DhammaTalks.xcdatamodeld */; };
+		76E064FE23CA9C6C007E18C1 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76E064FD23CA9C6C007E18C1 /* ContentView.swift */; };
+		76E0650023CA9C6E007E18C1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 76E064FF23CA9C6E007E18C1 /* Assets.xcassets */; };
+		76E0650323CA9C6E007E18C1 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 76E0650223CA9C6E007E18C1 /* Preview Assets.xcassets */; };
+		76E0650623CA9C6E007E18C1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 76E0650423CA9C6E007E18C1 /* LaunchScreen.storyboard */; };
+		76E0651123CA9C6E007E18C1 /* DhammaTalksTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76E0651023CA9C6E007E18C1 /* DhammaTalksTests.swift */; };
+		76E0651C23CA9C6E007E18C1 /* DhammaTalksUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76E0651B23CA9C6E007E18C1 /* DhammaTalksUITests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		76E0650D23CA9C6E007E18C1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 76E064EB23CA9C6C007E18C1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 76E064F223CA9C6C007E18C1;
+			remoteInfo = DhammaTalks;
+		};
+		76E0651823CA9C6E007E18C1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 76E064EB23CA9C6C007E18C1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 76E064F223CA9C6C007E18C1;
+			remoteInfo = DhammaTalks;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		76E064F323CA9C6C007E18C1 /* DhammaTalks.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DhammaTalks.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		76E064F623CA9C6C007E18C1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		76E064F823CA9C6C007E18C1 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		76E064FB23CA9C6C007E18C1 /* DhammaTalks.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DhammaTalks.xcdatamodel; sourceTree = "<group>"; };
+		76E064FD23CA9C6C007E18C1 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		76E064FF23CA9C6E007E18C1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		76E0650223CA9C6E007E18C1 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		76E0650523CA9C6E007E18C1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		76E0650723CA9C6E007E18C1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		76E0650C23CA9C6E007E18C1 /* DhammaTalksTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DhammaTalksTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		76E0651023CA9C6E007E18C1 /* DhammaTalksTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DhammaTalksTests.swift; sourceTree = "<group>"; };
+		76E0651223CA9C6E007E18C1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		76E0651723CA9C6E007E18C1 /* DhammaTalksUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DhammaTalksUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		76E0651B23CA9C6E007E18C1 /* DhammaTalksUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DhammaTalksUITests.swift; sourceTree = "<group>"; };
+		76E0651D23CA9C6E007E18C1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		76E064F023CA9C6C007E18C1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		76E0650923CA9C6E007E18C1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		76E0651423CA9C6E007E18C1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		76E064EA23CA9C6C007E18C1 = {
+			isa = PBXGroup;
+			children = (
+				76E064F523CA9C6C007E18C1 /* DhammaTalks */,
+				76E0650F23CA9C6E007E18C1 /* DhammaTalksTests */,
+				76E0651A23CA9C6E007E18C1 /* DhammaTalksUITests */,
+				76E064F423CA9C6C007E18C1 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		76E064F423CA9C6C007E18C1 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				76E064F323CA9C6C007E18C1 /* DhammaTalks.app */,
+				76E0650C23CA9C6E007E18C1 /* DhammaTalksTests.xctest */,
+				76E0651723CA9C6E007E18C1 /* DhammaTalksUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		76E064F523CA9C6C007E18C1 /* DhammaTalks */ = {
+			isa = PBXGroup;
+			children = (
+				76E064F623CA9C6C007E18C1 /* AppDelegate.swift */,
+				76E064F823CA9C6C007E18C1 /* SceneDelegate.swift */,
+				76E064FD23CA9C6C007E18C1 /* ContentView.swift */,
+				76E064FF23CA9C6E007E18C1 /* Assets.xcassets */,
+				76E0650423CA9C6E007E18C1 /* LaunchScreen.storyboard */,
+				76E0650723CA9C6E007E18C1 /* Info.plist */,
+				76E064FA23CA9C6C007E18C1 /* DhammaTalks.xcdatamodeld */,
+				76E0650123CA9C6E007E18C1 /* Preview Content */,
+			);
+			path = DhammaTalks;
+			sourceTree = "<group>";
+		};
+		76E0650123CA9C6E007E18C1 /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				76E0650223CA9C6E007E18C1 /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		76E0650F23CA9C6E007E18C1 /* DhammaTalksTests */ = {
+			isa = PBXGroup;
+			children = (
+				76E0651023CA9C6E007E18C1 /* DhammaTalksTests.swift */,
+				76E0651223CA9C6E007E18C1 /* Info.plist */,
+			);
+			path = DhammaTalksTests;
+			sourceTree = "<group>";
+		};
+		76E0651A23CA9C6E007E18C1 /* DhammaTalksUITests */ = {
+			isa = PBXGroup;
+			children = (
+				76E0651B23CA9C6E007E18C1 /* DhammaTalksUITests.swift */,
+				76E0651D23CA9C6E007E18C1 /* Info.plist */,
+			);
+			path = DhammaTalksUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		76E064F223CA9C6C007E18C1 /* DhammaTalks */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 76E0652023CA9C6E007E18C1 /* Build configuration list for PBXNativeTarget "DhammaTalks" */;
+			buildPhases = (
+				76E064EF23CA9C6C007E18C1 /* Sources */,
+				76E064F023CA9C6C007E18C1 /* Frameworks */,
+				76E064F123CA9C6C007E18C1 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = DhammaTalks;
+			productName = DhammaTalks;
+			productReference = 76E064F323CA9C6C007E18C1 /* DhammaTalks.app */;
+			productType = "com.apple.product-type.application";
+		};
+		76E0650B23CA9C6E007E18C1 /* DhammaTalksTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 76E0652323CA9C6E007E18C1 /* Build configuration list for PBXNativeTarget "DhammaTalksTests" */;
+			buildPhases = (
+				76E0650823CA9C6E007E18C1 /* Sources */,
+				76E0650923CA9C6E007E18C1 /* Frameworks */,
+				76E0650A23CA9C6E007E18C1 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				76E0650E23CA9C6E007E18C1 /* PBXTargetDependency */,
+			);
+			name = DhammaTalksTests;
+			productName = DhammaTalksTests;
+			productReference = 76E0650C23CA9C6E007E18C1 /* DhammaTalksTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		76E0651623CA9C6E007E18C1 /* DhammaTalksUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 76E0652623CA9C6E007E18C1 /* Build configuration list for PBXNativeTarget "DhammaTalksUITests" */;
+			buildPhases = (
+				76E0651323CA9C6E007E18C1 /* Sources */,
+				76E0651423CA9C6E007E18C1 /* Frameworks */,
+				76E0651523CA9C6E007E18C1 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				76E0651923CA9C6E007E18C1 /* PBXTargetDependency */,
+			);
+			name = DhammaTalksUITests;
+			productName = DhammaTalksUITests;
+			productReference = 76E0651723CA9C6E007E18C1 /* DhammaTalksUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		76E064EB23CA9C6C007E18C1 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1120;
+				LastUpgradeCheck = 1120;
+				ORGANIZATIONNAME = "Bill Parousis";
+				TargetAttributes = {
+					76E064F223CA9C6C007E18C1 = {
+						CreatedOnToolsVersion = 11.2.1;
+					};
+					76E0650B23CA9C6E007E18C1 = {
+						CreatedOnToolsVersion = 11.2.1;
+						TestTargetID = 76E064F223CA9C6C007E18C1;
+					};
+					76E0651623CA9C6E007E18C1 = {
+						CreatedOnToolsVersion = 11.2.1;
+						TestTargetID = 76E064F223CA9C6C007E18C1;
+					};
+				};
+			};
+			buildConfigurationList = 76E064EE23CA9C6C007E18C1 /* Build configuration list for PBXProject "DhammaTalks" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 76E064EA23CA9C6C007E18C1;
+			productRefGroup = 76E064F423CA9C6C007E18C1 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				76E064F223CA9C6C007E18C1 /* DhammaTalks */,
+				76E0650B23CA9C6E007E18C1 /* DhammaTalksTests */,
+				76E0651623CA9C6E007E18C1 /* DhammaTalksUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		76E064F123CA9C6C007E18C1 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				76E0650623CA9C6E007E18C1 /* LaunchScreen.storyboard in Resources */,
+				76E0650323CA9C6E007E18C1 /* Preview Assets.xcassets in Resources */,
+				76E0650023CA9C6E007E18C1 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		76E0650A23CA9C6E007E18C1 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		76E0651523CA9C6E007E18C1 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		76E064EF23CA9C6C007E18C1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				76E064FC23CA9C6C007E18C1 /* DhammaTalks.xcdatamodeld in Sources */,
+				76E064F723CA9C6C007E18C1 /* AppDelegate.swift in Sources */,
+				76E064FE23CA9C6C007E18C1 /* ContentView.swift in Sources */,
+				76E064F923CA9C6C007E18C1 /* SceneDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		76E0650823CA9C6E007E18C1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				76E0651123CA9C6E007E18C1 /* DhammaTalksTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		76E0651323CA9C6E007E18C1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				76E0651C23CA9C6E007E18C1 /* DhammaTalksUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		76E0650E23CA9C6E007E18C1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 76E064F223CA9C6C007E18C1 /* DhammaTalks */;
+			targetProxy = 76E0650D23CA9C6E007E18C1 /* PBXContainerItemProxy */;
+		};
+		76E0651923CA9C6E007E18C1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 76E064F223CA9C6C007E18C1 /* DhammaTalks */;
+			targetProxy = 76E0651823CA9C6E007E18C1 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		76E0650423CA9C6E007E18C1 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				76E0650523CA9C6E007E18C1 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		76E0651E23CA9C6E007E18C1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		76E0651F23CA9C6E007E18C1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		76E0652123CA9C6E007E18C1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_ASSET_PATHS = "\"DhammaTalks/Preview Content\"";
+				DEVELOPMENT_TEAM = QF6M4CC7RV;
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = DhammaTalks/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.bparousis.DhammaTalks;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		76E0652223CA9C6E007E18C1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_ASSET_PATHS = "\"DhammaTalks/Preview Content\"";
+				DEVELOPMENT_TEAM = QF6M4CC7RV;
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = DhammaTalks/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.bparousis.DhammaTalks;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		76E0652423CA9C6E007E18C1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = QF6M4CC7RV;
+				INFOPLIST_FILE = DhammaTalksTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.bparousis.DhammaTalksTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/DhammaTalks.app/DhammaTalks";
+			};
+			name = Debug;
+		};
+		76E0652523CA9C6E007E18C1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = QF6M4CC7RV;
+				INFOPLIST_FILE = DhammaTalksTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.bparousis.DhammaTalksTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/DhammaTalks.app/DhammaTalks";
+			};
+			name = Release;
+		};
+		76E0652723CA9C6E007E18C1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = QF6M4CC7RV;
+				INFOPLIST_FILE = DhammaTalksUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.bparousis.DhammaTalksUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = DhammaTalks;
+			};
+			name = Debug;
+		};
+		76E0652823CA9C6E007E18C1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = QF6M4CC7RV;
+				INFOPLIST_FILE = DhammaTalksUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.bparousis.DhammaTalksUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = DhammaTalks;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		76E064EE23CA9C6C007E18C1 /* Build configuration list for PBXProject "DhammaTalks" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				76E0651E23CA9C6E007E18C1 /* Debug */,
+				76E0651F23CA9C6E007E18C1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		76E0652023CA9C6E007E18C1 /* Build configuration list for PBXNativeTarget "DhammaTalks" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				76E0652123CA9C6E007E18C1 /* Debug */,
+				76E0652223CA9C6E007E18C1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		76E0652323CA9C6E007E18C1 /* Build configuration list for PBXNativeTarget "DhammaTalksTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				76E0652423CA9C6E007E18C1 /* Debug */,
+				76E0652523CA9C6E007E18C1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		76E0652623CA9C6E007E18C1 /* Build configuration list for PBXNativeTarget "DhammaTalksUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				76E0652723CA9C6E007E18C1 /* Debug */,
+				76E0652823CA9C6E007E18C1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		76E064FA23CA9C6C007E18C1 /* DhammaTalks.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				76E064FB23CA9C6C007E18C1 /* DhammaTalks.xcdatamodel */,
+			);
+			currentVersion = 76E064FB23CA9C6C007E18C1 /* DhammaTalks.xcdatamodel */;
+			path = DhammaTalks.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
+	};
+	rootObject = 76E064EB23CA9C6C007E18C1 /* Project object */;
+}
