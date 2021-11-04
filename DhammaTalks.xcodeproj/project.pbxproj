@@ -3,10 +3,13 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		766CA1E123D517E300A8E770 /* TalkRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766CA1E023D517E300A8E770 /* TalkRow.swift */; };
+		766CA1E323D51C3700A8E770 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766CA1E223D51C3700A8E770 /* Player.swift */; };
+		766CA1E523E6600400A8E770 /* YearSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766CA1E423E6600400A8E770 /* YearSection.swift */; };
 		76E064F723CA9C6C007E18C1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76E064F623CA9C6C007E18C1 /* AppDelegate.swift */; };
 		76E064F923CA9C6C007E18C1 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76E064F823CA9C6C007E18C1 /* SceneDelegate.swift */; };
 		76E064FC23CA9C6C007E18C1 /* DhammaTalks.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 76E064FA23CA9C6C007E18C1 /* DhammaTalks.xcdatamodeld */; };
@@ -16,6 +19,11 @@
 		76E0650623CA9C6E007E18C1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 76E0650423CA9C6E007E18C1 /* LaunchScreen.storyboard */; };
 		76E0651123CA9C6E007E18C1 /* DhammaTalksTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76E0651023CA9C6E007E18C1 /* DhammaTalksTests.swift */; };
 		76E0651C23CA9C6E007E18C1 /* DhammaTalksUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76E0651B23CA9C6E007E18C1 /* DhammaTalksUITests.swift */; };
+		76E0652B23CA9E17007E18C1 /* SwiftSoup in Frameworks */ = {isa = PBXBuildFile; productRef = 76E0652A23CA9E17007E18C1 /* SwiftSoup */; };
+		76E0652E23CA9FDE007E18C1 /* TalkDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76E0652D23CA9FDE007E18C1 /* TalkDataService.swift */; };
+		76E0653023CAA71B007E18C1 /* TalkData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76E0652F23CAA71B007E18C1 /* TalkData.swift */; };
+		76E0653223CAB9EB007E18C1 /* AudioFileNameParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76E0653123CAB9EB007E18C1 /* AudioFileNameParser.swift */; };
+		76E724E923F0DF3300B3B2AF /* AVPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76E724E823F0DF3300B3B2AF /* AVPlayerView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,6 +44,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		766CA1E023D517E300A8E770 /* TalkRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TalkRow.swift; sourceTree = "<group>"; };
+		766CA1E223D51C3700A8E770 /* Player.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
+		766CA1E423E6600400A8E770 /* YearSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YearSection.swift; sourceTree = "<group>"; };
 		76E064F323CA9C6C007E18C1 /* DhammaTalks.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DhammaTalks.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		76E064F623CA9C6C007E18C1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		76E064F823CA9C6C007E18C1 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -51,6 +62,10 @@
 		76E0651723CA9C6E007E18C1 /* DhammaTalksUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DhammaTalksUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		76E0651B23CA9C6E007E18C1 /* DhammaTalksUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DhammaTalksUITests.swift; sourceTree = "<group>"; };
 		76E0651D23CA9C6E007E18C1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		76E0652D23CA9FDE007E18C1 /* TalkDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TalkDataService.swift; sourceTree = "<group>"; };
+		76E0652F23CAA71B007E18C1 /* TalkData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TalkData.swift; sourceTree = "<group>"; };
+		76E0653123CAB9EB007E18C1 /* AudioFileNameParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioFileNameParser.swift; sourceTree = "<group>"; };
+		76E724E823F0DF3300B3B2AF /* AVPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVPlayerView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +73,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				76E0652B23CA9E17007E18C1 /* SwiftSoup in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -101,14 +117,18 @@
 		76E064F523CA9C6C007E18C1 /* DhammaTalks */ = {
 			isa = PBXGroup;
 			children = (
+				76E0652C23CA9FBE007E18C1 /* Data */,
 				76E064F623CA9C6C007E18C1 /* AppDelegate.swift */,
 				76E064F823CA9C6C007E18C1 /* SceneDelegate.swift */,
 				76E064FD23CA9C6C007E18C1 /* ContentView.swift */,
+				766CA1E023D517E300A8E770 /* TalkRow.swift */,
 				76E064FF23CA9C6E007E18C1 /* Assets.xcassets */,
 				76E0650423CA9C6E007E18C1 /* LaunchScreen.storyboard */,
 				76E0650723CA9C6E007E18C1 /* Info.plist */,
 				76E064FA23CA9C6C007E18C1 /* DhammaTalks.xcdatamodeld */,
 				76E0650123CA9C6E007E18C1 /* Preview Content */,
+				766CA1E223D51C3700A8E770 /* Player.swift */,
+				76E724E823F0DF3300B3B2AF /* AVPlayerView.swift */,
 			);
 			path = DhammaTalks;
 			sourceTree = "<group>";
@@ -139,6 +159,17 @@
 			path = DhammaTalksUITests;
 			sourceTree = "<group>";
 		};
+		76E0652C23CA9FBE007E18C1 /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				76E0652D23CA9FDE007E18C1 /* TalkDataService.swift */,
+				76E0652F23CAA71B007E18C1 /* TalkData.swift */,
+				76E0653123CAB9EB007E18C1 /* AudioFileNameParser.swift */,
+				766CA1E423E6600400A8E770 /* YearSection.swift */,
+			);
+			path = Data;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -155,6 +186,9 @@
 			dependencies = (
 			);
 			name = DhammaTalks;
+			packageProductDependencies = (
+				76E0652A23CA9E17007E18C1 /* SwiftSoup */,
+			);
 			productName = DhammaTalks;
 			productReference = 76E064F323CA9C6C007E18C1 /* DhammaTalks.app */;
 			productType = "com.apple.product-type.application";
@@ -227,6 +261,9 @@
 				Base,
 			);
 			mainGroup = 76E064EA23CA9C6C007E18C1;
+			packageReferences = (
+				76E0652923CA9E17007E18C1 /* XCRemoteSwiftPackageReference "SwiftSoup" */,
+			);
 			productRefGroup = 76E064F423CA9C6C007E18C1 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -270,10 +307,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				76E724E923F0DF3300B3B2AF /* AVPlayerView.swift in Sources */,
 				76E064FC23CA9C6C007E18C1 /* DhammaTalks.xcdatamodeld in Sources */,
 				76E064F723CA9C6C007E18C1 /* AppDelegate.swift in Sources */,
+				766CA1E523E6600400A8E770 /* YearSection.swift in Sources */,
+				76E0653223CAB9EB007E18C1 /* AudioFileNameParser.swift in Sources */,
 				76E064FE23CA9C6C007E18C1 /* ContentView.swift in Sources */,
+				766CA1E123D517E300A8E770 /* TalkRow.swift in Sources */,
 				76E064F923CA9C6C007E18C1 /* SceneDelegate.swift in Sources */,
+				76E0652E23CA9FDE007E18C1 /* TalkDataService.swift in Sources */,
+				766CA1E323D51C3700A8E770 /* Player.swift in Sources */,
+				76E0653023CAA71B007E18C1 /* TalkData.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -598,6 +642,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		76E0652923CA9E17007E18C1 /* XCRemoteSwiftPackageReference "SwiftSoup" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/scinfu/SwiftSoup.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.3.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		76E0652A23CA9E17007E18C1 /* SwiftSoup */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 76E0652923CA9E17007E18C1 /* XCRemoteSwiftPackageReference "SwiftSoup" */;
+			productName = SwiftSoup;
+		};
+/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		76E064FA23CA9C6C007E18C1 /* DhammaTalks.xcdatamodeld */ = {
