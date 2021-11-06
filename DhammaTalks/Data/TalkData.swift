@@ -8,17 +8,16 @@
 
 import Foundation
 
-struct TalkData: Identifiable {
+struct TalkData: Identifiable, Decodable {
 
     var id = UUID()
 
-    let fileName: String
-    let label: String
-    let date: Date
-
-    var url: String {
-        let year = Calendar.current.component(.year, from: self.date)
-        return "https://www.dhammatalks.org/Archive/y\(year)/\(fileName)"
+    let title: String
+    let date: Date?
+    let url: String
+    
+    private enum CodingKeys: String, CodingKey {
+        case title, date, url
     }
 }
 
@@ -26,6 +25,6 @@ extension TalkData: CustomStringConvertible {
     var description: String {
         // create and return a String that is how
         // you’d like a Store to look when printed
-        return " \(label): \(fileName) [\(date)]"
+        return " \(title): \(url)"
     }
 }

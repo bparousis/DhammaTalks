@@ -31,8 +31,10 @@ struct TalkRow: View {
     var body: some View {
         HStack(alignment: .center, spacing: 10) {
             VStack(alignment: .leading, spacing: 5) {
-                Text("\(talk.label)").font(.headline)
-                Text("\(self.dateFormatter.string(from: talk.date))").font(.subheadline)
+                Text("\(talk.title)").font(.headline)
+                if let date = talk.date {
+                    Text("\(self.dateFormatter.string(from: date))").font(.subheadline)
+                }
             }
             Spacer()
             Image(systemName: "play")
