@@ -41,16 +41,12 @@ struct ContentView_Previews: PreviewProvider {
 struct ListHeader: View {
     let year: String
     let talkCount: Int
-    
-    private var talkCountString: String {
-        return "\(talkCount) \(talkCount == 1 ? "talk" : "talks")"
-    }
 
     var body: some View {
         HStack {
             Text(year)
             Spacer()
-            Text(talkCountString)
+            Text("talk-count \(talkCount)")
         }
     }
 }

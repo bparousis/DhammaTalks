@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7658CA0F2736CA67009FF527 /* Localizable.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = 7658CA0E2736CA67009FF527 /* Localizable.stringsdict */; };
 		766CA1E123D517E300A8E770 /* TalkRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766CA1E023D517E300A8E770 /* TalkRow.swift */; };
 		766CA1E323D51C3700A8E770 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766CA1E223D51C3700A8E770 /* Player.swift */; };
 		766CA1E523E6600400A8E770 /* YearSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766CA1E423E6600400A8E770 /* YearSection.swift */; };
@@ -44,6 +45,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		7658CA0E2736CA67009FF527 /* Localizable.stringsdict */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; path = Localizable.stringsdict; sourceTree = "<group>"; };
 		766CA1E023D517E300A8E770 /* TalkRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TalkRow.swift; sourceTree = "<group>"; };
 		766CA1E223D51C3700A8E770 /* Player.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
 		766CA1E423E6600400A8E770 /* YearSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YearSection.swift; sourceTree = "<group>"; };
@@ -121,6 +123,7 @@
 				76E064F623CA9C6C007E18C1 /* AppDelegate.swift */,
 				76E064F823CA9C6C007E18C1 /* SceneDelegate.swift */,
 				76E064FD23CA9C6C007E18C1 /* ContentView.swift */,
+				7658CA0E2736CA67009FF527 /* Localizable.stringsdict */,
 				766CA1E023D517E300A8E770 /* TalkRow.swift */,
 				76E064FF23CA9C6E007E18C1 /* Assets.xcassets */,
 				76E0650423CA9C6E007E18C1 /* LaunchScreen.storyboard */,
@@ -282,6 +285,7 @@
 			files = (
 				76E0650623CA9C6E007E18C1 /* LaunchScreen.storyboard in Resources */,
 				76E0650323CA9C6E007E18C1 /* Preview Assets.xcassets in Resources */,
+				7658CA0F2736CA67009FF527 /* Localizable.stringsdict in Resources */,
 				76E0650023CA9C6E007E18C1 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
