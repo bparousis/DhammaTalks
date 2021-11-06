@@ -14,6 +14,19 @@ struct ContentView: View {
         let year = Calendar.current.component(.year, from: Date())
         return TalkDataService().fetchTalks(yearRange: 2018...year)
     }()
+    
+    let categoryTalks: [CategoryTalks]? = {
+        if let path = Bundle.main.path(forResource: "CategoryTalks", ofType: "json") {
+            do {
+                let data = try Data(contentsOf: URL(fileURLWithPath: path))
+                let categoryTalks = try JSONDecoder().decode([CategoryTalks].self, from: data)
+                return categoryTalks
+            } catch {
+                return nil
+            }
+        }
+        return nil
+    }()
         
     private var player: AVAudioPlayer?
     

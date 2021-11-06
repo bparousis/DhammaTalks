@@ -12,14 +12,15 @@ import SwiftSoup
 class TalkDataService {
 
     private let parser = AudioFileNameParser()
-
+    static let dhammaTalksArchiveAddress = "https://www.dhammatalks.org/Archive"
+    
     func fetchTalks(yearRange: ClosedRange<Int>) -> [YearSection] {
         var talkData: [YearSection] = []
 
         for year in yearRange {
             var yearSection = YearSection(id: year)
             var talkDataList: [TalkData] = []
-            guard let pageUrl = URL(string: "https://www.dhammatalks.org/Archive/y\(year)/") else {
+            guard let pageUrl = URL(string: "\(TalkDataService.dhammaTalksArchiveAddress)/y\(year)/") else {
                 continue
             }
 
@@ -32,7 +33,7 @@ class TalkDataService {
                     try document.select("a").forEach { element in
                         let linkUrl = try element.attr("href")
                         if linkUrl.hasSuffix(".mp3"), let talkData =
-                            parser.parseFileName(fileName: linkUrl) {
+                            parser.parseFileNameWithDate(fileName: linkUrl) {
                             talkDataList.append(talkData)
                         }
                     }

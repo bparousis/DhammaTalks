@@ -35,7 +35,8 @@ class AudioFileNameParser {
         return dateFormatter
     }()
 
-    func parseFileName(fileName: String) -> TalkData? {
+    /// Returns nil if the URL isn't in date format. (e.g. https://www.dhammatalks.org/Archive/y2021/210101_A_Radiant_Practice.mp3)
+    func parseFileNameWithDate(fileName: String) -> TalkData? {
 
         guard fileName.hasSuffix(".mp3") else {
             return nil
@@ -57,8 +58,10 @@ class AudioFileNameParser {
 
         if let date = date {
             fileNameSplit.removeFirst()
-            let label = fileNameSplit.joined(separator: " ")
-            talkData = TalkData(fileName: fileName, label: label, date: date)
+            let title = fileNameSplit.joined(separator: " ")
+            let year = Calendar.current.component(.year, from: date)
+            let url = "\(TalkDataService.dhammaTalksArchiveAddress)/y\(year)/\(fileName)"
+            talkData = TalkData(title: title, date: date, url: url)
         }
 
         return talkData
