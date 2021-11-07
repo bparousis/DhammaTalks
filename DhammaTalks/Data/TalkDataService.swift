@@ -48,6 +48,10 @@ class TalkDataService {
                     talkSectionId += 1
                 }
             }
+            
+            if let talkSection = currentTalkSection, !talkSection.talks.isEmpty {
+                talkSectionList.append(talkSection)
+            }
         }
         return talkSectionList
     }
