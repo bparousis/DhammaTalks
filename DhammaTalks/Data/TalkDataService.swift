@@ -13,37 +13,42 @@ class TalkDataService {
 
     private let parser = AudioFileNameParser()
     static let dhammaTalksArchiveAddress = "https://www.dhammatalks.org/Archive"
+    private let talkDataExtractor: TalkDataExtractor
     
-    func fetchTalks(yearRange: ClosedRange<Int>) -> [YearSection] {
-        var talkData: [YearSection] = []
-
-        for year in yearRange {
-            var yearSection = YearSection(id: year)
-            var talkDataList: [TalkData] = []
-            guard let pageUrl = URL(string: "\(TalkDataService.dhammaTalksArchiveAddress)/y\(year)/") else {
-                continue
-            }
-
-            if let html = try? String(contentsOf: pageUrl, encoding: .utf8) {
-                guard let document = try? SwiftSoup.parse(html) else {
-                    continue
-                }
-
-                do {
-                    try document.select("a").forEach { element in
-                        let linkUrl = try element.attr("href")
-                        if linkUrl.hasSuffix(".mp3"), let talkData =
-                            parser.parseFileNameWithDate(fileName: linkUrl) {
-                            talkDataList.append(talkData)
-                        }
-                    }
-                } catch {
-                }
-                yearSection.talks = talkDataList.reversed()
-                talkData.append(yearSection)
-            }
+    init(talkDataExtractor: TalkDataExtractor = TalkDataExtractor()) {
+        self.talkDataExtractor = talkDataExtractor
+    }
+    
+    func fetchTalksForYear(_ year: Int) -> [TalkSection] {
+        var talkSectionList: [TalkSection] = []
+        guard let pageUrl = URL(string: "\(TalkDataService.dhammaTalksArchiveAddress)/y\(year)/") else {
+            return []
         }
 
-        return talkData.sorted { $0.year > $1.year }
+        let monthFormatter = DateFormatter()
+        monthFormatter.dateFormat = "LLLL"
+        var talkSectionId = 0
+        if let html = try? String(contentsOf: pageUrl) {
+            let talkDataList = talkDataExtractor.extractFromHTML(html)
+            var currentTalkSection: TalkSection?
+            for talkData in talkDataList {
+                guard let date = talkData.date else {
+                    continue
+                }
+                let month = monthFormatter.string(from: date)
+                let title = "\(month) \(year)"
+                if currentTalkSection?.title == title {
+                    currentTalkSection?.addTalk(talkData)
+                } else {
+                    if let talkSection = currentTalkSection {
+                        talkSectionList.append(talkSection)
+                    }
+                    currentTalkSection = TalkSection(id: talkSectionId, title: title)
+                    currentTalkSection?.addTalk(talkData)
+                    talkSectionId += 1
+                }
+            }
+        }
+        return talkSectionList
     }
 }

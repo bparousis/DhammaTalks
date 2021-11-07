@@ -10,10 +10,6 @@ import SwiftUI
 import AVFoundation
 
 struct ContentView: View {
-    let allTalks: [YearSection] = {
-        let year = Calendar.current.component(.year, from: Date())
-        return TalkDataService().fetchTalks(yearRange: 2018...year)
-    }()
     
     let categoryTalks: [CategoryTalks]? = {
         if let path = Bundle.main.path(forResource: "CategoryTalks", ofType: "json") {
@@ -27,23 +23,10 @@ struct ContentView: View {
         }
         return nil
     }()
-        
-    private var player: AVAudioPlayer?
     
     var body: some View {
         return NavigationView {
             MainView()
-            /*
-            List {
-                ForEach(allTalks) { yearSection in
-                    Section(header: ListHeader(year: yearSection.year, talkCount: yearSection.talks.count)) {
-                        ForEach(yearSection.talks) { talk in
-                            TalkRow(talk: talk)
-                        }
-                    }
-                }
-            }.navigationBarTitle("Evening Dhamma Talks", displayMode: .inline)
-             */
         }
     }
 }
@@ -51,18 +34,5 @@ struct ContentView: View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
-    }
-}
-
-struct ListHeader: View {
-    let year: String
-    let talkCount: Int
-
-    var body: some View {
-        HStack {
-            Text(year)
-            Spacer()
-            Text("talk-count \(talkCount)")
-        }
     }
 }
