@@ -8,11 +8,20 @@
 
 import UIKit
 import CoreData
+import AVKit
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        // Get the singleton instance.
+        let audioSession = AVAudioSession.sharedInstance()
+        do {
+            // Set the audio session category, mode, and options.
+            try audioSession.setCategory(.playback, mode: .spokenAudio, options: [])
+        } catch {
+            print("Failed to set audio session category.")
+        }
         // Override point for customization after application launch.
         return true
     }

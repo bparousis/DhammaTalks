@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		76041DB12736EB2100B32362 /* CategoryTalks.json in Resources */ = {isa = PBXBuildFile; fileRef = 76041DB02736EB2100B32362 /* CategoryTalks.json */; };
 		76041DB32737008A00B32362 /* CategoryTalks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76041DB22737008900B32362 /* CategoryTalks.swift */; };
+		763C950227383D4A00632633 /* UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 763C950127383D4A00632633 /* UIImage.swift */; };
 		7658CA0F2736CA67009FF527 /* Localizable.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = 7658CA0E2736CA67009FF527 /* Localizable.stringsdict */; };
 		766CA1E123D517E300A8E770 /* TalkRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766CA1E023D517E300A8E770 /* TalkRow.swift */; };
 		766CA1E523E6600400A8E770 /* YearSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766CA1E423E6600400A8E770 /* YearSection.swift */; };
@@ -48,6 +49,7 @@
 /* Begin PBXFileReference section */
 		76041DB02736EB2100B32362 /* CategoryTalks.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = CategoryTalks.json; sourceTree = "<group>"; };
 		76041DB22737008900B32362 /* CategoryTalks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryTalks.swift; sourceTree = "<group>"; };
+		763C950127383D4A00632633 /* UIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImage.swift; sourceTree = "<group>"; };
 		7658CA0E2736CA67009FF527 /* Localizable.stringsdict */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; path = Localizable.stringsdict; sourceTree = "<group>"; };
 		766CA1E023D517E300A8E770 /* TalkRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TalkRow.swift; sourceTree = "<group>"; };
 		766CA1E423E6600400A8E770 /* YearSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YearSection.swift; sourceTree = "<group>"; };
@@ -98,6 +100,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		763C950027383D2B00632633 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				763C950127383D4A00632633 /* UIImage.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
 		76E064EA23CA9C6C007E18C1 = {
 			isa = PBXGroup;
 			children = (
@@ -121,6 +131,7 @@
 		76E064F523CA9C6C007E18C1 /* DhammaTalks */ = {
 			isa = PBXGroup;
 			children = (
+				763C950027383D2B00632633 /* Extensions */,
 				C6621EB6273724F0004D4D13 /* MainView.swift */,
 				76E0652C23CA9FBE007E18C1 /* Data */,
 				76E064F623CA9C6C007E18C1 /* AppDelegate.swift */,
@@ -324,6 +335,7 @@
 				766CA1E123D517E300A8E770 /* TalkRow.swift in Sources */,
 				C6621EB7273724F0004D4D13 /* MainView.swift in Sources */,
 				76E064F923CA9C6C007E18C1 /* SceneDelegate.swift in Sources */,
+				763C950227383D4A00632633 /* UIImage.swift in Sources */,
 				76E0652E23CA9FDE007E18C1 /* TalkDataService.swift in Sources */,
 				76E0653023CAA71B007E18C1 /* TalkData.swift in Sources */,
 			);
