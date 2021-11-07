@@ -61,7 +61,8 @@ class AudioFileNameParser {
             let title = fileNameSplit.joined(separator: " ")
             let year = Calendar.current.component(.year, from: date)
             let url = "\(TalkDataService.dhammaTalksArchiveAddress)/y\(year)/\(fileName)"
-            talkData = TalkData(title: title, date: date, url: url)
+            let image = ""
+            talkData = TalkData(title: title, date: date, url: url, image: image)
         }
 
         return talkData

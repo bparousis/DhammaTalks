@@ -4,15 +4,18 @@
         "talks": [
             {
                 "title": "Strength from the Basics",
-                "url": "https://www.dhammatalks.org/Archive/basics_collection/01%20Strength%20from%20the%20Basics.mp3"
+                "url": "https://www.dhammatalks.org/Archive/basics_collection/01%20Strength%20from%20the%20Basics.mp3",
+                "image": "Talk1"
             },
             {
                 "title": "Basics",
-                "url": "https://www.dhammatalks.org/Archive/basics_collection/02%20Basics.mp3"
+                "url": "https://www.dhammatalks.org/Archive/basics_collection/02%20Basics.mp3",
+                "image": "Talk2"
             },
             {
                 "title": "Stay with the Breath",
-                "url": "https://www.dhammatalks.org/Archive/basics_collection/03%20Stay%20with%20the%20Breath.mp3"
+                "url": "https://www.dhammatalks.org/Archive/basics_collection/03%20Stay%20with%20the%20Breath.mp3",
+                "image": "Talk1"
             }
         ]
     },
@@ -21,31 +24,38 @@
         "talks": [
             {
                 "title": "Mindfulness",
-                "url": "https://www.dhammatalks.org/Archive/seven_factors/01%20Mindfulness%20(110723).mp3"
+                "url": "https://www.dhammatalks.org/Archive/seven_factors/01%20Mindfulness%20(110723).mp3",
+                "image": "Talk2"
             },
             {
                 "title": "Analysis of Qualities",
-                "url": "https://www.dhammatalks.org/Archive/seven_factors/02%20Analysis%20of%20Qualities%20(110730%20sony).mp3"
+                "url": "https://www.dhammatalks.org/Archive/seven_factors/02%20Analysis%20of%20Qualities%20(110730%20sony).mp3",
+                "image": "Talk1"
             },
             {
                 "title": "Persistence",
-                "url": "https://www.dhammatalks.org/Archive/seven_factors/03%20Persistence%20(110807%20sony).mp3"
+                "url": "https://www.dhammatalks.org/Archive/seven_factors/03%20Persistence%20(110807%20sony).mp3",
+                "image": "Talk2"
             },
             {
                 "title": "Rapture",
-                "url": "https://www.dhammatalks.org/Archive/seven_factors/04%20Rapture%20(110822).mp3"
+                "url": "https://www.dhammatalks.org/Archive/seven_factors/04%20Rapture%20(110822).mp3",
+                "image": "Talk1"
             },
             {
                 "title": "Serenity",
-                "url": "https://www.dhammatalks.org/Archive/seven_factors/05%20Serenity%20(110905).mp3"
+                "url": "https://www.dhammatalks.org/Archive/seven_factors/05%20Serenity%20(110905).mp3",
+                "image": "Talk2"
             },
             {
                 "title": "Concentration",
-                "url": "https://www.dhammatalks.org/Archive/seven_factors/06%20Concentration%20(110912).mp3"
+                "url": "https://www.dhammatalks.org/Archive/seven_factors/06%20Concentration%20(110912).mp3",
+                "image": "Talk1"
             },
             {
                 "title": "Equanimity",
-                "url": "https://www.dhammatalks.org/Archive/seven_factors/07%20Equanimity%20(110927).mp3"
+                "url": "https://www.dhammatalks.org/Archive/seven_factors/07%20Equanimity%20(110927).mp3",
+                "image": "Talk2"
             }
         ]
     }
