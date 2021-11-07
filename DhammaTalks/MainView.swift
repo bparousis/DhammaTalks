@@ -27,17 +27,17 @@ struct MainView: View {
         return nil
     }()
     var body: some View {
-        ScrollView(.vertical){
-            VStack(alignment: .center, spacing: 20){
+        ScrollView(.vertical) {
+            VStack(alignment: .center, spacing: 20) {
                 if let category = category {
-                    ForEach(category){c in
+                    ForEach(category) {c in
                         Text(c.title)
                             .bold()
                             .font(.system(size:30, weight:.bold, design:Font.Design.default))
-                        ScrollView(.horizontal){
+                        ScrollView(.horizontal) {
 
                             HStack{
-                                ForEach(c.talks){ t in
+                                ForEach(c.talks) { t in
                                     VStack{
                                         Text(t.title)
                                             .bold()
@@ -57,32 +57,6 @@ struct MainView: View {
     }
 }
 
-
-struct TalkView: Identifiable{
-    let id = UUID()
-    let name: String
-    let colour: Color
-    let title: String
-    let imageName: String
-
-    let category: Category
-    
-}
-
-enum Category{
-    case beginner
-    case morning
-    case recommended
-}
-            
-let items = [
-    TalkView   (name: "",
-                colour: Color(.blue),
-                title: "Recommendations",
-                imageName: "",
-                category: Category.recommended
-               )
-]
 
 struct MainView_Previews: PreviewProvider {
     static var previews: some View {
