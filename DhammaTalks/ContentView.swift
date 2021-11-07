@@ -32,6 +32,8 @@ struct ContentView: View {
     
     var body: some View {
         return NavigationView {
+            MainView()
+            /*
             List {
                 ForEach(allTalks) { yearSection in
                     Section(header: ListHeader(year: yearSection.year, talkCount: yearSection.talks.count)) {
@@ -41,6 +43,7 @@ struct ContentView: View {
                     }
                 }
             }.navigationBarTitle("Evening Dhamma Talks", displayMode: .inline)
+             */
         }
     }
 }

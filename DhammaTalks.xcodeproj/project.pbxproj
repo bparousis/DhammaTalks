@@ -25,6 +25,7 @@
 		76E0652E23CA9FDE007E18C1 /* TalkDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76E0652D23CA9FDE007E18C1 /* TalkDataService.swift */; };
 		76E0653023CAA71B007E18C1 /* TalkData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76E0652F23CAA71B007E18C1 /* TalkData.swift */; };
 		76E0653223CAB9EB007E18C1 /* AudioFileNameParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76E0653123CAB9EB007E18C1 /* AudioFileNameParser.swift */; };
+		C6621EB7273724F0004D4D13 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6621EB6273724F0004D4D13 /* MainView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -68,6 +69,7 @@
 		76E0652D23CA9FDE007E18C1 /* TalkDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TalkDataService.swift; sourceTree = "<group>"; };
 		76E0652F23CAA71B007E18C1 /* TalkData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TalkData.swift; sourceTree = "<group>"; };
 		76E0653123CAB9EB007E18C1 /* AudioFileNameParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioFileNameParser.swift; sourceTree = "<group>"; };
+		C6621EB6273724F0004D4D13 /* MainView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -119,6 +121,7 @@
 		76E064F523CA9C6C007E18C1 /* DhammaTalks */ = {
 			isa = PBXGroup;
 			children = (
+				C6621EB6273724F0004D4D13 /* MainView.swift */,
 				76E0652C23CA9FBE007E18C1 /* Data */,
 				76E064F623CA9C6C007E18C1 /* AppDelegate.swift */,
 				76E064F823CA9C6C007E18C1 /* SceneDelegate.swift */,
@@ -319,6 +322,7 @@
 				76E064FE23CA9C6C007E18C1 /* ContentView.swift in Sources */,
 				76041DB32737008A00B32362 /* CategoryTalks.swift in Sources */,
 				766CA1E123D517E300A8E770 /* TalkRow.swift in Sources */,
+				C6621EB7273724F0004D4D13 /* MainView.swift in Sources */,
 				76E064F923CA9C6C007E18C1 /* SceneDelegate.swift in Sources */,
 				76E0652E23CA9FDE007E18C1 /* TalkDataService.swift in Sources */,
 				76E0653023CAA71B007E18C1 /* TalkData.swift in Sources */,
@@ -488,7 +492,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"DhammaTalks/Preview Content\"";
-				DEVELOPMENT_TEAM = QF6M4CC7RV;
+				DEVELOPMENT_TEAM = 284H7ZWH2A;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = DhammaTalks/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -508,7 +512,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"DhammaTalks/Preview Content\"";
-				DEVELOPMENT_TEAM = QF6M4CC7RV;
+				DEVELOPMENT_TEAM = 284H7ZWH2A;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = DhammaTalks/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
