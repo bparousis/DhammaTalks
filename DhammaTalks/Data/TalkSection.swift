@@ -8,17 +8,18 @@
 
 import Foundation
 
-struct YearSection: Identifiable {
+struct TalkSection: Identifiable {
     var id: Int
-    var talks: [TalkData] = []
+    let title: String
+    private(set) var talks: [TalkData] = []
     
-    var year: String {
-        return "\(id)"
+    mutating func addTalk(_ talkData: TalkData) {
+        talks.append(talkData)
     }
 }
 
-extension YearSection: Hashable {
-    static func == (lhs: YearSection, rhs: YearSection) -> Bool {
+extension TalkSection: Hashable {
+    static func == (lhs: TalkSection, rhs: TalkSection) -> Bool {
         return lhs.id == rhs.id
     }
     
