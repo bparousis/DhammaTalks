@@ -11,6 +11,7 @@ import CoreMedia
 
 
 
+
 struct MainView: View {
     
     let category: [CategoryTalks]? = {
@@ -34,6 +35,7 @@ struct MainView: View {
                         Text(c.title)
                             .bold()
                             .font(.system(size:30, weight:.bold, design:Font.Design.default))
+                            .foregroundColor(Color("Colour 5"))
                         ScrollView(.horizontal) {
 
                             HStack{
@@ -42,7 +44,13 @@ struct MainView: View {
                                         Text(t.title)
                                             .bold()
                                             .font(.system(size:20, weight:.bold))
-                                        Image("Talk1")
+                                            .foregroundColor(Color("Colour 4"))
+                                        Image(t.image)
+                                            .resizable()
+                                            .frame(width: 252, height:168, alignment:.center)
+                                            .aspectRatio(contentMode:.fill)
+                                            .cornerRadius(20)
+                                            
                                     }
                                 }
 
@@ -53,7 +61,10 @@ struct MainView: View {
                     }
                 }
             }
+            
         }
+        .frame(maxWidth: .infinity)
+        .background(Color("Colour 1"))
     }
 }
 

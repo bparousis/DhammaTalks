@@ -15,9 +15,10 @@ struct TalkData: Identifiable, Decodable {
     let title: String
     let date: Date?
     let url: String
+    let image: String
     
     private enum CodingKeys: String, CodingKey {
-        case title, date, url
+        case title, date, url, image
     }
 }
 
