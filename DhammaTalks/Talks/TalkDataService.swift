@@ -12,23 +12,21 @@ import SwiftSoup
 class TalkDataService {
 
     private let parser = AudioFileNameParser()
-    static let dhammaTalksArchiveAddress = "https://www.dhammatalks.org/Archive"
+    private let htmlPageFetcher: HTMLPageFetcher
     private let talkDataExtractor: TalkDataExtractor
     
-    init(talkDataExtractor: TalkDataExtractor = TalkDataExtractor()) {
+    init(htmlPageFetcher: HTMLPageFetcher = HTMLPageFetcher(), talkDataExtractor: TalkDataExtractor = TalkDataExtractor()) {
         self.talkDataExtractor = talkDataExtractor
+        self.htmlPageFetcher = htmlPageFetcher
     }
     
     func fetchTalksForYear(_ year: Int) -> [TalkSection] {
         var talkSectionList: [TalkSection] = []
-        guard let pageUrl = URL(string: "\(TalkDataService.dhammaTalksArchiveAddress)/y\(year)/") else {
-            return []
-        }
 
         let monthFormatter = DateFormatter()
         monthFormatter.dateFormat = "LLLL"
         var talkSectionId = 0
-        if let html = try? String(contentsOf: pageUrl) {
+        if let html = htmlPageFetcher.getHTMLForCategory(.evening(year: year)) {
             let talkDataList = talkDataExtractor.extractFromHTML(html)
             var currentTalkSection: TalkSection?
             for talkData in talkDataList {

@@ -19,7 +19,7 @@ struct YearlyTalkListView: View {
     private let years: [Int] = Array(2000...Self.currentYear).reversed()
     
     var body: some View {
-        Form {
+        List {
             Section(header: Text("Year")) {
                 Picker("Year", selection: $selectedYear) {
                     ForEach(years, id: \.self) {
@@ -29,12 +29,10 @@ struct YearlyTalkListView: View {
             }
             
             let allTalks = TalkDataService().fetchTalksForYear(selectedYear)
-            List {
-                ForEach(allTalks) { talkSection in
-                    Section(header: TalkSectionHeader(title: talkSection.title, talkCount: talkSection.talks.count)) {
-                        ForEach(talkSection.talks) { talk in
-                            TalkRow(talk: talk)
-                        }
+            ForEach(allTalks) { talkSection in
+                Section(header: TalkSectionHeader(title: talkSection.title, talkCount: talkSection.talks.count)) {
+                    ForEach(talkSection.talks) { talk in
+                        TalkRow(talk: talk)
                     }
                 }
             }

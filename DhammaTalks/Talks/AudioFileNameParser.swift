@@ -60,7 +60,7 @@ class AudioFileNameParser {
             fileNameSplit.removeFirst()
             let title = fileNameSplit.joined(separator: " ")
             let year = Calendar.current.component(.year, from: date)
-            let url = "\(TalkDataService.dhammaTalksArchiveAddress)/y\(year)/\(fileName)"
+            let url = "\(HTMLPageFetcher.archivePath)/y\(year)/\(fileName)"
             let image = ""
             talkData = TalkData(title: title, date: date, url: url, image: image)
         }

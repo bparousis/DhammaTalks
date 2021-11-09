@@ -9,13 +9,14 @@
 /* Begin PBXBuildFile section */
 		76041DB12736EB2100B32362 /* CategoryTalks.json in Resources */ = {isa = PBXBuildFile; fileRef = 76041DB02736EB2100B32362 /* CategoryTalks.json */; };
 		76041DB32737008A00B32362 /* CategoryTalks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76041DB22737008900B32362 /* CategoryTalks.swift */; };
+		76227188273A159100AFBA63 /* TalkDataServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76227187273A159100AFBA63 /* TalkDataServiceTests.swift */; };
+		7622718D273A1F8800AFBA63 /* HTMLPageFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7622718C273A1F8800AFBA63 /* HTMLPageFetcher.swift */; };
 		763C950227383D4A00632633 /* UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 763C950127383D4A00632633 /* UIImage.swift */; };
 		763C950427386ECC00632633 /* YearlyTalkListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 763C950327386ECC00632633 /* YearlyTalkListView.swift */; };
 		7658CA0F2736CA67009FF527 /* Localizable.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = 7658CA0E2736CA67009FF527 /* Localizable.stringsdict */; };
 		766CA1E123D517E300A8E770 /* TalkRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766CA1E023D517E300A8E770 /* TalkRow.swift */; };
 		766CA1E523E6600400A8E770 /* TalkSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766CA1E423E6600400A8E770 /* TalkSection.swift */; };
 		7697512427380A8300DB07FF /* TalkDataExtractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7697512327380A8300DB07FF /* TalkDataExtractor.swift */; };
-		7697512627380D3300DB07FF /* TalkDataExtractorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7697512527380D3300DB07FF /* TalkDataExtractorTests.swift */; };
 		76E064F723CA9C6C007E18C1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76E064F623CA9C6C007E18C1 /* AppDelegate.swift */; };
 		76E064F923CA9C6C007E18C1 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76E064F823CA9C6C007E18C1 /* SceneDelegate.swift */; };
 		76E064FC23CA9C6C007E18C1 /* DhammaTalks.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 76E064FA23CA9C6C007E18C1 /* DhammaTalks.xcdatamodeld */; };
@@ -52,13 +53,14 @@
 /* Begin PBXFileReference section */
 		76041DB02736EB2100B32362 /* CategoryTalks.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = CategoryTalks.json; sourceTree = "<group>"; };
 		76041DB22737008900B32362 /* CategoryTalks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryTalks.swift; sourceTree = "<group>"; };
+		76227187273A159100AFBA63 /* TalkDataServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TalkDataServiceTests.swift; sourceTree = "<group>"; };
+		7622718C273A1F8800AFBA63 /* HTMLPageFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTMLPageFetcher.swift; sourceTree = "<group>"; };
 		763C950127383D4A00632633 /* UIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImage.swift; sourceTree = "<group>"; };
 		763C950327386ECC00632633 /* YearlyTalkListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YearlyTalkListView.swift; sourceTree = "<group>"; };
 		7658CA0E2736CA67009FF527 /* Localizable.stringsdict */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; path = Localizable.stringsdict; sourceTree = "<group>"; };
 		766CA1E023D517E300A8E770 /* TalkRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TalkRow.swift; sourceTree = "<group>"; };
 		766CA1E423E6600400A8E770 /* TalkSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TalkSection.swift; sourceTree = "<group>"; };
 		7697512327380A8300DB07FF /* TalkDataExtractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TalkDataExtractor.swift; sourceTree = "<group>"; };
-		7697512527380D3300DB07FF /* TalkDataExtractorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TalkDataExtractorTests.swift; sourceTree = "<group>"; };
 		76E064F323CA9C6C007E18C1 /* DhammaTalks.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DhammaTalks.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		76E064F623CA9C6C007E18C1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		76E064F823CA9C6C007E18C1 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -106,6 +108,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		7622718B273A1E8600AFBA63 /* Talks */ = {
+			isa = PBXGroup;
+			children = (
+				76E0652C23CA9FBE007E18C1 /* Data */,
+				76E0653123CAB9EB007E18C1 /* AudioFileNameParser.swift */,
+				76E0652D23CA9FDE007E18C1 /* TalkDataService.swift */,
+				7697512327380A8300DB07FF /* TalkDataExtractor.swift */,
+				7622718C273A1F8800AFBA63 /* HTMLPageFetcher.swift */,
+			);
+			path = Talks;
+			sourceTree = "<group>";
+		};
 		763C950027383D2B00632633 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
@@ -137,9 +151,9 @@
 		76E064F523CA9C6C007E18C1 /* DhammaTalks */ = {
 			isa = PBXGroup;
 			children = (
+				7622718B273A1E8600AFBA63 /* Talks */,
 				763C950027383D2B00632633 /* Extensions */,
 				C6621EB6273724F0004D4D13 /* MainView.swift */,
-				76E0652C23CA9FBE007E18C1 /* Data */,
 				76E064F623CA9C6C007E18C1 /* AppDelegate.swift */,
 				76E064F823CA9C6C007E18C1 /* SceneDelegate.swift */,
 				76E064FD23CA9C6C007E18C1 /* ContentView.swift */,
@@ -169,7 +183,7 @@
 			children = (
 				76E0651023CA9C6E007E18C1 /* DhammaTalksTests.swift */,
 				76E0651223CA9C6E007E18C1 /* Info.plist */,
-				7697512527380D3300DB07FF /* TalkDataExtractorTests.swift */,
+				76227187273A159100AFBA63 /* TalkDataServiceTests.swift */,
 			);
 			path = DhammaTalksTests;
 			sourceTree = "<group>";
@@ -186,12 +200,9 @@
 		76E0652C23CA9FBE007E18C1 /* Data */ = {
 			isa = PBXGroup;
 			children = (
-				76E0652D23CA9FDE007E18C1 /* TalkDataService.swift */,
 				76E0652F23CAA71B007E18C1 /* TalkData.swift */,
-				76E0653123CAB9EB007E18C1 /* AudioFileNameParser.swift */,
 				766CA1E423E6600400A8E770 /* TalkSection.swift */,
 				76041DB22737008900B32362 /* CategoryTalks.swift */,
-				7697512327380A8300DB07FF /* TalkDataExtractor.swift */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -344,6 +355,7 @@
 				76041DB32737008A00B32362 /* CategoryTalks.swift in Sources */,
 				766CA1E123D517E300A8E770 /* TalkRow.swift in Sources */,
 				C6621EB7273724F0004D4D13 /* MainView.swift in Sources */,
+				7622718D273A1F8800AFBA63 /* HTMLPageFetcher.swift in Sources */,
 				76E064F923CA9C6C007E18C1 /* SceneDelegate.swift in Sources */,
 				763C950427386ECC00632633 /* YearlyTalkListView.swift in Sources */,
 				763C950227383D4A00632633 /* UIImage.swift in Sources */,
@@ -356,7 +368,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7697512627380D3300DB07FF /* TalkDataExtractorTests.swift in Sources */,
+				76227188273A159100AFBA63 /* TalkDataServiceTests.swift in Sources */,
 				76E0651123CA9C6E007E18C1 /* DhammaTalksTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -516,7 +528,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"DhammaTalks/Preview Content\"";
-				DEVELOPMENT_TEAM = 284H7ZWH2A;
+				DEVELOPMENT_TEAM = QF6M4CC7RV;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = DhammaTalks/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -536,7 +548,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"DhammaTalks/Preview Content\"";
-				DEVELOPMENT_TEAM = 284H7ZWH2A;
+				DEVELOPMENT_TEAM = QF6M4CC7RV;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = DhammaTalks/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
