@@ -19,8 +19,8 @@ class TalkDataServiceTests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 
-    func testCannotParse() throws {
-        let sut = TalkDataService(htmlPageFetcher: MockHTMLPageFetcher(testCase: .cannotParse))
+    func testError() throws {
+        let sut = TalkDataService(htmlPageFetcher: MockHTMLPageFetcher(testCase: .error))
         let talkSections = sut.fetchTalksForYear(2021)
         XCTAssertEqual(talkSections.count, 0)
     }
@@ -57,16 +57,16 @@ class MockHTMLPageFetcher: HTMLPageFetcher {
     }
     
     enum TestCase {
-        case cannotParse
+        case error
         case noTalks
         case oneMonth
         case multipleMonths
     }
 
-    override func getHTMLForCategory(_ category: TalkCategory) -> String? {
+    override func getHTMLForCategory(_ category: TalkCategory) -> Result<String,HTMLPageFetcherError> {
         switch testCase {
-        case .cannotParse:
-            return nil
+        case .error:
+            return .failure(.failedToRetrieve)
         case .noTalks:
             let html = """
             <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
@@ -87,7 +87,7 @@ class MockHTMLPageFetcher: HTMLPageFetcher {
             <address>Apache/2.4.48 (Debian) Server at www.dhammatalks.org Port 443</address>
             </body></html>
             """
-            return html
+            return .success(html)
             
         case .oneMonth:
             let html = """
@@ -114,7 +114,7 @@ class MockHTMLPageFetcher: HTMLPageFetcher {
             <address>Apache/2.4.48 (Debian) Server at www.dhammatalks.org Port 443</address>
             </body></html>
             """
-            return html
+            return .success(html)
         case .multipleMonths:
             let html = """
             <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
@@ -149,7 +149,7 @@ class MockHTMLPageFetcher: HTMLPageFetcher {
             <address>Apache/2.4.48 (Debian) Server at www.dhammatalks.org Port 443</address>
             </body></html>
             """
-            return html
+            return .success(html)
         }
     }
 }

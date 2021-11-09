@@ -21,12 +21,13 @@ class TalkDataService {
     }
     
     func fetchTalksForYear(_ year: Int) -> [TalkSection] {
-        var talkSectionList: [TalkSection] = []
-
         let monthFormatter = DateFormatter()
         monthFormatter.dateFormat = "LLLL"
         var talkSectionId = 0
-        if let html = htmlPageFetcher.getHTMLForCategory(.evening(year: year)) {
+        let result = htmlPageFetcher.getHTMLForCategory(.evening(year: year))
+        switch result {
+        case .success(let html):
+            var talkSectionList: [TalkSection] = []
             let talkDataList = talkDataExtractor.extractFromHTML(html)
             var currentTalkSection: TalkSection?
             for talkData in talkDataList {
@@ -50,7 +51,9 @@ class TalkDataService {
             if let talkSection = currentTalkSection, !talkSection.talks.isEmpty {
                 talkSectionList.append(talkSection)
             }
+            return talkSectionList
+        case .failure:
+            return []
         }
-        return talkSectionList
     }
 }

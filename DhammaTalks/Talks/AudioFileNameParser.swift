@@ -8,9 +8,6 @@
 
 import Foundation
 
-/**
- * Created by bparousis on 2018-06-21.
- */
 class AudioFileNameParser {
 
     private let YMD = "yyMMdd"

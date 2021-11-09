@@ -13,6 +13,11 @@ class HTMLPageFetcher {
     
     static let archivePath = "https://www.dhammatalks.org/Archive"
     
+    enum HTMLPageFetcherError: Error {
+        case invalidURL
+        case failedToRetrieve
+    }
+    
     enum TalkCategory {
 
         case short(year: Int)
@@ -46,15 +51,16 @@ class HTMLPageFetcher {
         }
     }
 
-    func getHTMLForCategory(_ category: TalkCategory) -> String? {
+    func getHTMLForCategory(_ category: TalkCategory) -> Result<String, HTMLPageFetcherError> {
         guard let talkURL = category.talkURL else {
-            return nil
+            return .failure(.invalidURL)
         }
 
         do {
-            return try String(contentsOf: talkURL)
+            let content = try String(contentsOf: talkURL)
+            return .success(content)
         } catch {
-            return nil
+            return .failure(.failedToRetrieve)
         }
     }
 }
