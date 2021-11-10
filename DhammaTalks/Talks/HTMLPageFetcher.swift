@@ -8,6 +8,38 @@
 
 import Foundation
 
+enum TalkCategory {
+
+    case short(year: Int)
+    case evening(year: Int)
+    case fiveStrengths
+    case chants
+    case guidedMeditations
+    case refugeFromDeath
+    case basics
+    case eightfoldPath
+
+    var talkURL: String {
+        switch self {
+        case let .short(year):
+            return "\(HTMLPageFetcher.archivePath)/shorttalks/y\(year)"
+        case let .evening(year):
+            return "\(HTMLPageFetcher.archivePath)/y\(year)"
+        case .fiveStrengths:
+            return "\(HTMLPageFetcher.archivePath)/five_strengths"
+        case .chants:
+            return "\(HTMLPageFetcher.archivePath)/Chants"
+        case .guidedMeditations:
+            return "\(HTMLPageFetcher.archivePath)/guided_meditations"
+        case .refugeFromDeath:
+            return "\(HTMLPageFetcher.archivePath)/refuge_from_death"
+        case .basics:
+            return "\(HTMLPageFetcher.archivePath)/basics_collection"
+        case .eightfoldPath:
+            return "\(HTMLPageFetcher.archivePath)/TheEightfoldPath/"
+        }
+    }
+}
 
 class HTMLPageFetcher {
     
@@ -17,48 +49,15 @@ class HTMLPageFetcher {
         case invalidURL
         case failedToRetrieve
     }
-    
-    enum TalkCategory {
 
-        case short(year: Int)
-        case evening(year: Int)
-        case fiveStrengths
-        case chants
-        case guidedMeditations
-        case refugeFromDeath
-        case basics
-        case eightfoldPath
-
-        var talkURL: URL? {
-            switch self {
-            case let .short(year):
-                return URL(string: "\(HTMLPageFetcher.archivePath)/shorttalks/y\(year)")
-            case let .evening(year):
-                return URL(string: "\(HTMLPageFetcher.archivePath)/y\(year)")
-            case .fiveStrengths:
-                return URL(string: "\(HTMLPageFetcher.archivePath)/five_strengths")
-            case .chants:
-                return URL(string: "\(HTMLPageFetcher.archivePath)/Chants")
-            case .guidedMeditations:
-                return URL(string: "\(HTMLPageFetcher.archivePath)/guided_meditations")
-            case .refugeFromDeath:
-                return URL(string: "\(HTMLPageFetcher.archivePath)/refuge_from_death")
-            case .basics:
-                return URL(string: "\(HTMLPageFetcher.archivePath)/basics_collection")
-            case .eightfoldPath:
-                return URL(string: "\(HTMLPageFetcher.archivePath)/TheEightfoldPath/")
-            }
-        }
-    }
-
-    func getHTMLForCategory(_ category: TalkCategory) -> Result<String, HTMLPageFetcherError> {
-        guard let talkURL = category.talkURL else {
+    func getHTMLForCategory(_ category: TalkCategory) -> Result<HTMLData, HTMLPageFetcherError> {
+        guard let talkURL = URL(string:category.talkURL) else {
             return .failure(.invalidURL)
         }
 
         do {
             let content = try String(contentsOf: talkURL)
-            return .success(content)
+            return .success(HTMLData(html: content, talkCategory: category))
         } catch {
             return .failure(.failedToRetrieve)
         }

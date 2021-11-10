@@ -21,26 +21,26 @@ class TalkDataServiceTests: XCTestCase {
 
     func testError() throws {
         let sut = TalkDataService(htmlPageFetcher: MockHTMLPageFetcher(testCase: .error))
-        let talkSections = sut.fetchTalksForYear(2021)
+        let talkSections = sut.fetchEveningTalksForYear(2021)
         XCTAssertEqual(talkSections.count, 0)
     }
     
     func testNoTalks() throws {
         let sut = TalkDataService(htmlPageFetcher: MockHTMLPageFetcher(testCase: .noTalks))
-        let talkSections = sut.fetchTalksForYear(2021)
+        let talkSections = sut.fetchEveningTalksForYear(2021)
         XCTAssertEqual(talkSections.count, 0)
     }
     
     func testOneMonthWithTalks() throws {
         let sut = TalkDataService(htmlPageFetcher: MockHTMLPageFetcher(testCase: .oneMonth))
-        let talkSections = sut.fetchTalksForYear(2021)
+        let talkSections = sut.fetchEveningTalksForYear(2021)
         XCTAssertEqual(talkSections.count, 1)
         XCTAssertEqual(talkSections[0].talks.count, 3)
     }
     
     func testMultipleMonthsWithTalks() throws {
         let sut = TalkDataService(htmlPageFetcher: MockHTMLPageFetcher(testCase: .multipleMonths))
-        let talkSections = sut.fetchTalksForYear(2021)
+        let talkSections = sut.fetchEveningTalksForYear(2021)
         XCTAssertEqual(talkSections.count, 4)
         XCTAssertEqual(talkSections[0].talks.count, 1)
         XCTAssertEqual(talkSections[1].talks.count, 3)
@@ -63,7 +63,7 @@ class MockHTMLPageFetcher: HTMLPageFetcher {
         case multipleMonths
     }
 
-    override func getHTMLForCategory(_ category: TalkCategory) -> Result<String,HTMLPageFetcherError> {
+    override func getHTMLForCategory(_ category: TalkCategory) -> Result<HTMLData,HTMLPageFetcherError> {
         switch testCase {
         case .error:
             return .failure(.failedToRetrieve)
@@ -87,7 +87,7 @@ class MockHTMLPageFetcher: HTMLPageFetcher {
             <address>Apache/2.4.48 (Debian) Server at www.dhammatalks.org Port 443</address>
             </body></html>
             """
-            return .success(html)
+            return .success(HTMLData(html: html, talkCategory: category))
             
         case .oneMonth:
             let html = """
@@ -114,7 +114,7 @@ class MockHTMLPageFetcher: HTMLPageFetcher {
             <address>Apache/2.4.48 (Debian) Server at www.dhammatalks.org Port 443</address>
             </body></html>
             """
-            return .success(html)
+            return .success(HTMLData(html: html, talkCategory: category))
         case .multipleMonths:
             let html = """
             <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
@@ -149,7 +149,7 @@ class MockHTMLPageFetcher: HTMLPageFetcher {
             <address>Apache/2.4.48 (Debian) Server at www.dhammatalks.org Port 443</address>
             </body></html>
             """
-            return .success(html)
+            return .success(HTMLData(html: html, talkCategory: category))
         }
     }
 }

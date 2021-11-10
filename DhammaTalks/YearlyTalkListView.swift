@@ -28,7 +28,7 @@ struct YearlyTalkListView: View {
                 }
             }
             
-            let allTalks = TalkDataService().fetchTalksForYear(selectedYear)
+            let allTalks = TalkDataService().fetchEveningTalksForYear(selectedYear)
             ForEach(allTalks) { talkSection in
                 Section(header: TalkSectionHeader(title: talkSection.title, talkCount: talkSection.talks.count)) {
                     ForEach(talkSection.talks) { talk in

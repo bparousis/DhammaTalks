@@ -20,11 +20,12 @@ class TalkDataService {
         self.htmlPageFetcher = htmlPageFetcher
     }
     
-    func fetchTalksForYear(_ year: Int) -> [TalkSection] {
+    func fetchEveningTalksForYear(_ year: Int) -> [TalkSection] {
         let monthFormatter = DateFormatter()
         monthFormatter.dateFormat = "LLLL"
         var talkSectionId = 0
-        let result = htmlPageFetcher.getHTMLForCategory(.evening(year: year))
+        let eveningCategory: TalkCategory = .evening(year: year)
+        let result = htmlPageFetcher.getHTMLForCategory(eveningCategory)
         switch result {
         case .success(let html):
             var talkSectionList: [TalkSection] = []
