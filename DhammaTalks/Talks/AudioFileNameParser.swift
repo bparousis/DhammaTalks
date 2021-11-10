@@ -8,21 +8,26 @@
 
 import Foundation
 
-/**
- * Created by bparousis on 2018-06-21.
- */
 class AudioFileNameParser {
+    
+    private struct Translation {
+        let from: String
+        let to: String
+        
+        func translate(value: String) -> String {
+            value.replacingOccurrences(of: from, with: to)
+        }
+    }
 
     private let YMD = "yyMMdd"
     private let YM = "yyMM"
     private let DATE_POSITION = 0
     
-    private let translationMap: [String: String] = [
-        "_Q.": "?.",
-        "_Q_": "?_",
-        "_"  : " "
-    ]
-    
+    // IMPORTANT: Order matters.  For instance doing Translation(from: "_", to: " ") first would not translate correctly.
+    private let translations: [Translation] = [Translation(from: "_Q.", to: "?."),
+                                               Translation(from: "_Q_", to: "?_"),
+                                               Translation(from: "_", to: " ")]
+
     private lazy var ymdDateFormatter: DateFormatter = {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = YMD
@@ -36,7 +41,7 @@ class AudioFileNameParser {
     }()
 
     /// Returns nil if the URL isn't in date format. (e.g. https://www.dhammatalks.org/Archive/y2021/210101_A_Radiant_Practice.mp3)
-    func parseFileNameWithDate(fileName: String) -> TalkData? {
+    func makeTalkData(fileName: String, talkCategory: TalkCategory) -> TalkData? {
 
         guard fileName.hasSuffix(".mp3") else {
             return nil
@@ -45,22 +50,25 @@ class AudioFileNameParser {
         var talkData: TalkData? = nil
 
         var fileNameSplit = extractTextFromFileName(fileName)
-        guard let dateString = validateDateString(String(fileNameSplit[DATE_POSITION])) else {
-            return nil
-        }
 
         var date: Date? = nil
-        if dateString.count == YMD.count {
-            date = ymdDateFormatter.date(from: dateString)
-        } else if dateString.count == YM.count {
-            date = ymDateFormatter.date(from: dateString)
+        if talkCategory.isYearly {
+            guard let dateString = validateDateString(String(fileNameSplit[DATE_POSITION])) else {
+                return nil
+            }
+
+            if dateString.count == YMD.count {
+                date = ymdDateFormatter.date(from: dateString)
+            } else if dateString.count == YM.count {
+                date = ymDateFormatter.date(from: dateString)
+            }
         }
+        
 
         if let date = date {
             fileNameSplit.removeFirst()
             let title = fileNameSplit.joined(separator: " ")
-            let year = Calendar.current.component(.year, from: date)
-            let url = "\(TalkDataService.dhammaTalksArchiveAddress)/y\(year)/\(fileName)"
+            let url = "\(talkCategory.talkURL)/\(fileName)"
             let image = ""
             talkData = TalkData(title: title, date: date, url: url, image: image)
         }
@@ -75,8 +83,8 @@ private extension AudioFileNameParser {
             return []
         }
 
-        for translation in translationMap {
-            formattedFileName = formattedFileName.replacingOccurrences(of: translation.key, with: translation.value)
+        for translation in translations {
+            formattedFileName = translation.translate(value: formattedFileName)
         }
         
         formattedFileName.removeLast(".mp3".count)

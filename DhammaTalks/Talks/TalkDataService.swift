@@ -12,23 +12,23 @@ import SwiftSoup
 class TalkDataService {
 
     private let parser = AudioFileNameParser()
-    static let dhammaTalksArchiveAddress = "https://www.dhammatalks.org/Archive"
+    private let htmlPageFetcher: HTMLPageFetcher
     private let talkDataExtractor: TalkDataExtractor
     
-    init(talkDataExtractor: TalkDataExtractor = TalkDataExtractor()) {
+    init(htmlPageFetcher: HTMLPageFetcher = HTMLPageFetcher(), talkDataExtractor: TalkDataExtractor = TalkDataExtractor()) {
         self.talkDataExtractor = talkDataExtractor
+        self.htmlPageFetcher = htmlPageFetcher
     }
     
-    func fetchTalksForYear(_ year: Int) -> [TalkSection] {
-        var talkSectionList: [TalkSection] = []
-        guard let pageUrl = URL(string: "\(TalkDataService.dhammaTalksArchiveAddress)/y\(year)/") else {
-            return []
-        }
-
+    func fetchEveningTalksForYear(_ year: Int) -> [TalkSection] {
         let monthFormatter = DateFormatter()
         monthFormatter.dateFormat = "LLLL"
         var talkSectionId = 0
-        if let html = try? String(contentsOf: pageUrl) {
+        let eveningCategory: TalkCategory = .evening(year: year)
+        let result = htmlPageFetcher.getHTMLForCategory(eveningCategory)
+        switch result {
+        case .success(let html):
+            var talkSectionList: [TalkSection] = []
             let talkDataList = talkDataExtractor.extractFromHTML(html)
             var currentTalkSection: TalkSection?
             for talkData in talkDataList {
@@ -48,7 +48,13 @@ class TalkDataService {
                     talkSectionId += 1
                 }
             }
+            
+            if let talkSection = currentTalkSection, !talkSection.talks.isEmpty {
+                talkSectionList.append(talkSection)
+            }
+            return talkSectionList
+        case .failure:
+            return []
         }
-        return talkSectionList
     }
 }

@@ -11,18 +11,18 @@ import SwiftSoup
 
 struct TalkDataExtractor {
 
-    func extractFromHTML(_ html: String) -> [TalkData] {
+    func extractFromHTML(_ htmlData: HTMLData) -> [TalkData] {
         let parser = AudioFileNameParser()
         var talkDataList: [TalkData] = []
-        guard let document = try? SwiftSoup.parse(html) else {
+
+        guard let document = try? SwiftSoup.parse(htmlData.html) else {
             return []
         }
 
         do {
             try document.select("a").forEach { element in
                 let linkUrl = try element.attr("href")
-                if linkUrl.hasSuffix(".mp3"), let talkData =
-                    parser.parseFileNameWithDate(fileName: linkUrl) {
+                if linkUrl.hasSuffix(".mp3"), let talkData = parser.makeTalkData(fileName: linkUrl, talkCategory: htmlData.talkCategory) {
                     talkDataList.insert(talkData, at: 0)
                 }
             }
