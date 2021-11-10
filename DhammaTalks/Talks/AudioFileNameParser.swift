@@ -50,16 +50,20 @@ class AudioFileNameParser {
         var talkData: TalkData? = nil
 
         var fileNameSplit = extractTextFromFileName(fileName)
-        guard let dateString = validateDateString(String(fileNameSplit[DATE_POSITION])) else {
-            return nil
-        }
 
         var date: Date? = nil
-        if dateString.count == YMD.count {
-            date = ymdDateFormatter.date(from: dateString)
-        } else if dateString.count == YM.count {
-            date = ymDateFormatter.date(from: dateString)
+        if talkCategory.isYearly {
+            guard let dateString = validateDateString(String(fileNameSplit[DATE_POSITION])) else {
+                return nil
+            }
+
+            if dateString.count == YMD.count {
+                date = ymdDateFormatter.date(from: dateString)
+            } else if dateString.count == YM.count {
+                date = ymDateFormatter.date(from: dateString)
+            }
         }
+        
 
         if let date = date {
             fileNameSplit.removeFirst()

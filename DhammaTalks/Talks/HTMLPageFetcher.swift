@@ -39,6 +39,15 @@ enum TalkCategory {
             return "\(HTMLPageFetcher.archivePath)/TheEightfoldPath/"
         }
     }
+    
+    var isYearly: Bool {
+        switch self {
+        case .short(_), .evening(_):
+            return true
+        default:
+            return false
+        }
+    }
 }
 
 class HTMLPageFetcher {
