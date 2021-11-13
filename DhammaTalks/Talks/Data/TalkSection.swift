@@ -9,7 +9,7 @@
 import Foundation
 
 struct TalkSection: Identifiable {
-    var id: Int
+    let id: UUID = UUID()
     let title: String
     private(set) var talks: [TalkData] = []
     
@@ -18,12 +18,8 @@ struct TalkSection: Identifiable {
     }
 }
 
-extension TalkSection: Hashable {
+extension TalkSection: Equatable {
     static func == (lhs: TalkSection, rhs: TalkSection) -> Bool {
         return lhs.id == rhs.id
-    }
-    
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(id)
     }
 }
