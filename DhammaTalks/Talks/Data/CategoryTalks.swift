@@ -9,7 +9,7 @@
 import Foundation
 
 struct CategoryTalks: Decodable, Identifiable {
-    var id = UUID()
+    let id = UUID()
     let title: String
     let talks: [TalkData]
     

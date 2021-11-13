@@ -19,28 +19,28 @@ class TalkDataServiceTests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 
-    func testError() throws {
+    func testError() async {
         let sut = TalkDataService(htmlPageFetcher: MockHTMLPageFetcher(testCase: .error))
-        let talkSections = sut.fetchEveningTalksForYear(2021)
+        let talkSections = await sut.fetchEveningTalksForYear(2021)
         XCTAssertEqual(talkSections.count, 0)
     }
     
-    func testNoTalks() throws {
+    func testNoTalks() async {
         let sut = TalkDataService(htmlPageFetcher: MockHTMLPageFetcher(testCase: .noTalks))
-        let talkSections = sut.fetchEveningTalksForYear(2021)
+        let talkSections = await sut.fetchEveningTalksForYear(2021)
         XCTAssertEqual(talkSections.count, 0)
     }
     
-    func testOneMonthWithTalks() throws {
+    func testOneMonthWithTalks() async {
         let sut = TalkDataService(htmlPageFetcher: MockHTMLPageFetcher(testCase: .oneMonth))
-        let talkSections = sut.fetchEveningTalksForYear(2021)
+        let talkSections = await sut.fetchEveningTalksForYear(2021)
         XCTAssertEqual(talkSections.count, 1)
         XCTAssertEqual(talkSections[0].talks.count, 3)
     }
     
-    func testMultipleMonthsWithTalks() throws {
+    func testMultipleMonthsWithTalks() async {
         let sut = TalkDataService(htmlPageFetcher: MockHTMLPageFetcher(testCase: .multipleMonths))
-        let talkSections = sut.fetchEveningTalksForYear(2021)
+        let talkSections = await sut.fetchEveningTalksForYear(2021)
         XCTAssertEqual(talkSections.count, 4)
         XCTAssertEqual(talkSections[0].talks.count, 1)
         XCTAssertEqual(talkSections[1].talks.count, 3)
@@ -63,7 +63,7 @@ class MockHTMLPageFetcher: HTMLPageFetcher {
         case multipleMonths
     }
 
-    override func getHTMLForCategory(_ category: TalkCategory) -> Result<HTMLData,HTMLPageFetcherError> {
+    override func getHTMLForCategory(_ category: TalkCategory) async -> Result<HTMLData,HTMLPageFetcherError> {
         switch testCase {
         case .error:
             return .failure(.failedToRetrieve)

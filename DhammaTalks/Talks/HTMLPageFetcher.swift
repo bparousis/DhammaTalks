@@ -59,7 +59,7 @@ class HTMLPageFetcher {
         case failedToRetrieve
     }
 
-    func getHTMLForCategory(_ category: TalkCategory) -> Result<HTMLData, HTMLPageFetcherError> {
+    func getHTMLForCategory(_ category: TalkCategory) async -> Result<HTMLData, HTMLPageFetcherError> {
         guard let talkURL = URL(string:category.talkURL) else {
             return .failure(.invalidURL)
         }

@@ -112,9 +112,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		761BA31F273CCB2400F22202 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				766CA1E023D517E300A8E770 /* TalkRow.swift */,
+				763C950327386ECC00632633 /* YearlyTalkListView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
 		7622718B273A1E8600AFBA63 /* Talks */ = {
 			isa = PBXGroup;
 			children = (
+				761BA31F273CCB2400F22202 /* Views */,
 				76E0652C23CA9FBE007E18C1 /* Data */,
 				76E0653123CAB9EB007E18C1 /* AudioFileNameParser.swift */,
 				76E0652D23CA9FDE007E18C1 /* TalkDataService.swift */,
@@ -162,14 +172,12 @@
 				76E064F823CA9C6C007E18C1 /* SceneDelegate.swift */,
 				76E064FD23CA9C6C007E18C1 /* ContentView.swift */,
 				7658CA0E2736CA67009FF527 /* Localizable.stringsdict */,
-				766CA1E023D517E300A8E770 /* TalkRow.swift */,
 				76E064FF23CA9C6E007E18C1 /* Assets.xcassets */,
 				76E0650423CA9C6E007E18C1 /* LaunchScreen.storyboard */,
 				76E0650723CA9C6E007E18C1 /* Info.plist */,
 				76E064FA23CA9C6C007E18C1 /* DhammaTalks.xcdatamodeld */,
 				76E0650123CA9C6E007E18C1 /* Preview Content */,
 				76041DB02736EB2100B32362 /* CategoryTalks.json */,
-				763C950327386ECC00632633 /* YearlyTalkListView.swift */,
 			);
 			path = DhammaTalks;
 			sourceTree = "<group>";
@@ -466,7 +474,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -520,7 +528,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -578,7 +586,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = QF6M4CC7RV;
 				INFOPLIST_FILE = DhammaTalksTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -600,7 +608,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = QF6M4CC7RV;
 				INFOPLIST_FILE = DhammaTalksTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

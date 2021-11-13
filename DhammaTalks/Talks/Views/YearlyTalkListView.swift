@@ -7,46 +7,8 @@
 //
 
 import SwiftUI
-import AVFoundation
 
-struct YearlyTalkListView: View {
-
-    private static var currentYear: Int {
-        Calendar.current.component(.year, from: Date())
-    }
-    
-    @State private var selectedYear = Self.currentYear
-    private let years: [Int] = Array(2000...Self.currentYear).reversed()
-    
-    var body: some View {
-        List {
-            Section(header: Text("Year")) {
-                Picker("Year", selection: $selectedYear) {
-                    ForEach(years, id: \.self) {
-                        Text(String($0))
-                    }
-                }
-            }
-            
-            let allTalks = TalkDataService().fetchEveningTalksForYear(selectedYear)
-            ForEach(allTalks) { talkSection in
-                Section(header: TalkSectionHeader(title: talkSection.title, talkCount: talkSection.talks.count)) {
-                    ForEach(talkSection.talks) { talk in
-                        TalkRow(talk: talk)
-                    }
-                }
-            }
-        }.navigationBarTitle("Evening Dhamma Talks", displayMode: .inline)
-    }
-}
-
-struct YearlyTalkListView_Previews: PreviewProvider {
-    static var previews: some View {
-        YearlyTalkListView()
-    }
-}
-
-struct TalkSectionHeader: View {
+private struct TalkSectionHeader: View {
     let title: String
     let talkCount: Int
 
@@ -55,6 +17,51 @@ struct TalkSectionHeader: View {
             Text(title)
             Spacer()
             Text("talk-count \(talkCount)")
+        }
+    }
+}
+
+struct YearlyTalkListView: View {
+
+    private static var currentYear: Int {
+        Calendar.current.component(.year, from: Date())
+    }
+    
+    @State private var selectedYear = Self.currentYear
+    @State private var talkSections: [TalkSection] = []
+    private let talkDataService = TalkDataService()
+    private let years: [Int] = Array(2000...Self.currentYear).reversed()
+    
+    var body: some View {
+        List {
+            Section {
+                Picker("Year", selection: $selectedYear) {
+                    ForEach(years, id: \.self) {
+                        Text(String($0))
+                    }
+                }
+            }
+
+            ForEach(talkSections) { talkSection in
+                Section(header: TalkSectionHeader(title: talkSection.title, talkCount: talkSection.talks.count)) {
+                    ForEach(talkSection.talks) { talk in
+                        TalkRow(talk: talk)
+                    }
+                }
+            }
+        }
+        .task(id: selectedYear) {
+            talkSections = await talkDataService.fetchEveningTalksForYear(selectedYear)
+        }
+        .listStyle(.insetGrouped)
+        .navigationBarTitle("Evening Dhamma Talks", displayMode: .inline)
+    }
+}
+
+struct YearlyTalkListView_Previews: PreviewProvider {
+    static var previews: some View {
+        return NavigationView {
+            YearlyTalkListView()
         }
     }
 }
