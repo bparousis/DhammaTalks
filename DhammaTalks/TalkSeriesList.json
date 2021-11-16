@@ -1,0 +1,166 @@
+[
+    {
+        "title": "Beginners",
+        "description": "A graduated series of 50 Dhamma talks for meditators, starting with breath meditation and leading through issues of discernment. An expanded version of this series (64 talks) is available on youtube.",
+        "talks": [
+            {
+                "title": "Strength from the Basics",
+                "url": "https://www.dhammatalks.org/Archive/basics_collection/01%20Strength%20from%20the%20Basics.mp3",
+                "image": "Talk1"
+            },
+            {
+                "title": "Basics",
+                "url": "https://www.dhammatalks.org/Archive/basics_collection/02%20Basics.mp3",
+                "image": "Talk2"
+            },
+            {
+                "title": "Stay with the Breath",
+                "url": "https://www.dhammatalks.org/Archive/basics_collection/03%20Stay%20with%20the%20Breath.mp3",
+                "image": "Talk1"
+            }
+        ]
+    },
+    {
+        "title": "The Seven Factors of Awakening",
+        "description": "A series of 7 Dhamma talks following one of the sets of the Buddha’s fundamental teachings from the 37 Wings to Awakening.",
+        "talks": [
+            {
+                "title": "Mindfulness",
+                "url": "https://www.dhammatalks.org/Archive/seven_factors/01%20Mindfulness%20(110723).mp3",
+                "image": "Talk2"
+            },
+            {
+                "title": "Analysis of Qualities",
+                "url": "https://www.dhammatalks.org/Archive/seven_factors/02%20Analysis%20of%20Qualities%20(110730%20sony).mp3",
+                "image": "Talk1"
+            },
+            {
+                "title": "Persistence",
+                "url": "https://www.dhammatalks.org/Archive/seven_factors/03%20Persistence%20(110807%20sony).mp3",
+                "image": "Talk2"
+            },
+            {
+                "title": "Rapture",
+                "url": "https://www.dhammatalks.org/Archive/seven_factors/04%20Rapture%20(110822).mp3",
+                "image": "Talk1"
+            },
+            {
+                "title": "Serenity",
+                "url": "https://www.dhammatalks.org/Archive/seven_factors/05%20Serenity%20(110905).mp3",
+                "image": "Talk2"
+            },
+            {
+                "title": "Concentration",
+                "url": "https://www.dhammatalks.org/Archive/seven_factors/06%20Concentration%20(110912).mp3",
+                "image": "Talk1"
+            },
+            {
+                "title": "Equanimity",
+                "url": "https://www.dhammatalks.org/Archive/seven_factors/07%20Equanimity%20(110927).mp3",
+                "image": "Talk2"
+            }
+        ]
+    },
+    {
+        "title": "The Five Strengths",
+        "description": "A series of 5 Dhamma talks following one of the sets of the Buddha’s fundamental teachings from the 37 Wings to Awakening.",
+        "talks": [
+            {
+                "title": "Strengthening Conviction",
+                "url": "https://www.dhammatalks.org/Archive/five_strengths/120101_Strengthening_Conviction.mp3",
+                "image": "Talk2"
+            },
+            {
+                "title": "Generating Energy",
+                "url": "https://www.dhammatalks.org/Archive/five_strengths/120102_Generating_Energy.mp3",
+                "image": "Talk2"
+            },
+            {
+                "title": "Strengthening Mindfulness",
+                "url": "https://www.dhammatalks.org/Archive/five_strengths/120104_Strengthening_Mindfulness.mp3",
+                "image": "Talk2"
+            },
+            {
+                "title": "Strengthening Concentration",
+                "url": "https://www.dhammatalks.org/Archive/five_strengths/120105_Strengthening_Concentration.mp3",
+                "image": "Talk2"
+            },
+            {
+                "title": "Strengthening Discernment",
+                "url": "https://www.dhammatalks.org/Archive/five_strengths/120111_Strengthening_Discernment.mp3",
+                "image": "Talk2"
+            }
+        ]
+    },
+    {
+        "title": "The Eightfold Path",
+        "description": "The Noble Eightfold Path forms the framework for all the Buddha’s teachings. It was the first topic he mentioned in his first sermon, and the last topic he mentioned in his last. The edited transcripts of these talks are available in eBook form as The Noble Eightfold Path: 13 Meditations Talks on the eBooks page.",
+        "talks": [
+            {
+                "title": "An Overview of the Path",
+                "url": "https://www.dhammatalks.org/Archive/TheEightfoldPath/0_110707%20An%20Overview%20of%20the%20Path.mp3",
+                "image": "Talk2"
+            },
+            {
+                "title": "Right View",
+                "url": "https://www.dhammatalks.org/Archive/TheEightfoldPath/1_071120%20Right%20View.mp3",
+                "image": "Talk2"
+            },
+            {
+                "title": "Right Resolve",
+                "url": "https://www.dhammatalks.org/Archive/TheEightfoldPath/2_120607_Right_Resolve.mp3",
+                "image": "Talk2"
+            },
+            {
+                "title": "Right Speech",
+                "url": "https://www.dhammatalks.org/Archive/TheEightfoldPath/3_071126%20Right%20Speech.mp3",
+                "image": "Talk2"
+            },
+            {
+                "title": "Right Action",
+                "url": "https://www.dhammatalks.org/Archive/TheEightfoldPath/4_071128%20Right%20Action.mp3",
+                "image": "Talk2"
+            },
+            {
+                "title": "Right Livelihood",
+                "url": "https://www.dhammatalks.org/Archive/TheEightfoldPath/5_071221%20Right%20Livelihood.mp3",
+                "image": "Talk2"
+            },
+            {
+                "title": "Right Effort",
+                "url": "https://www.dhammatalks.org/Archive/TheEightfoldPath/6_071224%20Right%20Effort.mp3",
+                "image": "Talk2"
+            },
+            {
+                "title": "Right Mindfulness - The First Frame of Reference",
+                "url": "https://www.dhammatalks.org/Archive/TheEightfoldPath/7a_071225%20Right%20Mindfulness%20-%20The%20First%20Frame%20of%20Reference.mp3",
+                "image": "Talk2"
+            },
+            {
+                "title": "Right Mindfulness - The Second Frame of Reference",
+                "url": "https://www.dhammatalks.org/Archive/TheEightfoldPath/7b_090921%20Right%20Mindfulness%20-%20The%20Second%20Frame%20of%20Reference.mp3",
+                "image": "Talk2"
+            },
+            {
+                "title": "Right Mindfulness - The Third Frame of Reference",
+                "url": "https://www.dhammatalks.org/Archive/TheEightfoldPath/7c_091015%20Right%20Mindfulness%20-%20The%20Third%20Frame%20of%20Reference.mp3",
+                "image": "Talk2"
+            },
+            {
+                "title": "Right Mindfulness - The Fourth Frame of Reference",
+                "url": "https://www.dhammatalks.org/Archive/TheEightfoldPath/7d_090329%20Right%20Mindfulness%20-%20The%20Fourth%20Frame%20of%20Reference.mp3",
+                "image": "Talk2"
+            },
+            {
+                "title": "Right Concentration",
+                "url": "https://www.dhammatalks.org/Archive/TheEightfoldPath/8_071227%20Right%20Concentration.mp3",
+                "image": "Talk2"
+            },
+            {
+                "title": "Right Concentration - The Uses of Right Concentration",
+                "url": "https://www.dhammatalks.org/Archive/TheEightfoldPath/8a_141202_Right_Concentration_-_The_Uses_of_Right_Concentration.mp3",
+                "image": "Talk2"
+            }
+        ]
+    }
+]

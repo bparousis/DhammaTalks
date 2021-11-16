@@ -14,54 +14,51 @@ import CoreMedia
 
 struct MainView: View {
     
-    let category: [CategoryTalks]? = {
-        if let path = Bundle.main.path(forResource: "CategoryTalks", ofType: "json") {
+    let talkSeriesList: [TalkSeries]? = {
+        if let path = Bundle.main.path(forResource: "TalkSeriesList", ofType: "json") {
             do {
                 let data = try Data(contentsOf: URL(fileURLWithPath: path))
-                let categoryTalks = try JSONDecoder().decode([CategoryTalks].self, from: data)
-                return categoryTalks
+                let talkSeriesList = try JSONDecoder().decode([TalkSeries].self, from: data)
+                return talkSeriesList
             } catch {
-                print(error)
                 return nil
             }
         }
         return nil
     }()
+
     var body: some View {
         ScrollView(.vertical) {
             VStack(alignment: .center, spacing: 20) {
-                if let category = category {
-                    ForEach(category) {c in
-                        Text(c.title)
+                if let talkSeriesList = talkSeriesList {
+                    ForEach(talkSeriesList) { talkSeries in
+                        Text(talkSeries.title)
                             .bold()
                             .font(.system(size:30, weight:.bold, design:Font.Design.default))
                             .foregroundColor(Color("Colour 5"))
-                        ScrollView(.horizontal) {
-
+                        Text(talkSeries.description)
+                            .font(.system(size:16, weight:.light))
+                            .foregroundColor(Color("Colour 4"))
+                        ScrollView(.horizontal, showsIndicators: false) {
                             HStack{
-                                ForEach(c.talks) { t in
+                                ForEach(talkSeries.talks) { talk in
                                     VStack{
-                                        Text(t.title)
+                                        Text(talk.title)
                                             .bold()
                                             .font(.system(size:20, weight:.bold))
                                             .foregroundColor(Color("Colour 4"))
-                                        Image(t.image)
+                                        Image(talk.image)
                                             .resizable()
                                             .frame(width: 252, height:168, alignment:.center)
                                             .aspectRatio(contentMode:.fill)
                                             .cornerRadius(20)
-                                            
                                     }
                                 }
-
                             }
-
                         }
-
                     }
                 }
             }
-            
         }
         .frame(maxWidth: .infinity)
         .background(Color("Colour 1"))

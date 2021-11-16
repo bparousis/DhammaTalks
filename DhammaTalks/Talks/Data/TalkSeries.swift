@@ -8,12 +8,13 @@
 
 import Foundation
 
-struct CategoryTalks: Decodable, Identifiable {
+struct TalkSeries: Decodable, Identifiable {
     let id = UUID()
     let title: String
+    let description: String
     let talks: [TalkData]
     
     private enum CodingKeys: String, CodingKey {
-        case title, talks
+        case title, description, talks
     }
 }

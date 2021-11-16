@@ -10,20 +10,7 @@ import SwiftUI
 import AVFoundation
 
 struct ContentView: View {
-    
-    let categoryTalks: [CategoryTalks]? = {
-        if let path = Bundle.main.path(forResource: "CategoryTalks", ofType: "json") {
-            do {
-                let data = try Data(contentsOf: URL(fileURLWithPath: path))
-                let categoryTalks = try JSONDecoder().decode([CategoryTalks].self, from: data)
-                return categoryTalks
-            } catch {
-                return nil
-            }
-        }
-        return nil
-    }()
-    
+
     var body: some View {
         return NavigationView {
             MainView()
