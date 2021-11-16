@@ -8,44 +8,36 @@
 
 import Foundation
 
-enum TalkCategory {
+enum YearlyTalkCategory: String, CaseIterable, Identifiable {
+    var id: String { self.rawValue }
 
-    case short(year: Int)
-    case evening(year: Int)
-    case fiveStrengths
-    case chants
-    case guidedMeditations
-    case refugeFromDeath
-    case basics
-    case eightfoldPath
+    case short
+    case evening
 
-    var talkURL: String {
+    func talkURLForYear(_ year: Int) -> String {
         switch self {
-        case let .short(year):
+        case .short:
             return "\(HTMLPageFetcher.archivePath)/shorttalks/y\(year)"
-        case let .evening(year):
+        case .evening:
             return "\(HTMLPageFetcher.archivePath)/y\(year)"
-        case .fiveStrengths:
-            return "\(HTMLPageFetcher.archivePath)/five_strengths"
-        case .chants:
-            return "\(HTMLPageFetcher.archivePath)/Chants"
-        case .guidedMeditations:
-            return "\(HTMLPageFetcher.archivePath)/guided_meditations"
-        case .refugeFromDeath:
-            return "\(HTMLPageFetcher.archivePath)/refuge_from_death"
-        case .basics:
-            return "\(HTMLPageFetcher.archivePath)/basics_collection"
-        case .eightfoldPath:
-            return "\(HTMLPageFetcher.archivePath)/TheEightfoldPath/"
         }
     }
     
-    var isYearly: Bool {
+    var title: String {
         switch self {
-        case .short(_), .evening(_):
-            return true
-        default:
-            return false
+        case .short:
+            return "Short"
+        case .evening:
+            return "Evening"
+        }
+    }
+    
+    var startYear: Int {
+        switch self {
+        case .short:
+            return 2010
+        case .evening:
+            return 2000
         }
     }
 }
@@ -58,15 +50,24 @@ class HTMLPageFetcher {
         case invalidURL
         case failedToRetrieve
     }
+    
+    private let urlSession: URLSession
+    
+    init(urlSession: URLSession = .shared) {
+        self.urlSession = urlSession
+    }
 
-    func getHTMLForCategory(_ category: TalkCategory) async -> Result<HTMLData, HTMLPageFetcherError> {
-        guard let talkURL = URL(string:category.talkURL) else {
+    func getYearlyHTMLForCategory(_ category: YearlyTalkCategory, year: Int) async -> Result<YearlyHTMLData, HTMLPageFetcherError> {
+        guard let talkURL = URL(string:category.talkURLForYear(year)) else {
             return .failure(.invalidURL)
         }
 
         do {
-            let content = try String(contentsOf: talkURL)
-            return .success(HTMLData(html: content, talkCategory: category))
+            let (data, _) = try await urlSession.data(from: talkURL)
+            guard let content = String(data: data, encoding: .utf8) else {
+                return .failure(.failedToRetrieve)
+            }
+            return .success(YearlyHTMLData(html: content, talkCategory: category, year: year))
         } catch {
             return .failure(.failedToRetrieve)
         }

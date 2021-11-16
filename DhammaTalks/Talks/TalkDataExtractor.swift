@@ -10,25 +10,22 @@ import Foundation
 import SwiftSoup
 
 struct TalkDataExtractor {
+    
+    private let audioFileNameParser = AudioFileNameParser()
 
-    func extractFromHTML(_ htmlData: HTMLData) -> [TalkData] {
-        let parser = AudioFileNameParser()
+    func extractTalkDataFromHTML(_ htmlData: YearlyHTMLData) -> Result<[TalkData], Error> {
         var talkDataList: [TalkData] = []
-
-        guard let document = try? SwiftSoup.parse(htmlData.html) else {
-            return []
-        }
-
         do {
+            let document = try SwiftSoup.parse(htmlData.html)
             try document.select("a").forEach { element in
                 let linkUrl = try element.attr("href")
-                if linkUrl.hasSuffix(".mp3"), let talkData = parser.makeTalkData(fileName: linkUrl, talkCategory: htmlData.talkCategory) {
+                if linkUrl.hasSuffix(".mp3"), let talkData = audioFileNameParser.parse(fileName: linkUrl, talkCategory: htmlData.talkCategory, year: htmlData.year) {
                     talkDataList.insert(talkData, at: 0)
                 }
             }
         } catch {
-            print(error)
+            return .failure(error)
         }
-        return talkDataList
+        return .success(talkDataList)
     }
 }

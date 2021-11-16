@@ -28,9 +28,13 @@ struct YearlyTalkListView: View {
     }
     
     @State private var selectedYear = Self.currentYear
+    @State private var selectedCategory: YearlyTalkCategory = .evening
     @State private var talkSections: [TalkSection] = []
+    @State private var showingAlert = false
     private let talkDataService = TalkDataService()
-    private let years: [Int] = Array(2000...Self.currentYear).reversed()
+    private var years: [Int] {
+        Array(selectedCategory.startYear...Self.currentYear).reversed()
+    }
     
     var body: some View {
         List {
@@ -50,11 +54,39 @@ struct YearlyTalkListView: View {
                 }
             }
         }
+        .toolbar {
+            Picker("Select a category", selection: $selectedCategory) {
+                ForEach(YearlyTalkCategory.allCases, id: \.self) {
+                    Text($0.title)
+                }
+            }
+            .pickerStyle(.segmented)
+        }
+        .alert("Failed to load talks", isPresented: $showingAlert) {
+            Button("OK", role: .cancel) { }
+        }
+        .task(id: selectedCategory) {
+            await fetchData()
+        }
         .task(id: selectedYear) {
-            talkSections = await talkDataService.fetchEveningTalksForYear(selectedYear)
+            await fetchData()
         }
         .listStyle(.insetGrouped)
-        .navigationBarTitle("Evening Dhamma Talks", displayMode: .inline)
+        .navigationBarTitle("Dhamma Talks", displayMode: .inline)
+    }
+    
+    private func fetchData() async {
+        if selectedYear < selectedCategory.startYear {
+            selectedYear = selectedCategory.startYear
+        }
+        
+        let result = await talkDataService.fetchYearlyTalks(category: selectedCategory, year: selectedYear)
+        switch result {
+        case .success(let talkSections):
+            self.talkSections = talkSections
+        case .failure:
+            showingAlert = true
+        }
     }
 }
 

@@ -15,28 +15,41 @@ class TalkDataService {
     private let htmlPageFetcher: HTMLPageFetcher
     private let talkDataExtractor: TalkDataExtractor
     
+    private lazy var monthFormatter: DateFormatter = {
+        let monthFormatter = DateFormatter()
+        monthFormatter.dateFormat = "LLLL"
+        return monthFormatter
+    }()
+    
     init(htmlPageFetcher: HTMLPageFetcher = HTMLPageFetcher(), talkDataExtractor: TalkDataExtractor = TalkDataExtractor()) {
         self.talkDataExtractor = talkDataExtractor
         self.htmlPageFetcher = htmlPageFetcher
     }
     
-    func fetchEveningTalksForYear(_ year: Int) async -> [TalkSection] {
+    func fetchYearlyTalks(category: YearlyTalkCategory, year: Int) async -> Result<[TalkSection], Error> {
 
-        let monthFormatter = DateFormatter()
-        monthFormatter.dateFormat = "LLLL"
-        let eveningCategory: TalkCategory = .evening(year: year)
-        let result = await htmlPageFetcher.getHTMLForCategory(eveningCategory)
-        switch result {
+        let fetchResult = await htmlPageFetcher.getYearlyHTMLForCategory(category, year: year)
+        switch fetchResult {
         case .success(let html):
+            return getTalkSectionsFromHTML(html)
+        case .failure(let error):
+            return .failure(error)
+        }
+    }
+    
+    func getTalkSectionsFromHTML(_ htmlData: YearlyHTMLData) -> Result<[TalkSection], Error> {
+        
+        let result = talkDataExtractor.extractTalkDataFromHTML(htmlData)
+        switch result {
+        case .success(let talkDataList):
             var talkSectionList: [TalkSection] = []
-            let talkDataList = talkDataExtractor.extractFromHTML(html)
             var currentTalkSection: TalkSection?
             for talkData in talkDataList {
                 guard let date = talkData.date else {
                     continue
                 }
                 let month = monthFormatter.string(from: date)
-                let title = "\(month) \(year)"
+                let title = "\(month) \(htmlData.year)"
                 if currentTalkSection?.title == title {
                     currentTalkSection?.addTalk(talkData)
                 } else {
@@ -51,9 +64,9 @@ class TalkDataService {
             if let talkSection = currentTalkSection, !talkSection.talks.isEmpty {
                 talkSectionList.append(talkSection)
             }
-            return talkSectionList
-        case .failure:
-            return []
+            return .success(talkSectionList)
+        case .failure(let error):
+            return .failure(error)
         }
     }
 }

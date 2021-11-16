@@ -19,28 +19,36 @@ class TalkDataServiceTests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 
-    func testError() async {
+    func testError() async throws {
         let sut = TalkDataService(htmlPageFetcher: MockHTMLPageFetcher(testCase: .error))
-        let talkSections = await sut.fetchEveningTalksForYear(2021)
-        XCTAssertEqual(talkSections.count, 0)
+        let result = await sut.fetchYearlyTalks(category: .evening, year: 2021)
+        switch result {
+            case .success:
+                XCTFail("Expected failure")
+            case .failure(let error):
+                XCTAssertEqual(error as! HTMLPageFetcher.HTMLPageFetcherError, HTMLPageFetcher.HTMLPageFetcherError.failedToRetrieve)
+        }
     }
     
-    func testNoTalks() async {
+    func testNoTalks() async throws {
         let sut = TalkDataService(htmlPageFetcher: MockHTMLPageFetcher(testCase: .noTalks))
-        let talkSections = await sut.fetchEveningTalksForYear(2021)
-        XCTAssertEqual(talkSections.count, 0)
+        let result = await sut.fetchYearlyTalks(category: .evening, year: 2021)
+        let count = try result.get().count
+        XCTAssertEqual(count, 0)
     }
     
-    func testOneMonthWithTalks() async {
+    func testOneMonthWithTalks() async throws {
         let sut = TalkDataService(htmlPageFetcher: MockHTMLPageFetcher(testCase: .oneMonth))
-        let talkSections = await sut.fetchEveningTalksForYear(2021)
+        let result = await sut.fetchYearlyTalks(category: .evening, year: 2021)
+        let talkSections = try result.get()
         XCTAssertEqual(talkSections.count, 1)
         XCTAssertEqual(talkSections[0].talks.count, 3)
     }
     
-    func testMultipleMonthsWithTalks() async {
+    func testMultipleMonthsWithTalks() async throws {
         let sut = TalkDataService(htmlPageFetcher: MockHTMLPageFetcher(testCase: .multipleMonths))
-        let talkSections = await sut.fetchEveningTalksForYear(2021)
+        let result = await sut.fetchYearlyTalks(category: .evening, year: 2021)
+        let talkSections = try result.get()
         XCTAssertEqual(talkSections.count, 4)
         XCTAssertEqual(talkSections[0].talks.count, 1)
         XCTAssertEqual(talkSections[1].talks.count, 3)
@@ -63,7 +71,7 @@ class MockHTMLPageFetcher: HTMLPageFetcher {
         case multipleMonths
     }
 
-    override func getHTMLForCategory(_ category: TalkCategory) async -> Result<HTMLData,HTMLPageFetcherError> {
+    override func getYearlyHTMLForCategory(_ category: YearlyTalkCategory, year: Int) async -> Result<YearlyHTMLData,HTMLPageFetcherError> {
         switch testCase {
         case .error:
             return .failure(.failedToRetrieve)
@@ -87,7 +95,7 @@ class MockHTMLPageFetcher: HTMLPageFetcher {
             <address>Apache/2.4.48 (Debian) Server at www.dhammatalks.org Port 443</address>
             </body></html>
             """
-            return .success(HTMLData(html: html, talkCategory: category))
+            return .success(YearlyHTMLData(html: html, talkCategory: category, year: year))
             
         case .oneMonth:
             let html = """
@@ -114,7 +122,7 @@ class MockHTMLPageFetcher: HTMLPageFetcher {
             <address>Apache/2.4.48 (Debian) Server at www.dhammatalks.org Port 443</address>
             </body></html>
             """
-            return .success(HTMLData(html: html, talkCategory: category))
+            return .success(YearlyHTMLData(html: html, talkCategory: category, year: year))
         case .multipleMonths:
             let html = """
             <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
@@ -149,7 +157,7 @@ class MockHTMLPageFetcher: HTMLPageFetcher {
             <address>Apache/2.4.48 (Debian) Server at www.dhammatalks.org Port 443</address>
             </body></html>
             """
-            return .success(HTMLData(html: html, talkCategory: category))
+            return .success(YearlyHTMLData(html: html, talkCategory: category, year: year))
         }
     }
 }

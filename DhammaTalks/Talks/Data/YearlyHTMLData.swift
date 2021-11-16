@@ -8,7 +8,8 @@
 
 import Foundation
 
-struct HTMLData {
+struct YearlyHTMLData {
     let html: String
-    let talkCategory: TalkCategory
+    let talkCategory: YearlyTalkCategory
+    let year: Int
 }
