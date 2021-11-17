@@ -41,33 +41,31 @@ class AudioFileNameParser {
     }()
 
     /// Returns nil if the URL isn't in date format. (e.g. https://www.dhammatalks.org/Archive/y2021/210101_A_Radiant_Practice.mp3)
-    func parse(fileName: String, talkCategory: YearlyTalkCategory, year: Int) -> TalkData? {
+    func parseFileNameWithDate(_ fileName: String) -> (title: String, date: Date)? {
 
         guard fileName.hasSuffix(".mp3") else {
             return nil
         }
 
-        var talkData: TalkData? = nil
         var fileNameSplit = extractTextFromFileName(fileName)
-        var date: Date? = nil
-
         guard let dateString = validateDateString(String(fileNameSplit[DATE_POSITION])) else {
             return nil
         }
 
+        var parsedDate: Date? = nil
         if dateString.count == YMD.count {
-            date = ymdDateFormatter.date(from: dateString)
+            parsedDate = ymdDateFormatter.date(from: dateString)
         } else if dateString.count == YM.count {
-            date = ymDateFormatter.date(from: dateString)
+            parsedDate = ymDateFormatter.date(from: dateString)
+        }
+        
+        guard let date = parsedDate else {
+            return nil
         }
         
         fileNameSplit.removeFirst()
         let title = fileNameSplit.joined(separator: " ")
-        let url = "\(talkCategory.talkURLForYear(year))/\(fileName)"
-        let image = ""
-        talkData = TalkData(title: title, date: date, url: url, image: image)
-
-        return talkData
+        return (title, date)
     }
 }
 

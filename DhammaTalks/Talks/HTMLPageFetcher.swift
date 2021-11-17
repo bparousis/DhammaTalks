@@ -1,5 +1,5 @@
 //
-//  HTMLPageFetcher.swift
+//  DailyTalkCategory.swift
 //  DhammaTalks
 //
 //  Created by Bill Parousis on 2021-11-08.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum YearlyTalkCategory: String, CaseIterable, Identifiable {
+enum DailyTalkCategory: String, CaseIterable, Identifiable {
     var id: String { self.rawValue }
 
     case short
@@ -57,19 +57,19 @@ class HTMLPageFetcher {
         self.urlSession = urlSession
     }
 
-    func getYearlyHTMLForCategory(_ category: YearlyTalkCategory, year: Int) async -> Result<YearlyHTMLData, HTMLPageFetcherError> {
+    func getYearlyHTMLForCategory(_ category: DailyTalkCategory, year: Int) async -> Result<YearlyHTMLData, Error> {
         guard let talkURL = URL(string:category.talkURLForYear(year)) else {
-            return .failure(.invalidURL)
+            return .failure(HTMLPageFetcherError.invalidURL)
         }
 
         do {
             let (data, _) = try await urlSession.data(from: talkURL)
             guard let content = String(data: data, encoding: .utf8) else {
-                return .failure(.failedToRetrieve)
+                return .failure(HTMLPageFetcherError.failedToRetrieve)
             }
             return .success(YearlyHTMLData(html: content, talkCategory: category, year: year))
         } catch {
-            return .failure(.failedToRetrieve)
+            return .failure(error)
         }
     }
 }

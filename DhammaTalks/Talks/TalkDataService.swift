@@ -13,7 +13,6 @@ class TalkDataService {
 
     private let parser = AudioFileNameParser()
     private let htmlPageFetcher: HTMLPageFetcher
-    private let talkDataExtractor: TalkDataExtractor
     
     private lazy var monthFormatter: DateFormatter = {
         let monthFormatter = DateFormatter()
@@ -21,12 +20,11 @@ class TalkDataService {
         return monthFormatter
     }()
     
-    init(htmlPageFetcher: HTMLPageFetcher = HTMLPageFetcher(), talkDataExtractor: TalkDataExtractor = TalkDataExtractor()) {
-        self.talkDataExtractor = talkDataExtractor
+    init(htmlPageFetcher: HTMLPageFetcher = HTMLPageFetcher()) {
         self.htmlPageFetcher = htmlPageFetcher
     }
     
-    func fetchYearlyTalks(category: YearlyTalkCategory, year: Int) async -> Result<[TalkSection], Error> {
+    func fetchYearlyTalks(category: DailyTalkCategory, year: Int) async -> Result<[TalkSection], Error> {
 
         let fetchResult = await htmlPageFetcher.getYearlyHTMLForCategory(category, year: year)
         switch fetchResult {
@@ -39,7 +37,7 @@ class TalkDataService {
     
     func getTalkSectionsFromHTML(_ htmlData: YearlyHTMLData) -> Result<[TalkSection], Error> {
         
-        let result = talkDataExtractor.extractTalkDataFromHTML(htmlData)
+        let result = htmlData.parseTalkData()
         switch result {
         case .success(let talkDataList):
             var talkSectionList: [TalkSection] = []

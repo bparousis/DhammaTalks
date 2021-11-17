@@ -71,10 +71,10 @@ class MockHTMLPageFetcher: HTMLPageFetcher {
         case multipleMonths
     }
 
-    override func getYearlyHTMLForCategory(_ category: YearlyTalkCategory, year: Int) async -> Result<YearlyHTMLData,HTMLPageFetcherError> {
+    override func getYearlyHTMLForCategory(_ category: DailyTalkCategory, year: Int) async -> Result<YearlyHTMLData,Error> {
         switch testCase {
         case .error:
-            return .failure(.failedToRetrieve)
+            return .failure(HTMLPageFetcherError.failedToRetrieve)
         case .noTalks:
             let html = """
             <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">

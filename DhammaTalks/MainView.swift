@@ -27,41 +27,45 @@ struct MainView: View {
         return nil
     }()
 
+    let columns = [
+        GridItem(.adaptive(minimum: 150))
+    ]
+    
     var body: some View {
-        ScrollView(.vertical) {
-            VStack(alignment: .center, spacing: 20) {
-                if let talkSeriesList = talkSeriesList {
-                    ForEach(talkSeriesList) { talkSeries in
-                        Text(talkSeries.title)
-                            .bold()
-                            .font(.system(size:30, weight:.bold, design:Font.Design.default))
-                            .foregroundColor(Color("Colour 5"))
-                        Text(talkSeries.description)
-                            .font(.system(size:16, weight:.light))
-                            .foregroundColor(Color("Colour 4"))
-                        ScrollView(.horizontal, showsIndicators: false) {
-                            HStack{
-                                ForEach(talkSeries.talks) { talk in
-                                    VStack{
-                                        Text(talk.title)
-                                            .bold()
-                                            .font(.system(size:20, weight:.bold))
-                                            .foregroundColor(Color("Colour 4"))
-                                        Image(talk.image)
-                                            .resizable()
-                                            .frame(width: 252, height:168, alignment:.center)
-                                            .aspectRatio(contentMode:.fill)
-                                            .cornerRadius(20)
-                                    }
+        TabView {
+            NavigationView {
+                DailyTalkListView()
+            }
+            .tabItem {
+                Label("Daily Talks", systemImage: "mic")
+            }
+            
+            NavigationView {
+                LazyVGrid(columns: columns, spacing: 20) {
+                    if let talkSeriesList = talkSeriesList {
+                        ForEach(talkSeriesList) { talkSeries in
+                            NavigationLink(destination: TalkSeriesListView(title: talkSeries.title, talkDataList: talkSeries.talks)) {
+                                VStack{
+                                    Text(talkSeries.title)
+                                        .bold()
+                                        .font(.system(size:20, weight:.bold))
+                                        .foregroundColor(Color("Colour 4"))
+                                    Image(talkSeries.image)
+                                        .resizable()
+                                        .frame(width: 150, height:100, alignment:.center)
+                                        .aspectRatio(contentMode:.fill)
+                                        .cornerRadius(20)
                                 }
                             }
                         }
                     }
                 }
             }
+            .tabItem {
+                Label("Talk Collections", systemImage: "square.grid.2x2")
+            }
         }
-        .frame(maxWidth: .infinity)
-        .background(Color("Colour 1"))
+        .navigationTitle("Dhammatalks")
     }
 }
 

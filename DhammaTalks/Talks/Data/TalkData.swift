@@ -10,16 +10,10 @@ import Foundation
 
 struct TalkData: Identifiable, Decodable {
 
-    var id = UUID()
-
+    let id: String
     let title: String
     let date: Date?
     let url: String
-    let image: String
-    
-    private enum CodingKeys: String, CodingKey {
-        case title, date, url, image
-    }
 }
 
 extension TalkData: CustomStringConvertible {

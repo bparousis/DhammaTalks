@@ -1,165 +1,511 @@
 [
     {
-        "title": "Beginners",
+        "title": "Basics",
         "description": "A graduated series of 50 Dhamma talks for meditators, starting with breath meditation and leading through issues of discernment. An expanded version of this series (64 talks) is available on youtube.",
+        "image": "basics",
         "talks": [
             {
+                "id": "basics1",
                 "title": "Strength from the Basics",
-                "url": "https://www.dhammatalks.org/Archive/basics_collection/01%20Strength%20from%20the%20Basics.mp3",
-                "image": "Talk1"
+                "url": "https://www.dhammatalks.org/Archive/basics_collection/01%20Strength%20from%20the%20Basics.mp3"
             },
             {
+                "id": "basics2",
                 "title": "Basics",
-                "url": "https://www.dhammatalks.org/Archive/basics_collection/02%20Basics.mp3",
-                "image": "Talk2"
+                "url": "https://www.dhammatalks.org/Archive/basics_collection/02%20Basics.mp3"
             },
             {
+                "id": "basics3",
                 "title": "Stay with the Breath",
-                "url": "https://www.dhammatalks.org/Archive/basics_collection/03%20Stay%20with%20the%20Breath.mp3",
-                "image": "Talk1"
+                "url": "https://www.dhammatalks.org/Archive/basics_collection/03%20Stay%20with%20the%20Breath.mp3"
+            },
+            {
+                "id": "basics4",
+                "title": "Breath by Breath",
+                "url": "https://www.dhammatalks.org/Archive/basics_collection/04%20Breath%20by%20Breath.mp3"
+            },
+            {
+                "id": "basics5",
+                "title": "Analyzing the Breath",
+                "url": "https://www.dhammatalks.org/Archive/basics_collection/05%20Analyzing%20the%20Breath.mp3"
+            },
+            {
+                "id": "basics6",
+                "title": "Levels of the Breath",
+                "url": "https://www.dhammatalks.org/Archive/basics_collection/06%20Levels%20of%20the%20Breath.mp3"
+            },
+            {
+                "id": "basics7",
+                "title": "Breathing Through Daily Life",
+                "url": "https://www.dhammatalks.org/Archive/basics_collection/07%20Breathing%20Through%20Daily%20Life.mp3"
+            },
+            {
+                "id": "basics8",
+                "title": "At Ease with the Breath",
+                "url": "https://www.dhammatalks.org/Archive/basics_collection/08%20At%20Ease%20with%20the%20Breath.mp3"
+            },
+            {
+                "id": "basics9",
+                "title": "Immersed in the Body",
+                "url": "https://www.dhammatalks.org/Archive/basics_collection/09%20Immersed%20in%20the%20Body.mp3"
+            },
+            {
+                "id": "basics10",
+                "title": "Pleasure & Pain",
+                "url": "https://www.dhammatalks.org/Archive/basics_collection/10%20Pleasure%20&%20Pain.mp3"
+            },
+            {
+                "id": "basics11",
+                "title": "Breath Meditation",
+                "url": "https://www.dhammatalks.org/Archive/basics_collection/11%20Breath%20Meditation.mp3"
+            },
+            {
+                "id": "basics12",
+                "title": "Taking a Stance",
+                "url": "https://www.dhammatalks.org/Archive/basics_collection/12%20Taking%20a%20Stance.mp3"
+            },
+            {
+                "id": "basics13",
+                "title": "The Joy of Effort",
+                "url": "https://www.dhammatalks.org/Archive/basics_collection/13%20The%20Joy%20of%20Effort.mp3"
+            },
+            {
+                "id": "basics14",
+                "title": "Experimental Intelligence",
+                "url": "https://www.dhammatalks.org/Archive/basics_collection/14%20Experimental%20Intelligence.mp3"
+            },
+            {
+                "id": "basics15",
+                "title": "The Path of Mistakes",
+                "url": "https://www.dhammatalks.org/Archive/basics_collection/15%20The%20Path%20of%20Mistakes.mp3"
+            },
+            {
+                "id": "basics16",
+                "title": "A Post by the Ocean",
+                "url": "https://www.dhammatalks.org/Archive/basics_collection/16%20A%20Post%20by%20the%20Ocean.mp3"
+            },
+            {
+                "id": "basics17",
+                "title": "The Active Truth",
+                "url": "https://www.dhammatalks.org/Archive/basics_collection/17%20The%20Active%20Truth.mp3"
+            },
+            {
+                "id": "basics18",
+                "title": "The Middleness of the Path",
+                "url": "https://www.dhammatalks.org/Archive/basics_collection/18%20The%20Middleness%20of%20the%20Path.mp3"
+            },
+            {
+                "id": "basics19",
+                "title": "The Grass at the Gate",
+                "url": "https://www.dhammatalks.org/Archive/basics_collection/19%20The%20Grass%20at%20the%20Gate.mp3"
+            },
+            {
+                "id": "basics20",
+                "title": "A Magic Set of Tools",
+                "url": "https://www.dhammatalks.org/Archive/basics_collection/20%20A%20Magic%20Set%20of%20Tools.mp3"
+            },
+            {
+                "id": "basics21",
+                "title": "Perception",
+                "url": "https://www.dhammatalks.org/Archive/basics_collection/21%20Perception.mp3"
+            },
+            {
+                "id": "basics22",
+                "title": "Little Things",
+                "url": "https://www.dhammatalks.org/Archive/basics_collection/22%20Little%20Things.mp3"
+            },
+            {
+                "id": "basics23",
+                "title": "Stepping Back",
+                "url": "https://www.dhammatalks.org/Archive/basics_collection/23%20Stepping%20Back.mp3"
+            },
+            {
+                "id": "basics24",
+                "title": "Generosity First",
+                "url": "https://www.dhammatalks.org/Archive/basics_collection/24%20Generosity%20First.mp3"
+            },
+            {
+                "id": "basics25",
+                "title": "Self Esteem",
+                "url": "https://www.dhammatalks.org/Archive/basics_collection/25%20Self%20Esteem.mp3"
+            },
+            {
+                "id": "basics26",
+                "title": "Goodwill All Around",
+                "url": "https://www.dhammatalks.org/Archive/basics_collection/26%20Goodwill%20All%20Around.mp3"
+            },
+            {
+                "id": "basics27",
+                "title": "A Sense of Adventure",
+                "url": "https://www.dhammatalks.org/Archive/basics_collection/27%20A%20Sense%20of%20Adventure.mp3"
+            },
+            {
+                "id": "basics28",
+                "title": "Gladdening the Mind",
+                "url": "https://www.dhammatalks.org/Archive/basics_collection/28%20Gladdening%20the%20Mind.mp3"
+            },
+            {
+                "id": "basics29",
+                "title": "Strategies for Happiness",
+                "url": "https://www.dhammatalks.org/Archive/basics_collection/29%20Strategies%20for%20Happiness.mp3"
+            },
+            {
+                "id": "basics30",
+                "title": "Mindstorms",
+                "url": "https://www.dhammatalks.org/Archive/basics_collection/30%20Mindstorms.mp3"
+            },
+            {
+                "id": "basics31",
+                "title": "Resistance",
+                "url": "https://www.dhammatalks.org/Archive/basics_collection/31%20Resistance.mp3"
+            },
+            {
+                "id": "basics32",
+                "title": "Suppressed Emotions",
+                "url": "https://www.dhammatalks.org/Archive/basics_collection/32%20Suppressed%20Emotions.mp3"
+            },
+            {
+                "id": "basics33",
+                "title": "Your Inner Mob",
+                "url": "https://www.dhammatalks.org/Archive/basics_collection/33%20Your%20Inner%20Mob.mp3"
+            },
+            {
+                "id": "basics34",
+                "title": "Social Anxiety",
+                "url": "https://www.dhammatalks.org/Archive/basics_collection/34%20Social%20Anxiety.mp3"
+            },
+            {
+                "id": "basics35",
+                "title": "A Decent Education",
+                "url": "https://www.dhammatalks.org/Archive/basics_collection/35%20A%20Decent%20Education.mp3"
+            },
+            {
+                "id": "basics36",
+                "title": "Battling Darkness",
+                "url": "https://www.dhammatalks.org/Archive/basics_collection/36%20Battling%20Darkness.mp3"
+            },
+            {
+                "id": "basics37",
+                "title": "Fear of Death",
+                "url": "https://www.dhammatalks.org/Archive/basics_collection/37%20Fear%20of%20Death.mp3"
+            },
+            {
+                "id": "basics38",
+                "title": "Marshalling the Emotions",
+                "url": "https://www.dhammatalks.org/Archive/basics_collection/38%20Marshalling%20the%20Emotions.mp3"
+            },
+            {
+                "id": "basics39",
+                "title": "Heedfulness",
+                "url": "https://www.dhammatalks.org/Archive/basics_collection/39%20Heedfulness.mp3"
+            },
+            {
+                "id": "basics40",
+                "title": "A Refuge from Modern Values",
+                "url": "https://www.dhammatalks.org/Archive/basics_collection/40%20A%20Refuge%20from%20Modern%20Values.mp3"
+            },
+            {
+                "id": "basics41",
+                "title": "Antidotes for Clinging",
+                "url": "https://www.dhammatalks.org/Archive/basics_collection/41%20Antidotes%20for%20Clinging.mp3"
+            },
+            {
+                "id": "basics42",
+                "title": "The Walls of Ignorance",
+                "url": "https://www.dhammatalks.org/Archive/basics_collection/42%20The%20Walls%20of%20Ignorance.mp3"
+            },
+            {
+                "id": "basics43",
+                "title": "Warrior Knowledge",
+                "url": "https://www.dhammatalks.org/Archive/basics_collection/43%20Warrior%20Knowledge.mp3"
+            },
+            {
+                "id": "basics44",
+                "title": "Universal Truths",
+                "url": "https://www.dhammatalks.org/Archive/basics_collection/44%20Universal%20Truths.mp3"
+            },
+            {
+                "id": "basics45",
+                "title": "The Skill of Restraint",
+                "url": "https://www.dhammatalks.org/Archive/basics_collection/45%20The%20Skill%20of%20Restraint.mp3"
+            },
+            {
+                "id": "basics46",
+                "title": "Fabricating the Present",
+                "url": "https://www.dhammatalks.org/Archive/basics_collection/46%20Fabricating%20the%20Present.mp3"
+            },
+            {
+                "id": "basics47",
+                "title": "The Treasure Hunt",
+                "url": "https://www.dhammatalks.org/Archive/basics_collection/47%20The%20Treasure%20Hunt.mp3"
+            },
+            {
+                "id": "basics48",
+                "title": "The Saints Don’t Grieve",
+                "url": "https://www.dhammatalks.org/Archive/basics_collection/48%20The%20Saints%20Don't%20Grieve.mp3"
+            },
+            {
+                "id": "basics49",
+                "title": "Wise Effort",
+                "url": "https://www.dhammatalks.org/Archive/basics_collection/49%20Wise%20Effort.mp3"
+            },
+            {
+                "id": "basics50",
+                "title": "Walking Meditation - Stillness in Motion",
+                "url": "https://www.dhammatalks.org/Archive/basics_collection/50%20Walking%20Meditation%20-%20Stillness%20in%20Motion.mp3"
             }
         ]
     },
     {
         "title": "The Seven Factors of Awakening",
         "description": "A series of 7 Dhamma talks following one of the sets of the Buddha’s fundamental teachings from the 37 Wings to Awakening.",
+        "image": "lotusFlower",
         "talks": [
             {
+                "id": "sevenFactors1",
                 "title": "Mindfulness",
-                "url": "https://www.dhammatalks.org/Archive/seven_factors/01%20Mindfulness%20(110723).mp3",
-                "image": "Talk2"
+                "url": "https://www.dhammatalks.org/Archive/seven_factors/01%20Mindfulness%20(110723).mp3"
             },
             {
+                "id": "sevenFactors2",
                 "title": "Analysis of Qualities",
-                "url": "https://www.dhammatalks.org/Archive/seven_factors/02%20Analysis%20of%20Qualities%20(110730%20sony).mp3",
-                "image": "Talk1"
+                "url": "https://www.dhammatalks.org/Archive/seven_factors/02%20Analysis%20of%20Qualities%20(110730%20sony).mp3"
             },
             {
+                "id": "sevenFactors3",
                 "title": "Persistence",
-                "url": "https://www.dhammatalks.org/Archive/seven_factors/03%20Persistence%20(110807%20sony).mp3",
-                "image": "Talk2"
+                "url": "https://www.dhammatalks.org/Archive/seven_factors/03%20Persistence%20(110807%20sony).mp3"
             },
             {
+                "id": "sevenFactors4",
                 "title": "Rapture",
-                "url": "https://www.dhammatalks.org/Archive/seven_factors/04%20Rapture%20(110822).mp3",
-                "image": "Talk1"
+                "url": "https://www.dhammatalks.org/Archive/seven_factors/04%20Rapture%20(110822).mp3"
             },
             {
+                "id": "sevenFactors5",
                 "title": "Serenity",
-                "url": "https://www.dhammatalks.org/Archive/seven_factors/05%20Serenity%20(110905).mp3",
-                "image": "Talk2"
+                "url": "https://www.dhammatalks.org/Archive/seven_factors/05%20Serenity%20(110905).mp3"
             },
             {
+                "id": "sevenFactors6",
                 "title": "Concentration",
-                "url": "https://www.dhammatalks.org/Archive/seven_factors/06%20Concentration%20(110912).mp3",
-                "image": "Talk1"
+                "url": "https://www.dhammatalks.org/Archive/seven_factors/06%20Concentration%20(110912).mp3"
             },
             {
+                "id": "sevenFactors7",
                 "title": "Equanimity",
-                "url": "https://www.dhammatalks.org/Archive/seven_factors/07%20Equanimity%20(110927).mp3",
-                "image": "Talk2"
+                "url": "https://www.dhammatalks.org/Archive/seven_factors/07%20Equanimity%20(110927).mp3"
             }
         ]
     },
     {
         "title": "The Five Strengths",
         "description": "A series of 5 Dhamma talks following one of the sets of the Buddha’s fundamental teachings from the 37 Wings to Awakening.",
+        "image": "leaves",
         "talks": [
             {
+                "id": "fiveStrengths1",
                 "title": "Strengthening Conviction",
-                "url": "https://www.dhammatalks.org/Archive/five_strengths/120101_Strengthening_Conviction.mp3",
-                "image": "Talk2"
+                "url": "https://www.dhammatalks.org/Archive/five_strengths/120101_Strengthening_Conviction.mp3"
             },
             {
+                "id": "fiveStrengths2",
                 "title": "Generating Energy",
-                "url": "https://www.dhammatalks.org/Archive/five_strengths/120102_Generating_Energy.mp3",
-                "image": "Talk2"
+                "url": "https://www.dhammatalks.org/Archive/five_strengths/120102_Generating_Energy.mp3"
             },
             {
+                "id": "fiveStrengths3",
                 "title": "Strengthening Mindfulness",
-                "url": "https://www.dhammatalks.org/Archive/five_strengths/120104_Strengthening_Mindfulness.mp3",
-                "image": "Talk2"
+                "url": "https://www.dhammatalks.org/Archive/five_strengths/120104_Strengthening_Mindfulness.mp3"
             },
             {
+                "id": "fiveStrengths4",
                 "title": "Strengthening Concentration",
-                "url": "https://www.dhammatalks.org/Archive/five_strengths/120105_Strengthening_Concentration.mp3",
-                "image": "Talk2"
+                "url": "https://www.dhammatalks.org/Archive/five_strengths/120105_Strengthening_Concentration.mp3"
             },
             {
+                "id": "fiveStrengths5",
                 "title": "Strengthening Discernment",
-                "url": "https://www.dhammatalks.org/Archive/five_strengths/120111_Strengthening_Discernment.mp3",
-                "image": "Talk2"
+                "url": "https://www.dhammatalks.org/Archive/five_strengths/120111_Strengthening_Discernment.mp3"
             }
         ]
     },
     {
         "title": "The Eightfold Path",
         "description": "The Noble Eightfold Path forms the framework for all the Buddha’s teachings. It was the first topic he mentioned in his first sermon, and the last topic he mentioned in his last. The edited transcripts of these talks are available in eBook form as The Noble Eightfold Path: 13 Meditations Talks on the eBooks page.",
+        "image": "wheel",
         "talks": [
             {
+                "id": "eightfoldPath1",
                 "title": "An Overview of the Path",
-                "url": "https://www.dhammatalks.org/Archive/TheEightfoldPath/0_110707%20An%20Overview%20of%20the%20Path.mp3",
-                "image": "Talk2"
+                "url": "https://www.dhammatalks.org/Archive/TheEightfoldPath/0_110707%20An%20Overview%20of%20the%20Path.mp3"
             },
             {
+                "id": "eightfoldPath2",
                 "title": "Right View",
-                "url": "https://www.dhammatalks.org/Archive/TheEightfoldPath/1_071120%20Right%20View.mp3",
-                "image": "Talk2"
+                "url": "https://www.dhammatalks.org/Archive/TheEightfoldPath/1_071120%20Right%20View.mp3"
             },
             {
+                "id": "eightfoldPath3",
                 "title": "Right Resolve",
-                "url": "https://www.dhammatalks.org/Archive/TheEightfoldPath/2_120607_Right_Resolve.mp3",
-                "image": "Talk2"
+                "url": "https://www.dhammatalks.org/Archive/TheEightfoldPath/2_120607_Right_Resolve.mp3"
             },
             {
+                "id": "eightfoldPath4",
                 "title": "Right Speech",
-                "url": "https://www.dhammatalks.org/Archive/TheEightfoldPath/3_071126%20Right%20Speech.mp3",
-                "image": "Talk2"
+                "url": "https://www.dhammatalks.org/Archive/TheEightfoldPath/3_071126%20Right%20Speech.mp3"
             },
             {
+                "id": "eightfoldPath5",
                 "title": "Right Action",
-                "url": "https://www.dhammatalks.org/Archive/TheEightfoldPath/4_071128%20Right%20Action.mp3",
-                "image": "Talk2"
+                "url": "https://www.dhammatalks.org/Archive/TheEightfoldPath/4_071128%20Right%20Action.mp3"
             },
             {
+                "id": "eightfoldPath6",
                 "title": "Right Livelihood",
-                "url": "https://www.dhammatalks.org/Archive/TheEightfoldPath/5_071221%20Right%20Livelihood.mp3",
-                "image": "Talk2"
+                "url": "https://www.dhammatalks.org/Archive/TheEightfoldPath/5_071221%20Right%20Livelihood.mp3"
             },
             {
+                "id": "eightfoldPath7",
                 "title": "Right Effort",
-                "url": "https://www.dhammatalks.org/Archive/TheEightfoldPath/6_071224%20Right%20Effort.mp3",
-                "image": "Talk2"
+                "url": "https://www.dhammatalks.org/Archive/TheEightfoldPath/6_071224%20Right%20Effort.mp3"
             },
             {
+                "id": "eightfoldPath8",
                 "title": "Right Mindfulness - The First Frame of Reference",
-                "url": "https://www.dhammatalks.org/Archive/TheEightfoldPath/7a_071225%20Right%20Mindfulness%20-%20The%20First%20Frame%20of%20Reference.mp3",
-                "image": "Talk2"
+                "url": "https://www.dhammatalks.org/Archive/TheEightfoldPath/7a_071225%20Right%20Mindfulness%20-%20The%20First%20Frame%20of%20Reference.mp3"
             },
             {
+                "id": "eightfoldPath9",
                 "title": "Right Mindfulness - The Second Frame of Reference",
-                "url": "https://www.dhammatalks.org/Archive/TheEightfoldPath/7b_090921%20Right%20Mindfulness%20-%20The%20Second%20Frame%20of%20Reference.mp3",
-                "image": "Talk2"
+                "url": "https://www.dhammatalks.org/Archive/TheEightfoldPath/7b_090921%20Right%20Mindfulness%20-%20The%20Second%20Frame%20of%20Reference.mp3"
             },
             {
+                "id": "eightfoldPath10",
                 "title": "Right Mindfulness - The Third Frame of Reference",
-                "url": "https://www.dhammatalks.org/Archive/TheEightfoldPath/7c_091015%20Right%20Mindfulness%20-%20The%20Third%20Frame%20of%20Reference.mp3",
-                "image": "Talk2"
+                "url": "https://www.dhammatalks.org/Archive/TheEightfoldPath/7c_091015%20Right%20Mindfulness%20-%20The%20Third%20Frame%20of%20Reference.mp3"
             },
             {
+                "id": "eightfoldPath11",
                 "title": "Right Mindfulness - The Fourth Frame of Reference",
-                "url": "https://www.dhammatalks.org/Archive/TheEightfoldPath/7d_090329%20Right%20Mindfulness%20-%20The%20Fourth%20Frame%20of%20Reference.mp3",
-                "image": "Talk2"
+                "url": "https://www.dhammatalks.org/Archive/TheEightfoldPath/7d_090329%20Right%20Mindfulness%20-%20The%20Fourth%20Frame%20of%20Reference.mp3"
             },
             {
+                "id": "eightfoldPath12",
                 "title": "Right Concentration",
-                "url": "https://www.dhammatalks.org/Archive/TheEightfoldPath/8_071227%20Right%20Concentration.mp3",
-                "image": "Talk2"
+                "url": "https://www.dhammatalks.org/Archive/TheEightfoldPath/8_071227%20Right%20Concentration.mp3"
             },
             {
+                "id": "eightfoldPath13",
                 "title": "Right Concentration - The Uses of Right Concentration",
-                "url": "https://www.dhammatalks.org/Archive/TheEightfoldPath/8a_141202_Right_Concentration_-_The_Uses_of_Right_Concentration.mp3",
-                "image": "Talk2"
+                "url": "https://www.dhammatalks.org/Archive/TheEightfoldPath/8a_141202_Right_Concentration_-_The_Uses_of_Right_Concentration.mp3"
+            }
+        ]
+    },
+    {
+        "title": "Refuge from Death",
+        "description": "Refuge from Death.",
+        "image": "oldMonk",
+        "talks": [
+            {
+                "id": "refugeDeath1",
+                "title": "Chant Four Dhamma Summaries",
+                "url": "https://www.dhammatalks.org/Archive/refuge_from_death/01_Chant_Four_Dhamma_Summaries.mp3"
+            },
+            {
+                "id": "refugeDeath2",
+                "title": "Dhamma Talk: Expand Your Mind",
+                "url": "https://www.dhammatalks.org/Archive/refuge_from_death/02_Talk_Expand_Your_Mind.mp3"
+            },
+            {
+                "id": "refugeDeath3",
+                "title": "Chant: The Five Recollections",
+                "url": "https://www.dhammatalks.org/Archive/refuge_from_death/03_Chant_Five_Recollections.mp3"
+            },
+            {
+                "id": "refugeDeath4",
+                "title": "Sutta Reading: The Five Recollections (Anguttara Nikaya 5.57)",
+                "url": "https://www.dhammatalks.org/Archive/refuge_from_death/04_Sutta_Five_Recollections_(AN_5_57).mp3"
+            },
+            {
+                "id": "refugeDeath5",
+                "title": "Meditation: Guided Breath Meditation",
+                "url": "https://www.dhammatalks.org/Archive/refuge_from_death/05_Meditation_Breath.mp3"
+            },
+            {
+                "id": "refugeDeath6",
+                "title": "Dhamma Talk: Facing Pain",
+                "url": "https://www.dhammatalks.org/Archive/refuge_from_death/06_Talk_Facing_Pain.mp3"
+            },
+            {
+                "id": "refugeDeath7",
+                "title": "Sutta Reading: The Arrow (Samyutta Nikaya 36.6)",
+                "url": "https://www.dhammatalks.org/Archive/refuge_from_death/07_Sutta_The_Arrow_(SN_36_6).mp3"
+            },
+            {
+                "id": "refugeDeath8",
+                "title": "Dhamma Talk: Endurance Made Easier",
+                "url": "https://www.dhammatalks.org/Archive/refuge_from_death/08_Talk_Endurance_Made_Easier.mp3"
+            },
+            {
+                "id": "refugeDeath9",
+                "title": "Sutta Reading: Afflicted in Body (Samyutta Nikaya 22.2)",
+                "url": "https://www.dhammatalks.org/Archive/refuge_from_death/09_Sutta_Afflicted_in_Body_(SN_22_2).mp3"
+            },
+            {
+                "id": "refugeDeath10",
+                "title": "Meditation: Guided Metta Meditation",
+                "url": "https://www.dhammatalks.org/Archive/refuge_from_death/10_Meditation_Metta.mp3"
+            },
+            {
+                "id": "refugeDeath11",
+                "title": "Chant: The Sublime Attitudes",
+                "url": "https://www.dhammatalks.org/Archive/refuge_from_death/11_Chant_Sublime_Attitudes.mp3"
+            },
+            {
+                "id": "refugeDeath12",
+                "title": "Chant: The Metta Sutta",
+                "url": "https://www.dhammatalks.org/Archive/refuge_from_death/12_Chant_Karaniya_Metta_Sutta.mp3"
+            },
+            {
+                "id": "refugeDeath13",
+                "title": "Meditation: Guided Breath Meditation",
+                "url": "https://www.dhammatalks.org/Archive/refuge_from_death/13_Meditation_Breath.mp3"
+            },
+            {
+                "id": "refugeDeath14",
+                "title": "Dhamma Talk: Preparing to Die Well",
+                "url": "https://www.dhammatalks.org/Archive/refuge_from_death/14_Talk_Preparing_to_Die_Well.mp3"
+            },
+            {
+                "id": "refugeDeath15",
+                "title": "Sutta Reading: The Sick Ward (Samyutta Nikaya 36.7)",
+                "url": "https://www.dhammatalks.org/Archive/refuge_from_death/15_Sutta_The_Sick_Ward_(SN_36_7).mp3"
+            },
+            {
+                "id": "refugeDeath16",
+                "title": "Reading: Ajaan Lee",
+                "url": "https://www.dhammatalks.org/Archive/refuge_from_death/16_Reading_Ajaan_Lee.mp3"
+            },
+            {
+                "id": "refugeDeath17",
+                "title": "Chant: Verses on the Noble Truths",
+                "url": "https://www.dhammatalks.org/Archive/refuge_from_death/17_Chant_Verses_on_the_Noble_Truths.mp3"
+            },
+            {
+                "id": "refugeDeath18",
+                "title": "Dhamma Talk: Don't Worry, Be Focused (new)",
+                "url": "https://www.dhammatalks.org/Archive/refuge_from_death/18_Talk_Don't_Worry,_Be_Focused.mp3"
+            },
+            {
+                "id": "refugeDeath19",
+                "title": "Sutta Reading: Anathapindaka (Majjhima Nikaya 143)",
+                "url": "https://www.dhammatalks.org/Archive/refuge_from_death/19_Sutta_Anathapindaka_(MN_143).mp3"
+            },
+            {
+                "id": "refugeDeath20",
+                "title": "Meditation: Guided Breath Meditation & How to Exit Meditation",
+                "url": "https://www.dhammatalks.org/Archive/refuge_from_death/20_Meditation_Breath_with_Exit.mp3"
             }
         ]
     }
