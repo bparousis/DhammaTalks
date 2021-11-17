@@ -12,9 +12,10 @@ struct TalkSeries: Decodable, Identifiable {
     let id = UUID()
     let title: String
     let description: String
+    let image: String
     let talks: [TalkData]
     
     private enum CodingKeys: String, CodingKey {
-        case title, description, talks
+        case title, description, image, talks
     }
 }

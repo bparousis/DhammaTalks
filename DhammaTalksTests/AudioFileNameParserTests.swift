@@ -21,47 +21,49 @@ class AudioFileNameParserTests: XCTestCase {
 
     func testInvalidFileName() throws {
         let sut = AudioFileNameParser()
-        let result = sut.parse(fileName: "kajdflkjad", talkCategory: .evening, year: 2021)
+        let result = sut.parseFileNameWithDate("kajdflkjad")
+        XCTAssertNil(result)
+    }
+    
+    func testMP3WithoutDateInfo() throws {
+        let sut = AudioFileNameParser()
+        let result = sut.parseFileNameWithDate("something.mp3")
         XCTAssertNil(result)
     }
     
     func testValidYMDFileName() throws {
         let sut = AudioFileNameParser()
-        let result = sut.parse(fileName: "211103_A_Radiant_Practice.mp3", talkCategory: .evening, year: 2021)
+        let result = sut.parseFileNameWithDate("211103_A_Radiant_Practice.mp3")
         XCTAssertEqual(result?.title, "A Radiant Practice")
-        XCTAssertEqual(result?.url,  "https://www.dhammatalks.org/Archive/y2021/211103_A_Radiant_Practice.mp3")
-        XCTAssertEqual(2021, Calendar.current.component(.year, from: result!.date!))
-        XCTAssertEqual(11, Calendar.current.component(.month, from: result!.date!))
-        XCTAssertEqual(3, Calendar.current.component(.day, from: result!.date!))
+        XCTAssertEqual(2021, Calendar.current.component(.year, from: result!.date))
+        XCTAssertEqual(11, Calendar.current.component(.month, from: result!.date))
+        XCTAssertEqual(3, Calendar.current.component(.day, from: result!.date))
     }
     
     func testValidYMFileName() {
         let sut = AudioFileNameParser()
-        let result = sut.parse(fileName: "0112n1a1%20Encouragement.mp3", talkCategory: .evening, year: 2001)
+        let result = sut.parseFileNameWithDate("0112n1a1%20Encouragement.mp3")
         
         XCTAssertEqual(result?.title, "Encouragement")
-        XCTAssertEqual(result?.url,  "https://www.dhammatalks.org/Archive/y2001/0112n1a1%20Encouragement.mp3")
-        XCTAssertEqual(2001, Calendar.current.component(.year, from: result!.date!))
-        XCTAssertEqual(12, Calendar.current.component(.month, from: result!.date!))
+        XCTAssertEqual(2001, Calendar.current.component(.year, from: result!.date))
+        XCTAssertEqual(12, Calendar.current.component(.month, from: result!.date))
     }
     
     func testQuestionMark() {
         let sut = AudioFileNameParser()
-        let result = sut.parse(fileName: "210629_Why_Limit_YourselfQ.mp3", talkCategory: .evening, year: 2021)
+        let result = sut.parseFileNameWithDate("210629_Why_Limit_YourselfQ.mp3")
         XCTAssertEqual(result?.title, "Why Limit Yourself?")
-        XCTAssertEqual(result?.url,  "https://www.dhammatalks.org/Archive/y2021/210629_Why_Limit_YourselfQ.mp3")
-        XCTAssertEqual(2021, Calendar.current.component(.year, from: result!.date!))
-        XCTAssertEqual(6, Calendar.current.component(.month, from: result!.date!))
-        XCTAssertEqual(29, Calendar.current.component(.day, from: result!.date!))
+        XCTAssertEqual(2021, Calendar.current.component(.year, from: result!.date))
+        XCTAssertEqual(6, Calendar.current.component(.month, from: result!.date))
+        XCTAssertEqual(29, Calendar.current.component(.day, from: result!.date))
     }
     
     func testUnderscoreQuestionMark() {
         let sut = AudioFileNameParser()
-        let result = sut.parse(fileName: "180509_Where_Are_You_Going_Q.mp3", talkCategory: .evening, year: 2018)
+        let result = sut.parseFileNameWithDate("180509_Where_Are_You_Going_Q.mp3")
         XCTAssertEqual(result?.title, "Where Are You Going?")
-        XCTAssertEqual(result?.url,  "https://www.dhammatalks.org/Archive/y2018/180509_Where_Are_You_Going_Q.mp3")
-        XCTAssertEqual(2018, Calendar.current.component(.year, from: result!.date!))
-        XCTAssertEqual(5, Calendar.current.component(.month, from: result!.date!))
-        XCTAssertEqual(9, Calendar.current.component(.day, from: result!.date!))
+        XCTAssertEqual(2018, Calendar.current.component(.year, from: result!.date))
+        XCTAssertEqual(5, Calendar.current.component(.month, from: result!.date))
+        XCTAssertEqual(9, Calendar.current.component(.day, from: result!.date))
     }
 }

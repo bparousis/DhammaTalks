@@ -1,5 +1,5 @@
 //
-//  YearlyTalkListView.swift
+//  DailyTalkListView.swift
 //  DhammaTalks
 //
 //  Created by Bill Parousis on 2021-11-07.
@@ -8,34 +8,21 @@
 
 import SwiftUI
 
-private struct TalkSectionHeader: View {
-    let title: String
-    let talkCount: Int
-
-    var body: some View {
-        HStack {
-            Text(title)
-            Spacer()
-            Text("talk-count \(talkCount)")
-        }
-    }
-}
-
-struct YearlyTalkListView: View {
+struct DailyTalkListView: View {
 
     private static var currentYear: Int {
         Calendar.current.component(.year, from: Date())
     }
     
     @State private var selectedYear = Self.currentYear
-    @State private var selectedCategory: YearlyTalkCategory = .evening
+    @State private var selectedCategory: DailyTalkCategory = .evening
     @State private var talkSections: [TalkSection] = []
     @State private var showingAlert = false
     private let talkDataService = TalkDataService()
     private var years: [Int] {
         Array(selectedCategory.startYear...Self.currentYear).reversed()
     }
-    
+
     var body: some View {
         List {
             Section {
@@ -56,7 +43,7 @@ struct YearlyTalkListView: View {
         }
         .toolbar {
             Picker("Select a category", selection: $selectedCategory) {
-                ForEach(YearlyTalkCategory.allCases, id: \.self) {
+                ForEach(DailyTalkCategory.allCases, id: \.self) {
                     Text($0.title)
                 }
             }
@@ -72,7 +59,7 @@ struct YearlyTalkListView: View {
             await fetchData()
         }
         .listStyle(.insetGrouped)
-        .navigationBarTitle("Dhamma Talks", displayMode: .inline)
+        .navigationBarTitle("Daily Talks", displayMode: .inline)
     }
     
     private func fetchData() async {
@@ -84,8 +71,10 @@ struct YearlyTalkListView: View {
         switch result {
         case .success(let talkSections):
             self.talkSections = talkSections
-        case .failure:
-            showingAlert = true
+        case .failure(let error):
+            if (error as NSError).code != URLError.cancelled.rawValue {
+                showingAlert = true
+            }
         }
     }
 }
@@ -93,7 +82,7 @@ struct YearlyTalkListView: View {
 struct YearlyTalkListView_Previews: PreviewProvider {
     static var previews: some View {
         return NavigationView {
-            YearlyTalkListView()
+            DailyTalkListView()
         }
     }
 }
