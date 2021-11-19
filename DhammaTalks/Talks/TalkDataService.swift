@@ -11,7 +11,6 @@ import SwiftSoup
 
 class TalkDataService {
 
-    private let parser = AudioFileNameParser()
     private let htmlPageFetcher: HTMLPageFetcher
     
     private lazy var monthFormatter: DateFormatter = {
@@ -48,7 +47,7 @@ class TalkDataService {
         }
     }
     
-    func getTalkSectionsFromHTML(_ htmlData: YearlyHTMLData) -> Result<[TalkSection], Error> {
+    private func getTalkSectionsFromHTML(_ htmlData: YearlyHTMLData) -> Result<[TalkSection], Error> {
         
         let result = htmlData.parseTalkData()
         switch result {

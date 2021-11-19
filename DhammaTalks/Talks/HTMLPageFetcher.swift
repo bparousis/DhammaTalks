@@ -8,40 +8,6 @@
 
 import Foundation
 
-enum DailyTalkCategory: String, CaseIterable, Identifiable {
-    var id: String { self.rawValue }
-
-    case short
-    case evening
-
-    func talkURLForYear(_ year: Int) -> String {
-        switch self {
-        case .short:
-            return "\(HTMLPageFetcher.archivePath)/shorttalks/y\(year)"
-        case .evening:
-            return "\(HTMLPageFetcher.archivePath)/y\(year)"
-        }
-    }
-    
-    var title: String {
-        switch self {
-        case .short:
-            return "Short"
-        case .evening:
-            return "Evening"
-        }
-    }
-    
-    var startYear: Int {
-        switch self {
-        case .short:
-            return 2010
-        case .evening:
-            return 2000
-        }
-    }
-}
-
 class HTMLPageFetcher {
     
     static let archivePath = "https://www.dhammatalks.org/Archive"
@@ -56,8 +22,28 @@ class HTMLPageFetcher {
     init(urlSession: URLSession = .shared) {
         self.urlSession = urlSession
     }
+    
+    /// Since HTML page from past years will never change, since all those talks have been conducted the app has those pages stored and uses
+    /// them instead avoid fetching from the net.  We only really need to go to the net for the current year, since those talks are always updating.
+    private func checkForCachedPage(_ category: DailyTalkCategory, year: Int) -> YearlyHTMLData? {
+        guard let htmlFileURL = Bundle.main.url(forResource: category.cachedFileNameForYear(year), withExtension: "html") else {
+            return nil
+        }
+        
+        do {
+            let htmlContent = try String(contentsOf: htmlFileURL)
+            return YearlyHTMLData(html: htmlContent, talkCategory: category, year: year)
+        } catch {
+            return nil
+        }
+    }
 
     func getYearlyHTMLForCategory(_ category: DailyTalkCategory, year: Int) async -> Result<YearlyHTMLData, Error> {
+        
+        if let cachedData = checkForCachedPage(category, year: year) {
+            return .success(cachedData)
+        }
+        
         guard let talkURL = URL(string:category.talkURLForYear(year)) else {
             return .failure(HTMLPageFetcherError.invalidURL)
         }
