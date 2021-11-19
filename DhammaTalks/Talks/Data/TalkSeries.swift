@@ -13,9 +13,9 @@ struct TalkSeries: Decodable, Identifiable {
     let title: String
     let description: String
     let image: String
-    let talks: [TalkData]
+    let sections: [TalkSection]
     
     private enum CodingKeys: String, CodingKey {
-        case title, description, image, talks
+        case title, description, image, sections
     }
 }

@@ -20,6 +20,19 @@ class TalkDataService {
         return monthFormatter
     }()
     
+    static let talkSeriesList: [TalkSeries]? = {
+        if let path = Bundle.main.path(forResource: "TalkSeriesList", ofType: "json") {
+            do {
+                let data = try Data(contentsOf: URL(fileURLWithPath: path))
+                let talkSeriesList = try JSONDecoder().decode([TalkSeries].self, from: data)
+                return talkSeriesList
+            } catch {
+                return nil
+            }
+        }
+        return nil
+    }()
+    
     init(htmlPageFetcher: HTMLPageFetcher = HTMLPageFetcher()) {
         self.htmlPageFetcher = htmlPageFetcher
     }

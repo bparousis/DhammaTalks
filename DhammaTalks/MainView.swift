@@ -9,25 +9,10 @@
 import SwiftUI
 import CoreMedia
 
-
-
-
 struct MainView: View {
-    
-    let talkSeriesList: [TalkSeries]? = {
-        if let path = Bundle.main.path(forResource: "TalkSeriesList", ofType: "json") {
-            do {
-                let data = try Data(contentsOf: URL(fileURLWithPath: path))
-                let talkSeriesList = try JSONDecoder().decode([TalkSeries].self, from: data)
-                return talkSeriesList
-            } catch {
-                return nil
-            }
-        }
-        return nil
-    }()
 
     let columns = [
+        GridItem(.adaptive(minimum: 150)),
         GridItem(.adaptive(minimum: 150))
     ]
     
@@ -41,28 +26,30 @@ struct MainView: View {
             }
             
             NavigationView {
-                LazyVGrid(columns: columns, spacing: 20) {
-                    if let talkSeriesList = talkSeriesList {
+                LazyVGrid(columns: columns, spacing: 10) {
+                    if let talkSeriesList = TalkDataService.talkSeriesList {
                         ForEach(talkSeriesList) { talkSeries in
-                            NavigationLink(destination: TalkSeriesListView(title: talkSeries.title, talkDataList: talkSeries.talks)) {
-                                VStack{
-                                    Text(talkSeries.title)
-                                        .bold()
-                                        .font(.system(size:20, weight:.bold))
-                                        .foregroundColor(Color("Colour 4"))
+                            NavigationLink(destination: TalkSeriesListView(talkSeries:talkSeries)) {
+                                ZStack{
                                     Image(talkSeries.image)
                                         .resizable()
-                                        .frame(width: 150, height:100, alignment:.center)
+                                        .frame(width: 200, height:100, alignment:.center)
                                         .aspectRatio(contentMode:.fill)
                                         .cornerRadius(20)
+                                    Text(talkSeries.title)
+                                        .bold()
+                                        .font(.system(size:18, weight:.bold))
+                                        .foregroundColor(.white)
+                                        .frame(width: 180, height:100, alignment:.center)
                                 }
                             }
                         }
                     }
                 }
+                .navigationTitle("Collections")
             }
             .tabItem {
-                Label("Talk Collections", systemImage: "square.grid.2x2")
+                Label("Collections", systemImage: "square.grid.2x2")
             }
         }
         .navigationTitle("Dhammatalks")
