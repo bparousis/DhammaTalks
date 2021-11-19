@@ -55,6 +55,14 @@ class TalkDataServiceTests: XCTestCase {
         XCTAssertEqual(talkSections[2].talks.count, 6)
         XCTAssertEqual(talkSections[3].talks.count, 2)
     }
+    
+    func testTalkSeriesList() {
+        let talkSeriesList = TalkDataService.talkSeriesList!
+        XCTAssertEqual(talkSeriesList.count, 9)
+        XCTAssertEqual(talkSeriesList[0].sections.count, 1)
+        XCTAssertEqual(talkSeriesList[0].sections[0].talks.count, 50)
+        XCTAssertEqual(talkSeriesList[8].sections.count, 7)
+    }
 }
 
 class MockHTMLPageFetcher: HTMLPageFetcher {

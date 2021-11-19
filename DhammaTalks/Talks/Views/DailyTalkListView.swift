@@ -18,6 +18,7 @@ struct DailyTalkListView: View {
     @State private var selectedCategory: DailyTalkCategory = .evening
     @State private var talkSections: [TalkSection] = []
     @State private var showingAlert = false
+    @State private var isFetchDataFinished = false
     private let talkDataService = TalkDataService()
     private var years: [Int] {
         Array(selectedCategory.startYear...Self.currentYear).reversed()
@@ -25,18 +26,25 @@ struct DailyTalkListView: View {
 
     var body: some View {
         List {
-            Section {
-                Picker("Year", selection: $selectedYear) {
-                    ForEach(years, id: \.self) {
-                        Text(String($0))
+            
+            if !isFetchDataFinished {
+                Section {
+                    ProgressView()
+                }
+            } else {
+                Section {
+                    Picker("Year", selection: $selectedYear) {
+                        ForEach(years, id: \.self) {
+                            Text(String($0))
+                        }
                     }
                 }
-            }
 
-            ForEach(talkSections) { talkSection in
-                Section(header: TalkSectionHeader(title: talkSection.title, talkCount: talkSection.talks.count)) {
-                    ForEach(talkSection.talks) { talk in
-                        TalkRow(talk: talk)
+                ForEach(talkSections) { talkSection in
+                    Section(header: TalkSectionHeader(title: talkSection.title ?? "", talkCount: talkSection.talks.count)) {
+                        ForEach(talkSection.talks) { talk in
+                            TalkRow(talk: talk)
+                        }
                     }
                 }
             }
@@ -63,6 +71,12 @@ struct DailyTalkListView: View {
     }
     
     private func fetchData() async {
+        
+        defer {
+            isFetchDataFinished = true
+        }
+        
+        isFetchDataFinished = false
         if selectedYear < selectedCategory.startYear {
             selectedYear = selectedCategory.startYear
         }

@@ -11,31 +11,31 @@ import SwiftUI
 
 struct TalkSeriesListView: View {
 
-    private let talkDataList: [TalkData]
-    private let title: String
+    private let talkSeries: TalkSeries
     
-    init(title: String, talkDataList: [TalkData]) {
-        self.title = title
-        self.talkDataList = talkDataList
+    init(talkSeries: TalkSeries) {
+        self.talkSeries = talkSeries
     }
     
     var body: some View {
         List {
-            Section(header: TalkSectionHeader(title: "", talkCount: talkDataList.count)) {
-                ForEach(talkDataList) { talk in
-                    TalkRow(talk: talk)
+            ForEach(talkSeries.sections) { section in
+                Section(header: TalkSectionHeader(title: section.title ?? "", talkCount: section.talks.count)) {
+                    ForEach(section.talks) { talk in
+                        TalkRow(talk: talk)
+                    }
                 }
             }
         }
         .listStyle(.insetGrouped)
-        .navigationBarTitle(title, displayMode: .inline)
+        .navigationBarTitle(talkSeries.title, displayMode: .inline)
     }
 }
 
 struct TalkSeriesListView_Previews: PreviewProvider {
     static var previews: some View {
         return NavigationView {
-            TalkSeriesListView(title: "", talkDataList: [])
+            TalkSeriesListView(talkSeries: TalkSeries(title: "", description: "", image: "", sections: []))
         }
     }
 }

@@ -8,10 +8,14 @@
 
 import Foundation
 
-struct TalkSection: Identifiable {
+struct TalkSection: Identifiable, Decodable {
     let id: UUID = UUID()
-    let title: String
+    let title: String?
     private(set) var talks: [TalkData] = []
+    
+    private enum CodingKeys: String, CodingKey {
+        case title, talks
+    }
     
     mutating func addTalk(_ talkData: TalkData) {
         talks.append(talkData)
