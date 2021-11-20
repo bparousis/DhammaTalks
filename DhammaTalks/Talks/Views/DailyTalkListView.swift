@@ -9,38 +9,29 @@
 import SwiftUI
 
 struct DailyTalkListView: View {
-
-    private static var currentYear: Int {
-        Calendar.current.component(.year, from: Date())
-    }
     
-    @State private var selectedYear = Self.currentYear
-    @State private var selectedCategory: DailyTalkCategory = .evening
-    @State private var talkSections: [TalkSection] = []
-    @State private var showingAlert = false
-    @State private var isFetchDataFinished = false
-    private let talkDataService = TalkDataService()
-    private var years: [Int] {
-        Array(selectedCategory.startYear...Self.currentYear).reversed()
+    @ObservedObject private var viewModel: DailyTalkListViewModel
+    
+    init(viewModel: DailyTalkListViewModel) {
+        self.viewModel = viewModel
     }
 
     var body: some View {
         List {
-            
-            if !isFetchDataFinished {
+            if !viewModel.isFetchDataFinished {
                 Section {
                     ProgressView()
                 }
             } else {
                 Section {
-                    Picker("Year", selection: $selectedYear) {
-                        ForEach(years, id: \.self) {
+                    Picker("Year", selection: $viewModel.selectedYear) {
+                        ForEach(viewModel.years, id: \.self) {
                             Text(String($0))
                         }
                     }
                 }
 
-                ForEach(talkSections) { talkSection in
+                ForEach(viewModel.talkSections) { talkSection in
                     Section(header: TalkSectionHeader(title: talkSection.title ?? "", talkCount: talkSection.talks.count)) {
                         ForEach(talkSection.talks) { talk in
                             TalkRow(talk: talk)
@@ -50,53 +41,31 @@ struct DailyTalkListView: View {
             }
         }
         .toolbar {
-            Picker("Select a category", selection: $selectedCategory) {
+            Picker("Select a category", selection: $viewModel.selectedCategory) {
                 ForEach(DailyTalkCategory.allCases, id: \.self) {
                     Text($0.title)
                 }
             }
             .pickerStyle(.segmented)
         }
-        .alert("Failed to load talks", isPresented: $showingAlert) {
+        .alert("Failed to load talks", isPresented: $viewModel.showingAlert) {
             Button("OK", role: .cancel) { }
         }
-        .task(id: selectedCategory) {
-            await fetchData()
+        .task(id: viewModel.selectedCategory) {
+            await viewModel.fetchData()
         }
-        .task(id: selectedYear) {
-            await fetchData()
+        .task(id: viewModel.selectedYear) {
+            await viewModel.fetchData()
         }
         .listStyle(.insetGrouped)
         .navigationBarTitle("Daily Talks", displayMode: .inline)
-    }
-    
-    private func fetchData() async {
-        
-        defer {
-            isFetchDataFinished = true
-        }
-        
-        isFetchDataFinished = false
-        if selectedYear < selectedCategory.startYear {
-            selectedYear = selectedCategory.startYear
-        }
-        
-        let result = await talkDataService.fetchYearlyTalks(category: selectedCategory, year: selectedYear)
-        switch result {
-        case .success(let talkSections):
-            self.talkSections = talkSections
-        case .failure(let error):
-            if (error as NSError).code != URLError.cancelled.rawValue {
-                showingAlert = true
-            }
-        }
     }
 }
 
 struct YearlyTalkListView_Previews: PreviewProvider {
     static var previews: some View {
         return NavigationView {
-            DailyTalkListView()
+            DailyTalkListView(viewModel: DailyTalkListViewModel(talkDataService: TalkDataService()))
         }
     }
 }

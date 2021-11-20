@@ -1,15 +1,17 @@
 {
   "images" : [
     {
+      "filename" : "dhammatalks@467x467.jpg",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "dhammatalks-talks.jpg",
+      "filename" : "dhammatalks@700x700.jpg",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
+      "filename" : "dhammatalks@1400x1400.jpg",
       "idiom" : "universal",
       "scale" : "3x"
     }
