@@ -19,7 +19,7 @@ struct ContentView: View {
     var body: some View {
         TabView {
             NavigationView {
-                DailyTalkListView()
+                DailyTalkListView(viewModel: DailyTalkListViewModel(talkDataService: TalkDataService()))
             }
             .tabItem {
                 Label("Daily Talks", systemImage: "mic")
