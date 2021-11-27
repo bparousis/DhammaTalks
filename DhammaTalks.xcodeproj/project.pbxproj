@@ -281,10 +281,10 @@
 		7622718B273A1E8600AFBA63 /* Talks */ = {
 			isa = PBXGroup;
 			children = (
+				76C2262C274DF6EA00061450 /* Services */,
 				761BA31F273CCB2400F22202 /* Views */,
 				76E0652C23CA9FBE007E18C1 /* Data */,
 				76E0653123CAB9EB007E18C1 /* AudioFileNameParser.swift */,
-				76E0652D23CA9FDE007E18C1 /* TalkDataService.swift */,
 				7622718C273A1F8800AFBA63 /* HTMLPageFetcher.swift */,
 			);
 			path = Talks;
@@ -297,6 +297,14 @@
 				76F9F46227483F2700957810 /* Calendar.swift */,
 			);
 			path = Extensions;
+			sourceTree = "<group>";
+		};
+		76C2262C274DF6EA00061450 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				76E0652D23CA9FDE007E18C1 /* TalkDataService.swift */,
+			);
+			path = Services;
 			sourceTree = "<group>";
 		};
 		76E064EA23CA9C6C007E18C1 = {

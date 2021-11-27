@@ -35,7 +35,7 @@ struct TalkSeriesListView: View {
 struct TalkSeriesListView_Previews: PreviewProvider {
     static var previews: some View {
         return NavigationView {
-            TalkSeriesListView(talkSeries: TalkSeries(title: "", description: "", image: "", sections: []))
+            TalkSeriesListView(talkSeries: TalkSeries(id: "", title: "", description: "", image: "", sections: []))
         }
     }
 }

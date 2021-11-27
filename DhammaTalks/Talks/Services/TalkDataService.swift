@@ -66,7 +66,7 @@ class TalkDataService {
                     if let talkSection = currentTalkSection {
                         talkSectionList.append(talkSection)
                     }
-                    currentTalkSection = TalkSection(title: title)
+                    currentTalkSection = TalkSection(id: UUID().uuidString, title: title)
                     currentTalkSection?.addTalk(talkData)
                 }
             }

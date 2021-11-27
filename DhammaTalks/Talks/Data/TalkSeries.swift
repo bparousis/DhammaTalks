@@ -9,13 +9,9 @@
 import Foundation
 
 struct TalkSeries: Decodable, Identifiable {
-    let id = UUID()
+    let id: String
     let title: String
     let description: String
     let image: String
     let sections: [TalkSection]
-    
-    private enum CodingKeys: String, CodingKey {
-        case title, description, image, sections
-    }
 }

@@ -43,8 +43,8 @@ class HTMLPageFetcher {
         if let cachedData = checkForCachedPage(category, year: year) {
             return .success(cachedData)
         }
-        
-        guard let talkURL = URL(string:category.talkURLForYear(year)) else {
+
+        guard let talkURL = URL(string:"\(HTMLPageFetcher.archivePath)/\(category.directoryForYear(year))") else {
             return .failure(HTMLPageFetcherError.invalidURL)
         }
 
