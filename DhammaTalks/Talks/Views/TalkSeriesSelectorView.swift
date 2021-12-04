@@ -16,16 +16,18 @@ struct TalkSeriesSelectorView: View {
     ]
     
     private let talkSeriesList: [TalkSeries]
+    private let talkUserInfoService: TalkUserInfoService
 
-    init(talkSeriesList: [TalkSeries]) {
+    init(talkSeriesList: [TalkSeries], talkUserInfoService: TalkUserInfoService) {
         self.talkSeriesList = talkSeriesList
+        self.talkUserInfoService = talkUserInfoService
     }
 
     var body: some View {
         GeometryReader { geo in
             LazyVGrid(columns: columns, alignment: .center, spacing: 10) {
                 ForEach(talkSeriesList) { talkSeries in
-                    NavigationLink(destination: TalkSeriesListView(talkSeries:talkSeries)) {
+                    NavigationLink(destination: TalkSeriesListView(talkSeries:talkSeries, talkUserInfoService: talkUserInfoService)) {
                         ZStack {
                             let width = geo.size.width * 0.475
                             Image(talkSeries.image)

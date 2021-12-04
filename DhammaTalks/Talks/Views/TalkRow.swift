@@ -8,94 +8,77 @@
 
 import Foundation
 import SwiftUI
-import AVKit
+import CoreData
+import AVFoundation
 
 struct TalkRow: View {
-
-    private let talk: TalkData
-    @State private var playerItem: AVPlayerItem?
-
-    @State var currentTime: CMTime = CMTime()
-    @State var totalTime: CMTime = CMTime()
-
-    private var dateFormatter: DateFormatter = {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "MMMM dd, yyyy"
-        return dateFormatter
-    }()
     
-    private var dateComponentsFormatter: DateComponentsFormatter = {
-        let formatter = DateComponentsFormatter()
-        formatter.unitsStyle = .short
-        formatter.includesTimeRemainingPhrase = true
-        formatter.allowedUnits = [.minute, .second]
-        return formatter
-    }()
-    
-    init(talk: TalkData) {
-        self.talk = talk
-    }
+    @ObservedObject var viewModel: TalkRowViewModel
+    @State var showPopover = false
 
     var body: some View {
-        HStack(alignment: .center, spacing: 10) {
-            VStack(alignment: .leading, spacing: 5) {
-                Text(talk.title)
-                    .font(.headline)
-                if let date = talk.date {
-                    Text(self.dateFormatter.string(from: date))
+        
+        Button(action: {
+            Task {
+                await viewModel.play()
+            }
+        }) {
+            HStack(alignment: .center, spacing: 10) {
+                VStack(alignment: .leading, spacing: 5) {
+                    HStack(alignment: .top, spacing: 10) {
+                        Text(viewModel.title)
+                            .font(.headline)
+                        if viewModel.starred {
+                            Image(systemName: "star.fill")
+                                .foregroundColor(.yellow)
+                        }
+                    }
+                    Text(viewModel.formattedDate ?? "")
                         .font(.subheadline)
-                }
-                if currentTimeInSeconds > 0 && totalTimeInSeconds > 0 {
-                    if currentTime >= totalTime {
-                       Text("Played")
-                            .foregroundColor(.secondary)
-                            .font(.system(size: 12))
-                    } else {
-                        Spacer()
-                        HStack(spacing: 10) {
-                            ProgressView(value: currentTimeInSeconds, total: totalTimeInSeconds)
+                    Spacer()
+                    HStack(spacing: 10) {
+                        switch viewModel.state {
+                        case .played:
+                            Text("Played")
+                                 .foregroundColor(.secondary)
+                                 .font(.system(size: 12))
+                        case .inProgress:
+                            ProgressView(value: viewModel.currentTimeInSeconds, total: viewModel.totalTimeInSeconds)
                                 .frame(width: 75)
-                            if let timeString = dateComponentsFormatter.string(from: TimeInterval(totalTimeInSeconds - currentTimeInSeconds)) {
-                                Text(timeString)
+                            if let timeRemainingPhrase = viewModel.timeRemainingPhrase {
+                                Text(timeRemainingPhrase)
                                     .foregroundColor(.secondary)
                                     .font(.system(size: 12))
                             }
+                        case .unplayed:
+                            Text("")
+                                .frame(width: 0, height: 0, alignment: .top)
                         }
                     }
                 }
-            }
-            Spacer()
-            Image(systemName: "play")
-        }
-        .padding(5)
-        .onTapGesture {
-            if let url = talk.makeURL() {
-                self.playerItem = AVPlayerItem(url: url)
-                if currentTimeInSeconds > 0 {
-                    playerItem?.seek(to: currentTime, completionHandler: nil)
+                Spacer()
+                Button(action: { showPopover = true }) {
+                    Image(systemName: "ellipsis")
+                }
+                .popover(isPresented: $showPopover) {
+                    List {
+                        // TODO: Place holder for options
+                        Text("Option 1")
+                        Text("Option 2")
+                    }
                 }
             }
         }
-        .sheet(item: $playerItem) { item in
-            MediaPlayer(playerItem: item, title: talk.title)
+        .foregroundColor(.primary)
+        .padding(5)
+        .sheet(item: $viewModel.playerItem) { item in
+            MediaPlayer(playerItem: item, title: viewModel.title)
             .onDisappear{
-                currentTime = item.currentTime()
-                totalTime = item.duration
+                viewModel.finishedPlaying(item: item)
             }
         }
-    }
-    
-    var currentTimeInSeconds: Float {
-        Float(currentTime.value)/Float(currentTime.timescale)
-    }
-    
-    var totalTimeInSeconds: Float {
-        Float(totalTime.value)/Float(totalTime.timescale)
-    }
-}
-
-extension AVPlayerItem: Identifiable {
-    public var id: ObjectIdentifier {
-        return ObjectIdentifier(self)
+        .task {
+            viewModel.fetchTalkTime()
+        }
     }
 }

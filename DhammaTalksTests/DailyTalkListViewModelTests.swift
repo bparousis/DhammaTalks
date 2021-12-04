@@ -17,8 +17,10 @@ class DailyTalkListViewModelTests: XCTestCase {
     fileprivate var talkDataService: MockTalkDataService!
     
     override func setUpWithError() throws {
+        let context = TestCoreDataStack().persistentContainer.viewContext
         talkDataService = MockTalkDataService()
-        sut = DailyTalkListViewModel(talkDataService: talkDataService)
+        sut = DailyTalkListViewModel(talkDataService: talkDataService,
+                                     talkUserInfoService: TalkUserInfoService(managedObjectContext: context))
     }
 
     override func tearDownWithError() throws {
@@ -82,8 +84,8 @@ private class MockTalkDataService: TalkDataService {
         else if shouldCancel {
             return .failure(NSError(domain: "test", code: URLError.cancelled.rawValue, userInfo: nil))
         } else {
-            let section1 = TalkSection(title: "Section 1", talks: [TalkData(id: "1", title: "Talk 1", date: nil, url: "http://talk1")])
-            let section2 = TalkSection(title: "Section 2", talks: [TalkData(id: "2", title: "Talk 2", date: nil, url: "http://talk2")])
+            let section1 = TalkSection(id: "1", title: "Section 1", talks: [TalkData(id: "1", title: "Talk 1", date: nil, url: "http://talk1")])
+            let section2 = TalkSection(id: "2", title: "Section 2", talks: [TalkData(id: "2", title: "Talk 2", date: nil, url: "http://talk2")])
             return .success([section1, section2])
         }
     }

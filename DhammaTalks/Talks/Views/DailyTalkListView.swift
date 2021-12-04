@@ -34,7 +34,8 @@ struct DailyTalkListView: View {
                 ForEach(viewModel.talkSections) { talkSection in
                     Section(header: TalkSectionHeader(title: talkSection.title ?? "", talkCount: talkSection.talks.count)) {
                         ForEach(talkSection.talks) { talk in
-                            TalkRow(talk: talk)
+                            let viewModel = TalkRowViewModel(talkData: talk, talkUserInfoService: viewModel.talkUserInfoService)
+                            TalkRow(viewModel: viewModel)
                         }
                     }
                 }
@@ -59,13 +60,5 @@ struct DailyTalkListView: View {
         }
         .listStyle(.insetGrouped)
         .navigationBarTitle("Daily Talks", displayMode: .inline)
-    }
-}
-
-struct YearlyTalkListView_Previews: PreviewProvider {
-    static var previews: some View {
-        return NavigationView {
-            DailyTalkListView(viewModel: DailyTalkListViewModel(talkDataService: TalkDataService()))
-        }
     }
 }
