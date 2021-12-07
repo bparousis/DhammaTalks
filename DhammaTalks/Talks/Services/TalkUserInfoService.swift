@@ -41,7 +41,9 @@ class TalkUserInfoService {
             talkUserInfoMO.currentTimeScale = talkUserInfo.currentTime.timescale
             talkUserInfoMO.totalTimeValue = talkUserInfo.totalTime.value
             talkUserInfoMO.totalTimeScale = talkUserInfo.totalTime.timescale
-            try managedObjectContext.save()
+            if managedObjectContext.hasChanges {
+                try managedObjectContext.save()
+            }
         }
     }
 }

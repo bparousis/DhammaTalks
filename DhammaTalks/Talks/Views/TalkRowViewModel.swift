@@ -9,6 +9,7 @@
 import Foundation
 import Combine
 import AVFoundation
+import os.log
 
 class TalkRowViewModel: ObservableObject {
     
@@ -69,16 +70,27 @@ class TalkRowViewModel: ObservableObject {
     }
     
     func finishedPlaying(item: AVPlayerItem) {
+        
+        // playerItem can only be associated with a single AVPlayer.  So when we're finished playing we
+        // need to set it to nil.  A new instance will be created the next time the talk is played.
+        defer {
+            playerItem = nil
+        }
+
         currentTime = item.currentTime()
         totalTime = item.duration
 
-        if var talkUserInfo = talkUserInfoService.getTalkUserInfo(for: talkData.url) {
-            talkUserInfo.currentTime = item.currentTime()
-            talkUserInfo.totalTime = item.duration
-            try? talkUserInfoService.save(talkUserInfo: talkUserInfo)
-        } else {
-            let userInfo = TalkUserInfo(url: talkData.url, currentTime: item.currentTime(), totalTime: item.duration, starred: false, downloadPath: nil)
-            try? talkUserInfoService.save(talkUserInfo: userInfo)
+        do {
+            if var talkUserInfo = talkUserInfoService.getTalkUserInfo(for: talkData.url) {
+                talkUserInfo.currentTime = item.currentTime()
+                talkUserInfo.totalTime = item.duration
+                try talkUserInfoService.save(talkUserInfo: talkUserInfo)
+            } else {
+                let userInfo = TalkUserInfo(url: talkData.url, currentTime: item.currentTime(), totalTime: item.duration, starred: false, downloadPath: nil)
+                try talkUserInfoService.save(talkUserInfo: userInfo)
+            }
+        } catch {
+            Logger.talkUserInfo.error("Error saving TalkUserInfo: \(String(describing: error))")
         }
     }
     

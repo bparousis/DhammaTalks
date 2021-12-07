@@ -42,6 +42,7 @@
 		76163A572747788D00358DDF /* short_y2019.html in Resources */ = {isa = PBXBuildFile; fileRef = 76163A4C2747788D00358DDF /* short_y2019.html */; };
 		76163A582747788D00358DDF /* short_y2020.html in Resources */ = {isa = PBXBuildFile; fileRef = 76163A4D2747788D00358DDF /* short_y2020.html */; };
 		76163A5A27477B6500358DDF /* DailyTalkCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76163A5927477B6500358DDF /* DailyTalkCategory.swift */; };
+		76172407275F217000757236 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76172406275F217000757236 /* Logger.swift */; };
 		76227188273A159100AFBA63 /* TalkDataServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76227187273A159100AFBA63 /* TalkDataServiceTests.swift */; };
 		7622718D273A1F8800AFBA63 /* HTMLPageFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7622718C273A1F8800AFBA63 /* HTMLPageFetcher.swift */; };
 		763C950227383D4A00632633 /* UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 763C950127383D4A00632633 /* UIImage.swift */; };
@@ -136,6 +137,7 @@
 		76163A4C2747788D00358DDF /* short_y2019.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = short_y2019.html; sourceTree = "<group>"; };
 		76163A4D2747788D00358DDF /* short_y2020.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = short_y2020.html; sourceTree = "<group>"; };
 		76163A5927477B6500358DDF /* DailyTalkCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyTalkCategory.swift; sourceTree = "<group>"; };
+		76172406275F217000757236 /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
 		76227187273A159100AFBA63 /* TalkDataServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TalkDataServiceTests.swift; sourceTree = "<group>"; };
 		7622718C273A1F8800AFBA63 /* HTMLPageFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTMLPageFetcher.swift; sourceTree = "<group>"; };
 		763C950127383D4A00632633 /* UIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImage.swift; sourceTree = "<group>"; };
@@ -315,6 +317,7 @@
 				767AAC9027572D7B0003D9AC /* DateFormatter.swift */,
 				767AAC9227572E600003D9AC /* DateComponentsFormatter.swift */,
 				767AAC9427572F620003D9AC /* AVPlayerItem.swift */,
+				76172406275F217000757236 /* Logger.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -595,6 +598,7 @@
 				76E0653223CAB9EB007E18C1 /* AudioFileNameParser.swift in Sources */,
 				76577E92273B699E00CB453D /* YearlyHTMLData.swift in Sources */,
 				767AAC8F27572C9B0003D9AC /* TalkRowViewModel.swift in Sources */,
+				76172407275F217000757236 /* Logger.swift in Sources */,
 				769E69E52749758400DEC24C /* MediaPlayer.swift in Sources */,
 				76E064FE23CA9C6C007E18C1 /* ContentView.swift in Sources */,
 				767EEDB62744A58C0094697D /* TalkSectionHeader.swift in Sources */,
