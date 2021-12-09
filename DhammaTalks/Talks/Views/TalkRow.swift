@@ -14,7 +14,48 @@ import AVFoundation
 struct TalkRow: View {
     
     @ObservedObject var viewModel: TalkRowViewModel
-    @State var showPopover = false
+    @State var showActionSheet = false
+    
+    var actionButton: some View {
+        VStack {
+            if viewModel.downloadProgress != nil {
+                CircularProgressBar(progress: $viewModel.downloadProgress, lineWidth: 2.0) {
+                    viewModel.cancelDownload()
+                }
+                .frame(width: 25, height: 25, alignment: .center)
+            } else {
+                Button(action: { showActionSheet = true }) {
+                    Image(systemName: "ellipsis")
+                }
+            }
+        }
+    }
+    
+    var statusView: some View {
+        HStack(spacing: 10) {
+            if viewModel.isDownloadAvailable {
+                Image(systemName: "arrow.down.circle.fill")
+                    .foregroundColor(Color(.systemBlue))
+            }
+            switch viewModel.state {
+            case .played:
+                Text("Played")
+                     .foregroundColor(.secondary)
+                     .font(.system(size: 12))
+            case .inProgress:
+                ProgressView(value: viewModel.currentTimeInSeconds, total: viewModel.totalTimeInSeconds)
+                    .frame(width: 75)
+                if let timeRemainingPhrase = viewModel.timeRemainingPhrase {
+                    Text(timeRemainingPhrase)
+                        .foregroundColor(.secondary)
+                        .font(.system(size: 12))
+                }
+            case .unplayed:
+                Text("")
+                    .frame(width: 0, height: 0, alignment: .top)
+            }
+        }
+    }
 
     var body: some View {
         
@@ -25,46 +66,22 @@ struct TalkRow: View {
         }) {
             HStack(alignment: .center, spacing: 10) {
                 VStack(alignment: .leading, spacing: 5) {
-                    HStack(alignment: .top, spacing: 10) {
-                        Text(viewModel.title)
-                            .font(.headline)
-                        if viewModel.starred {
-                            Image(systemName: "star.fill")
-                                .foregroundColor(.yellow)
-                        }
-                    }
+                    Text(viewModel.title)
+                        .font(.headline)
                     Text(viewModel.formattedDate ?? "")
                         .font(.subheadline)
                     Spacer()
-                    HStack(spacing: 10) {
-                        switch viewModel.state {
-                        case .played:
-                            Text("Played")
-                                 .foregroundColor(.secondary)
-                                 .font(.system(size: 12))
-                        case .inProgress:
-                            ProgressView(value: viewModel.currentTimeInSeconds, total: viewModel.totalTimeInSeconds)
-                                .frame(width: 75)
-                            if let timeRemainingPhrase = viewModel.timeRemainingPhrase {
-                                Text(timeRemainingPhrase)
-                                    .foregroundColor(.secondary)
-                                    .font(.system(size: 12))
-                            }
-                        case .unplayed:
-                            Text("")
-                                .frame(width: 0, height: 0, alignment: .top)
-                        }
-                    }
+                    statusView
                 }
                 Spacer()
-                Button(action: { showPopover = true }) {
-                    Image(systemName: "ellipsis")
-                }
-                .popover(isPresented: $showPopover) {
-                    List {
-                        // TODO: Place holder for options
-                        Text("Option 1")
-                        Text("Option 2")
+                actionButton
+            }
+        }
+        .confirmationDialog(Text(viewModel.title), isPresented: $showActionSheet) {
+            ForEach(viewModel.actions) { action in
+                Button(action.title) {
+                    withAnimation {
+                        viewModel.handleAction(action)
                     }
                 }
             }

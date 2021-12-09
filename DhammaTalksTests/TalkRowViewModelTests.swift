@@ -41,7 +41,6 @@ class TalkRowViewModelTests: XCTestCase {
         
         self.context.performAndWait {
             let userInfo = TalkUserInfoMO(context: self.context)
-            userInfo.starred = false
             userInfo.url = "about:blank"
             userInfo.totalTimeScale = 1000000000
             userInfo.totalTimeValue = 14193277562
@@ -80,7 +79,6 @@ class TalkRowViewModelTests: XCTestCase {
         
         self.context.performAndWait {
             let userInfo = TalkUserInfoMO(context: self.context)
-            userInfo.starred = false
             userInfo.url = "about:blank"
             userInfo.totalTimeScale = 1000000000
             userInfo.totalTimeValue = 14193277562
@@ -130,7 +128,6 @@ class TalkRowViewModelTests: XCTestCase {
         
         self.context.performAndWait {
             let userInfo = TalkUserInfoMO(context: self.context)
-            userInfo.starred = false
             userInfo.url = "about:blank"
             userInfo.totalTimeScale = 1000000000
             userInfo.totalTimeValue = 154433577362

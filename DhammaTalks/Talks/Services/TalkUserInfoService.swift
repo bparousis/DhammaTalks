@@ -35,8 +35,6 @@ class TalkUserInfoService {
         try managedObjectContext.performAndWait {
             let talkUserInfoMO = TalkUserInfoMO(context: managedObjectContext)
             talkUserInfoMO.url = talkUserInfo.url
-            talkUserInfoMO.downloadPath = talkUserInfo.downloadPath
-            talkUserInfoMO.starred = talkUserInfo.starred
             talkUserInfoMO.currentTimeValue = talkUserInfo.currentTime.value
             talkUserInfoMO.currentTimeScale = talkUserInfo.currentTime.timescale
             talkUserInfoMO.totalTimeValue = talkUserInfo.totalTime.value
@@ -53,7 +51,6 @@ extension TalkUserInfoMO {
         let currentCMTime = CMTime(value: currentTimeValue, timescale: currentTimeScale)
         let totalCMTime = CMTime(value: totalTimeValue, timescale: totalTimeScale)
         
-        return TalkUserInfo(url: url ?? "", currentTime: currentCMTime, totalTime: totalCMTime, starred: starred,
-                            downloadPath: downloadPath)
+        return TalkUserInfo(url: url ?? "", currentTime: currentCMTime, totalTime: totalCMTime)
     }
 }

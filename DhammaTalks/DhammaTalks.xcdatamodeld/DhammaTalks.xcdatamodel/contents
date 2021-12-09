@@ -3,8 +3,6 @@
     <entity name="TalkUserInfoMO" representedClassName="TalkUserInfoMO" syncable="YES" codeGenerationType="class">
         <attribute name="currentTimeScale" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="currentTimeValue" optional="YES" attributeType="Integer 64" valueTransformerName="NSSecureUnarchiveFromDataTransformer" defaultValueString="0.0" usesScalarValueType="YES"/>
-        <attribute name="downloadPath" optional="YES" attributeType="String"/>
-        <attribute name="starred" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="totalTimeScale" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="totalTimeValue" optional="YES" attributeType="Integer 64" valueTransformerName="NSSecureUnarchiveFromDataTransformer" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="url" optional="YES" attributeType="String"/>
@@ -15,6 +13,6 @@
         </uniquenessConstraints>
     </entity>
     <elements>
-        <element name="TalkUserInfoMO" positionX="-63" positionY="-18" width="128" height="134"/>
+        <element name="TalkUserInfoMO" positionX="-63" positionY="-18" width="128" height="104"/>
     </elements>
 </model>

@@ -15,6 +15,15 @@ struct TalkData: Identifiable, Decodable {
     let date: Date?
     let url: String
     
+    var filename: String {
+        if let lastSlashIndex = url.lastIndex(of: "/") {
+            let startIndex = url.index(after: lastSlashIndex)
+            return String(url[startIndex..<url.endIndex])
+        } else {
+            return url
+        }
+    }
+    
     func makeURL() -> URL? {
         guard let talkURL = URL(string: "\(HTMLPageFetcher.archivePath)/\(url)") else {
             return nil
