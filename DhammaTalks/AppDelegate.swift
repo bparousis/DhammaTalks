@@ -9,6 +9,7 @@
 import UIKit
 import CoreData
 import AVKit
+import os.log
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -20,7 +21,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             // Set the audio session category, mode, and options.
             try audioSession.setCategory(.playback, mode: .spokenAudio, options: [])
         } catch {
-            print("Failed to set audio session category.")
+            Logger.audio.error("Failed to set audio session category: \(String(describing: error))")
         }
         // Override point for customization after application launch.
         return true

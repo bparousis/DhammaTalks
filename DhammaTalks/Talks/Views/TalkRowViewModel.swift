@@ -39,7 +39,7 @@ class TalkRowViewModel: NSObject, ObservableObject {
     private let talkData: TalkData
     private let talkUserInfoService: TalkUserInfoService
     private let urlSession: URLSession
-    private let audioStorage: AudioStorage
+    private let fileStorage: FileStorage
     private static let PLAYED_TIME_BUFFER: TimeInterval = 10
 
     private var currentTime: CMTime? {
@@ -66,7 +66,7 @@ class TalkRowViewModel: NSObject, ObservableObject {
     }
     
     var isDownloadAvailable: Bool {
-        audioStorage.isAvailable(filename: talkData.filename)
+        fileStorage.exists(filename: talkData.filename)
     }
     
     var formattedDate: String? {
@@ -102,19 +102,19 @@ class TalkRowViewModel: NSObject, ObservableObject {
     private var downloadTask: URLSessionDownloadTask?
     
     init(talkData: TalkData, talkUserInfoService: TalkUserInfoService, urlSession: URLSession = .shared,
-         audioStorage: AudioStorage = LocalAudioStorage())
+         fileStorage: FileStorage = LocalFileStorage())
     {
         self.talkData = talkData
         self.talkUserInfoService = talkUserInfoService
         self.urlSession = urlSession
-        self.audioStorage = audioStorage
+        self.fileStorage = fileStorage
     }
 
     func play() async {
         var playItemURL: URL?
 
-        if let storedAudioURL = audioStorage.url(for: talkData.filename) {
-            playItemURL = storedAudioURL
+        if fileStorage.exists(filename: talkData.filename) {
+            playItemURL = fileStorage.createURL(for: talkData.filename)
         } else {
             playItemURL = talkData.makeURL()
         }
@@ -198,9 +198,9 @@ class TalkRowViewModel: NSObject, ObservableObject {
     
     private func removeDownload() {
         do {
-            try audioStorage.remove(filename: talkData.filename)
+            try fileStorage.remove(filename: talkData.filename)
         } catch {
-            Logger.audioStorage.error("Failed to remove download: \(String(describing: error))")
+            Logger.fileStorage.error("Failed to remove download: \(String(describing: error))")
         }
     }
     
@@ -217,9 +217,9 @@ extension TalkRowViewModel: URLSessionDownloadDelegate {
 
     func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
         do {
-            try audioStorage.save(at: location, withFilename: talkData.filename)
+            try fileStorage.save(at: location, withFilename: talkData.filename)
         } catch {
-            Logger.audioStorage.error("Failed to save download: \(String(describing: error))")
+            Logger.fileStorage.error("Failed to save download: \(String(describing: error))")
         }
         
         DispatchQueue.main.async {

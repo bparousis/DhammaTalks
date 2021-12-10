@@ -12,13 +12,26 @@ import XCTest
 @testable import DhammaTalks
 import CoreData
 import AVFoundation
+import Combine
 
 class TalkRowViewModelTests: XCTestCase {
+    static let someText = "ABCDEFG"
     var sut: TalkRowViewModel!
     var context: NSManagedObjectContext!
     var talkUserInfoService: TalkUserInfoService!
+    var urlSession: URLSession!
 
     override func setUpWithError() throws {
+        MockURLProtocol.requestHandler = { request in
+            let exampleData = Self.someText.data(using: .utf8)!
+            let response = HTTPURLResponse.init(url: request.url!, statusCode: 200, httpVersion: "2.0", headerFields: nil)!
+            return (response, exampleData)
+        }
+        
+        let configuration = URLSessionConfiguration.ephemeral
+        configuration.protocolClasses = [MockURLProtocol.self]
+        urlSession = URLSession(configuration: configuration)
+        
         // Put setup code here. This method is called before the invocation of each test method in the class.
         context = TestCoreDataStack().persistentContainer.viewContext
         talkUserInfoService = TalkUserInfoService(managedObjectContext: context)
@@ -142,5 +155,50 @@ class TalkRowViewModelTests: XCTestCase {
         XCTAssertEqual(sut.currentTimeInSeconds, 8.495278262)
         XCTAssertEqual(sut.totalTimeInSeconds, 154.433577362)
         XCTAssertEqual(sut.timeRemainingPhrase, "2 min, 25 sec remaining")
+    }
+    
+    func testDownload() throws {
+        let date = Calendar.current.date(from: DateComponents(year:2000, month: 1, day: 1))
+        let talkData = TalkData(id: "1", title: "Title", date: date, url: "about:blank")
+        let mockFileStorage = MockFileStorage()
+        sut = TalkRowViewModel(talkData: talkData, talkUserInfoService: talkUserInfoService, urlSession: urlSession, fileStorage: mockFileStorage)
+        XCTAssertNil(mockFileStorage.saveURL)
+        let downloadProgress = sut.$downloadProgress
+            .collect(2)
+            .first()
+        sut.handleAction(.download)
+        let _ = try awaitPublisher(downloadProgress)
+        XCTAssertNotNil(mockFileStorage.saveURL)
+    }
+    
+    func testRemoveDownload() throws {
+        let date = Calendar.current.date(from: DateComponents(year:2000, month: 1, day: 1))
+        let talkData = TalkData(id: "1", title: "Title", date: date, url: "y2020/test.mp3")
+        let mockFileStorage = MockFileStorage()
+        sut = TalkRowViewModel(talkData: talkData, talkUserInfoService: talkUserInfoService, fileStorage: mockFileStorage)
+        XCTAssertNil(mockFileStorage.performedRemoveFilename)
+        sut.handleAction(.removeDownload)
+        XCTAssertEqual(mockFileStorage.performedRemoveFilename, "test.mp3")
+    }
+}
+
+private class MockFileStorage: FileStorage {
+    var saveURL: URL?
+    var performedRemoveFilename: String?
+    
+    func save(at url: URL, withFilename filename: String) throws {
+        saveURL = url
+    }
+    
+    func remove(filename: String) throws {
+        performedRemoveFilename = filename
+    }
+    
+    func exists(filename: String) -> Bool {
+        return true
+    }
+    
+    func createURL(for filename: String) -> URL {
+        return URL(string: "http://google.com")!
     }
 }

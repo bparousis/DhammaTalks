@@ -17,7 +17,7 @@ struct TalkRow: View {
     @State var showActionSheet = false
     
     var actionButton: some View {
-        VStack {
+        HStack {
             if viewModel.downloadProgress != nil {
                 CircularProgressBar(progress: $viewModel.downloadProgress, lineWidth: 2.0) {
                     viewModel.cancelDownload()
@@ -68,9 +68,10 @@ struct TalkRow: View {
                 VStack(alignment: .leading, spacing: 5) {
                     Text(viewModel.title)
                         .font(.headline)
-                    Text(viewModel.formattedDate ?? "")
-                        .font(.subheadline)
-                    Spacer()
+                    if let formattedDate = viewModel.formattedDate {
+                        Text(formattedDate)
+                            .font(.subheadline)
+                    }
                     statusView
                 }
                 Spacer()
@@ -80,9 +81,7 @@ struct TalkRow: View {
         .confirmationDialog(Text(viewModel.title), isPresented: $showActionSheet) {
             ForEach(viewModel.actions) { action in
                 Button(action.title) {
-                    withAnimation {
-                        viewModel.handleAction(action)
-                    }
+                    viewModel.handleAction(action)
                 }
             }
         }

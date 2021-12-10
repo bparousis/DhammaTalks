@@ -11,5 +11,6 @@ import os.log
 
 extension Logger {
     static let talkUserInfo = Logger(subsystem: "com.bparousis.DhammaTalks", category: "TalkUserInfo")
-    static let audioStorage = Logger(subsystem: "com.bparousis.DhammaTalks", category: "AudioStorage")
+    static let fileStorage = Logger(subsystem: "com.bparousis.DhammaTalks", category: "FileStorage")
+    static let audio = Logger(subsystem: "com.bparousis.DhammaTalks", category: "Audio")
 }
