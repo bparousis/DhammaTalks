@@ -14,12 +14,12 @@ enum DailyTalkCategory: String, CaseIterable, Identifiable {
     case short
     case evening
 
-    func talkURLForYear(_ year: Int) -> String {
+    func directoryForYear(_ year: Int) -> String {
         switch self {
         case .short:
-            return "\(HTMLPageFetcher.archivePath)/shorttalks/y\(year)"
+            return "shorttalks/y\(year)"
         case .evening:
-            return "\(HTMLPageFetcher.archivePath)/y\(year)"
+            return "y\(year)"
         }
     }
     

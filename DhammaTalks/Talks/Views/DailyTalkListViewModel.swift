@@ -13,6 +13,7 @@ class DailyTalkListViewModel: ObservableObject {
 
     private let calendar: Calendar
     private let talkDataService: TalkDataService
+    let talkUserInfoService: TalkUserInfoService
 
     @Published var selectedCategory: DailyTalkCategory {
         didSet {
@@ -23,9 +24,9 @@ class DailyTalkListViewModel: ObservableObject {
     }
 
     @Published var selectedYear: Int
-    @Published var talkSections: [TalkSection] = []
     @Published var showingAlert = false
-    @Published var isFetchDataFinished = false
+    @Published private(set) var talkSections: [TalkSection] = []
+    @Published private(set) var isFetchDataFinished = false
 
     var currentYear: Int {
         calendar.currentYear
@@ -35,8 +36,10 @@ class DailyTalkListViewModel: ObservableObject {
         Array(selectedCategory.startYear...currentYear).reversed()
     }
     
-    init(talkDataService: TalkDataService, calendar: Calendar = .current, selectedCategory: DailyTalkCategory = .evening) {
+    init(talkDataService: TalkDataService, talkUserInfoService: TalkUserInfoService,
+         calendar: Calendar = .current, selectedCategory: DailyTalkCategory = .evening) {
         self.talkDataService = talkDataService
+        self.talkUserInfoService = talkUserInfoService
         self.calendar = calendar
         self.selectedCategory = selectedCategory
         self.selectedYear = calendar.currentYear

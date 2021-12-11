@@ -15,6 +15,27 @@ struct DailyTalkListView: View {
     init(viewModel: DailyTalkListViewModel) {
         self.viewModel = viewModel
     }
+    
+    private var datePickerView: some View {
+        Section {
+            Picker("Year", selection: $viewModel.selectedYear) {
+                ForEach(viewModel.years, id: \.self) {
+                    Text(String($0))
+                }
+            }
+        }
+    }
+    
+    private var talkSectionsView: some View {
+        ForEach(viewModel.talkSections) { talkSection in
+            Section(header: TalkSectionHeader(title: talkSection.title ?? "", talkCount: talkSection.talks.count)) {
+                ForEach(talkSection.talks) { talk in
+                    let viewModel = TalkRowViewModel(talkData: talk, talkUserInfoService: viewModel.talkUserInfoService)
+                    TalkRow(viewModel: viewModel)
+                }
+            }
+        }
+    }
 
     var body: some View {
         List {
@@ -23,21 +44,8 @@ struct DailyTalkListView: View {
                     ProgressView()
                 }
             } else {
-                Section {
-                    Picker("Year", selection: $viewModel.selectedYear) {
-                        ForEach(viewModel.years, id: \.self) {
-                            Text(String($0))
-                        }
-                    }
-                }
-
-                ForEach(viewModel.talkSections) { talkSection in
-                    Section(header: TalkSectionHeader(title: talkSection.title ?? "", talkCount: talkSection.talks.count)) {
-                        ForEach(talkSection.talks) { talk in
-                            TalkRow(talk: talk)
-                        }
-                    }
-                }
+                datePickerView
+                talkSectionsView
             }
         }
         .toolbar {
@@ -59,13 +67,5 @@ struct DailyTalkListView: View {
         }
         .listStyle(.insetGrouped)
         .navigationBarTitle("Daily Talks", displayMode: .inline)
-    }
-}
-
-struct YearlyTalkListView_Previews: PreviewProvider {
-    static var previews: some View {
-        return NavigationView {
-            DailyTalkListView(viewModel: DailyTalkListViewModel(talkDataService: TalkDataService()))
-        }
     }
 }

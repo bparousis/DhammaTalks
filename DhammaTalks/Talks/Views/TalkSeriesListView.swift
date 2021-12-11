@@ -12,9 +12,11 @@ import SwiftUI
 struct TalkSeriesListView: View {
 
     private let talkSeries: TalkSeries
+    private let talkUserInfoService: TalkUserInfoService
     
-    init(talkSeries: TalkSeries) {
+    init(talkSeries: TalkSeries, talkUserInfoService: TalkUserInfoService) {
         self.talkSeries = talkSeries
+        self.talkUserInfoService = talkUserInfoService
     }
     
     var body: some View {
@@ -22,20 +24,13 @@ struct TalkSeriesListView: View {
             ForEach(talkSeries.sections) { section in
                 Section(header: TalkSectionHeader(title: section.title ?? "", talkCount: section.talks.count)) {
                     ForEach(section.talks) { talk in
-                        TalkRow(talk: talk)
+                        let viewModel = TalkRowViewModel(talkData: talk, talkUserInfoService: talkUserInfoService)
+                        TalkRow(viewModel: viewModel)
                     }
                 }
             }
         }
         .listStyle(.insetGrouped)
         .navigationBarTitle(talkSeries.title, displayMode: .inline)
-    }
-}
-
-struct TalkSeriesListView_Previews: PreviewProvider {
-    static var previews: some View {
-        return NavigationView {
-            TalkSeriesListView(talkSeries: TalkSeries(title: "", description: "", image: "", sections: []))
-        }
     }
 }

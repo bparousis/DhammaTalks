@@ -14,12 +14,15 @@ struct TalkData: Identifiable, Decodable {
     let title: String
     let date: Date?
     let url: String
-}
-
-extension TalkData: CustomStringConvertible {
-    var description: String {
-        // create and return a String that is how
-        // you’d like a Store to look when printed
-        return " \(title): \(url)"
+    
+    var filename: String {
+        url.filename
+    }
+    
+    func makeURL() -> URL? {
+        guard let talkURL = URL(string: "\(HTMLPageFetcher.archivePath)/\(url)") else {
+            return nil
+        }
+        return talkURL
     }
 }

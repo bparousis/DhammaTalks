@@ -21,11 +21,11 @@ class DailyTalkCategoryTests: XCTestCase {
     }
     
     func testTalkURLForYear() {
-        let eveningTalkURL = DailyTalkCategory.evening.talkURLForYear(2000)
-        XCTAssertEqual(eveningTalkURL, "https://www.dhammatalks.org/Archive/y2000")
+        let eveningTalkURL = DailyTalkCategory.evening.directoryForYear(2000)
+        XCTAssertEqual(eveningTalkURL, "y2000")
         
-        let shortTalkURL = DailyTalkCategory.short.talkURLForYear(2000)
-        XCTAssertEqual(shortTalkURL, "https://www.dhammatalks.org/Archive/shorttalks/y2000")
+        let shortTalkURL = DailyTalkCategory.short.directoryForYear(2000)
+        XCTAssertEqual(shortTalkURL, "shorttalks/y2000")
     }
     
     func testCachedFileNameForYear() {

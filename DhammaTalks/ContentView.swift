@@ -10,11 +10,14 @@ import SwiftUI
 import AVFoundation
 
 struct ContentView: View {
+    
+    @Environment(\.managedObjectContext) var managedObjectContext
 
     var body: some View {
         TabView {
             NavigationView {
-                DailyTalkListView(viewModel: DailyTalkListViewModel(talkDataService: TalkDataService()))
+                DailyTalkListView(viewModel: DailyTalkListViewModel(talkDataService: TalkDataService(),
+                                                                    talkUserInfoService: TalkUserInfoService(managedObjectContext: managedObjectContext)))
             }
             .tabItem {
                 Label("Daily Talks", systemImage: "mic")
@@ -22,7 +25,7 @@ struct ContentView: View {
             
             NavigationView {
                 if let talkSeriesList = TalkDataService.talkSeriesList {
-                    TalkSeriesSelectorView(talkSeriesList: talkSeriesList)
+                    TalkSeriesSelectorView(talkSeriesList: talkSeriesList, talkUserInfoService: TalkUserInfoService(managedObjectContext: managedObjectContext))
                 } else {
                     // It's not expected that this would ever be shown, since TalkDataService.talkSeriesList should
                     // load talk series from JSON file and display it in TalkSeriesSelectorView.
@@ -31,6 +34,13 @@ struct ContentView: View {
             }
             .tabItem {
                 Label("Collections", systemImage: "square.grid.2x2")
+            }
+            
+            NavigationView {
+                FavoritesListView(viewModel: FavoritesListViewModel(talkUserInfoService: TalkUserInfoService(managedObjectContext: managedObjectContext)))
+            }
+            .tabItem {
+                Label("Favorites", systemImage: "star.fill")
             }
         }
         .navigationTitle("Dhammatalks")

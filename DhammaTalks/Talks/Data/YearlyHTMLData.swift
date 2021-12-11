@@ -23,7 +23,7 @@ struct YearlyHTMLData {
             try document.select("a").forEach { element in
                 let hrefValue = try element.attr("href")
                 if let (title, date) = audioFileNameParser.parseFileNameWithDate(hrefValue) {
-                    let url = "\(talkCategory.talkURLForYear(year))/\(hrefValue)"
+                    let url = "\(talkCategory.directoryForYear(year))/\(hrefValue)"
                     let talkData = TalkData(id: UUID().uuidString, title: title, date: date, url: url)
                     talkDataList.insert(talkData, at: 0)
                 }
