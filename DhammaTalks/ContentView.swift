@@ -35,6 +35,13 @@ struct ContentView: View {
             .tabItem {
                 Label("Collections", systemImage: "square.grid.2x2")
             }
+            
+            NavigationView {
+                FavoritesListView(viewModel: FavoritesListViewModel(talkUserInfoService: TalkUserInfoService(managedObjectContext: managedObjectContext)))
+            }
+            .tabItem {
+                Label("Favorites", systemImage: "star.fill")
+            }
         }
         .navigationTitle("Dhammatalks")
     }

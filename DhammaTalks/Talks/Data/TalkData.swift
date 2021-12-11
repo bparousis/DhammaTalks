@@ -16,12 +16,7 @@ struct TalkData: Identifiable, Decodable {
     let url: String
     
     var filename: String {
-        if let lastSlashIndex = url.lastIndex(of: "/") {
-            let startIndex = url.index(after: lastSlashIndex)
-            return String(url[startIndex..<url.endIndex])
-        } else {
-            return url
-        }
+        url.filename
     }
     
     func makeURL() -> URL? {
@@ -29,13 +24,5 @@ struct TalkData: Identifiable, Decodable {
             return nil
         }
         return talkURL
-    }
-}
-
-extension TalkData: CustomStringConvertible {
-    var description: String {
-        // create and return a String that is how
-        // you’d like a Store to look when printed
-        return " \(title): \(url)"
     }
 }

@@ -11,7 +11,6 @@ import Combine
 import AVFoundation
 import os.log
 
-
 class TalkRowViewModel: NSObject, ObservableObject {
 
     enum Action: String, Identifiable {
@@ -20,12 +19,14 @@ class TalkRowViewModel: NSObject, ObservableObject {
         case download
         case removeDownload
         case addToFavorites
+        case removeFromFavorites
         
         var title: String {
             switch self {
             case .download: return "Download"
             case .removeDownload: return "Remove Donwload"
             case .addToFavorites: return "Add to Favorites"
+            case .removeFromFavorites: return "Remove from Favorites"
             }
         }
     }
@@ -57,7 +58,7 @@ class TalkRowViewModel: NSObject, ObservableObject {
     var actions: [Action] {
         var actionList: [Action] = []
         actionList.append(isDownloadAvailable ? .removeDownload : .download)
-        actionList.append(.addToFavorites)
+        actionList.append(favorite ? .removeFromFavorites : .addToFavorites)
         return actionList
     }
     
@@ -98,6 +99,7 @@ class TalkRowViewModel: NSObject, ObservableObject {
     @Published var playerItem: AVPlayerItem?
     @Published var state: TalkState = .unplayed
     @Published var downloadProgress: CGFloat?
+    @Published var favorite: Bool = false
 
     private var downloadTask: URLSessionDownloadTask?
     
@@ -161,13 +163,16 @@ class TalkRowViewModel: NSObject, ObservableObject {
             removeDownload()
         case .addToFavorites:
             addToFavorites()
+        case .removeFromFavorites:
+            removeFromFavorites()
         }
     }
     
-    func fetchTalkTime() {
+    func fetchTalkInfo() {
         if let talkUserInfo = talkUserInfoService.getTalkUserInfo(for: talkData.url) {
             currentTime = talkUserInfo.currentTime
             totalTime = talkUserInfo.totalTime
+            favorite = talkUserInfo.favorite
         }
     }
     
@@ -180,7 +185,7 @@ class TalkRowViewModel: NSObject, ObservableObject {
         if let talkUserInfo = talkUserInfoService.getTalkUserInfo(for: talkData.url) {
             return talkUserInfo
         } else {
-            return TalkUserInfo(url: talkData.url, currentTime: CMTime(), totalTime: CMTime())
+            return TalkUserInfo(url: talkData.url, currentTime: CMTime(), totalTime: CMTime(), favorite: false)
         }
     }
 
@@ -192,8 +197,23 @@ class TalkRowViewModel: NSObject, ObservableObject {
         }
     }
 
+    private func setFavorite(to value: Bool) {
+        var talkUserInfo = fetchOrCreateTalkUserInfo(for: talkData.url)
+        talkUserInfo.favorite = value
+        do {
+            try talkUserInfoService.save(talkUserInfo: talkUserInfo)
+            favorite = value
+        } catch {
+            Logger.talkUserInfo.error("Error setting favorite value: \(String(describing: error))")
+        }
+    }
+    
     private func addToFavorites() {
-        //TODO: Implement feature
+        setFavorite(to: true)
+    }
+
+    private func removeFromFavorites() {
+        setFavorite(to: false)
     }
     
     private func removeDownload() {

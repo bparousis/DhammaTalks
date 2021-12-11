@@ -13,4 +13,5 @@ struct TalkUserInfo {
     var url: String
     var currentTime: CMTime
     var totalTime: CMTime
+    var favorite: Bool
 }

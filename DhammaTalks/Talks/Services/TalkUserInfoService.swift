@@ -9,11 +9,16 @@
 import Foundation
 import CoreData
 import CoreMedia
+import Combine
 
 class TalkUserInfoService {
     
-    private let managedObjectContext: NSManagedObjectContext
+    var savePublisher: AnyPublisher<TalkUserInfo, Never> {
+        saveSubject.eraseToAnyPublisher()
+    }
     
+    private let managedObjectContext: NSManagedObjectContext
+    private let saveSubject = PassthroughSubject<TalkUserInfo, Never>()
     init(managedObjectContext: NSManagedObjectContext) {
         self.managedObjectContext = managedObjectContext
     }
@@ -30,7 +35,7 @@ class TalkUserInfoService {
         }
         return talkUserInfo
     }
-    
+
     func save(talkUserInfo: TalkUserInfo) throws {
         try managedObjectContext.performAndWait {
             let talkUserInfoMO = TalkUserInfoMO(context: managedObjectContext)
@@ -39,18 +44,31 @@ class TalkUserInfoService {
             talkUserInfoMO.currentTimeScale = talkUserInfo.currentTime.timescale
             talkUserInfoMO.totalTimeValue = talkUserInfo.totalTime.value
             talkUserInfoMO.totalTimeScale = talkUserInfo.totalTime.timescale
+            talkUserInfoMO.favorite = talkUserInfo.favorite
             if managedObjectContext.hasChanges {
                 try managedObjectContext.save()
             }
+            saveSubject.send(talkUserInfo)
         }
     }
-}
-
-extension TalkUserInfoMO {
-    func toDomainModel() -> TalkUserInfo {
-        let currentCMTime = CMTime(value: currentTimeValue, timescale: currentTimeScale)
-        let totalCMTime = CMTime(value: totalTimeValue, timescale: totalTimeScale)
-        
-        return TalkUserInfo(url: url ?? "", currentTime: currentCMTime, totalTime: totalCMTime)
+    
+    @MainActor
+    func fetchFavoriteTalks() async -> [TalkData] {
+        await self.managedObjectContext.perform {
+            var favoritesList: [TalkData] = []
+            let talkUserInfoFetch = NSFetchRequest<TalkUserInfoMO>(entityName: "TalkUserInfoMO")
+            talkUserInfoFetch.predicate = NSPredicate(format: "favorite = %d", true)
+            guard let results = try? self.managedObjectContext.fetch(talkUserInfoFetch) else {
+                return favoritesList
+            }
+            
+            let filenameParser = AudioFileNameParser()
+            for talkUserInfoMO in results {
+                if let url = talkUserInfoMO.url, let (title, date) = filenameParser.parseFileNameWithDate(url.filename) {
+                    favoritesList.append(TalkData(id: UUID().uuidString, title: title, date: date, url: url))
+                }
+            }
+            return favoritesList
+        }
     }
 }

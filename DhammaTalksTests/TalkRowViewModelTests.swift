@@ -151,12 +151,48 @@ class TalkRowViewModelTests: XCTestCase {
         
         sut = TalkRowViewModel(talkData: talkData, talkUserInfoService: talkUserInfoService)
         
-        sut.fetchTalkTime()
+        sut.fetchTalkInfo()
         XCTAssertEqual(sut.currentTimeInSeconds, 8.495278262)
         XCTAssertEqual(sut.totalTimeInSeconds, 154.433577362)
         XCTAssertEqual(sut.timeRemainingPhrase, "2 min, 25 sec remaining")
     }
     
+    func testAddToFavorites() async {
+        let talkData = TalkData(id: "1", title: "Title", date: Date(), url: "about:blank")
+        
+        self.context.performAndWait {
+            let userInfo = TalkUserInfoMO(context: self.context)
+            userInfo.url = "about:blank"
+            userInfo.favorite = false
+            try? self.context.save()
+        }
+        
+        sut = TalkRowViewModel(talkData: talkData, talkUserInfoService: talkUserInfoService)
+        sut.fetchTalkInfo()
+        XCTAssertFalse(sut.favorite)
+        sut.handleAction(.addToFavorites)
+        sut.fetchTalkInfo()
+        XCTAssertTrue(sut.favorite)
+    }
+    
+    func testRemoveFromFavorites() async {
+        let talkData = TalkData(id: "1", title: "Title", date: Date(), url: "about:blank")
+        
+        self.context.performAndWait {
+            let userInfo = TalkUserInfoMO(context: self.context)
+            userInfo.url = "about:blank"
+            userInfo.favorite = true
+            try? self.context.save()
+        }
+        
+        sut = TalkRowViewModel(talkData: talkData, talkUserInfoService: talkUserInfoService)
+        sut.fetchTalkInfo()
+        XCTAssertTrue(sut.favorite)
+        sut.handleAction(.removeFromFavorites)
+        sut.fetchTalkInfo()
+        XCTAssertFalse(sut.favorite)
+    }
+
     func testDownload() throws {
         let date = Calendar.current.date(from: DateComponents(year:2000, month: 1, day: 1))
         let talkData = TalkData(id: "1", title: "Title", date: date, url: "about:blank")

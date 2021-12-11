@@ -14,35 +14,31 @@ import AVFoundation
 struct TalkRow: View {
     
     @ObservedObject var viewModel: TalkRowViewModel
-    @State var showActionSheet = false
+    @State private var showActionSheet = false
     
-    var actionButton: some View {
-        HStack {
-            if viewModel.downloadProgress != nil {
-                CircularProgressBar(progress: $viewModel.downloadProgress, lineWidth: 2.0) {
-                    viewModel.cancelDownload()
-                }
-                .frame(width: 25, height: 25, alignment: .center)
-            } else {
-                Button(action: { showActionSheet = true }) {
-                    Image(systemName: "ellipsis")
-                }
+    @ViewBuilder
+    private var actionButton: some View {
+        if viewModel.downloadProgress != nil {
+            CircularProgressBar(progress: $viewModel.downloadProgress, lineWidth: 2.0) {
+                viewModel.cancelDownload()
+            }
+            .frame(width: 25, height: 25, alignment: .center)
+        } else {
+            Button(action: { showActionSheet = true }) {
+                Image(systemName: "ellipsis")
             }
         }
     }
     
-    var statusView: some View {
-        HStack(spacing: 10) {
-            if viewModel.isDownloadAvailable {
-                Image(systemName: "arrow.down.circle.fill")
-                    .foregroundColor(Color(.systemBlue))
-            }
-            switch viewModel.state {
-            case .played:
-                Text("Played")
-                     .foregroundColor(.secondary)
-                     .font(.system(size: 12))
-            case .inProgress:
+    @ViewBuilder
+    private var playedStateView: some View {
+        switch viewModel.state {
+        case .played:
+            Text("Played")
+                 .foregroundColor(.secondary)
+                 .font(.system(size: 12))
+        case .inProgress:
+            HStack {
                 ProgressView(value: viewModel.currentTimeInSeconds, total: viewModel.totalTimeInSeconds)
                     .frame(width: 75)
                 if let timeRemainingPhrase = viewModel.timeRemainingPhrase {
@@ -50,15 +46,41 @@ struct TalkRow: View {
                         .foregroundColor(.secondary)
                         .font(.system(size: 12))
                 }
-            case .unplayed:
-                Text("")
-                    .frame(width: 0, height: 0, alignment: .top)
             }
+        case .unplayed:
+            Text("")
+                .frame(width: 0, height: 0, alignment: .top)
+        }
+    }
+    
+    var titleStatusView: some View {
+        HStack(alignment: .firstTextBaseline) {
+            Text(viewModel.title)
+                .font(.headline)
+            HStack(spacing: 3) {
+                if viewModel.favorite {
+                    Image(systemName: "star.fill")
+                        .font(.system(size: 11.5))
+                        .foregroundColor(Color(.systemYellow))
+                }
+                if viewModel.isDownloadAvailable {
+                    Image(systemName: "arrow.down.circle.fill")
+                        .font(.system(size: 11.5))
+                        .foregroundColor(Color(.systemBlue))
+                }
+            }
+        }
+    }
+    
+    @ViewBuilder
+    private var dateView: some View {
+        if let formattedDate = viewModel.formattedDate {
+            Text(formattedDate)
+                .font(.subheadline)
         }
     }
 
     var body: some View {
-        
         Button(action: {
             Task {
                 await viewModel.play()
@@ -66,13 +88,9 @@ struct TalkRow: View {
         }) {
             HStack(alignment: .center, spacing: 10) {
                 VStack(alignment: .leading, spacing: 5) {
-                    Text(viewModel.title)
-                        .font(.headline)
-                    if let formattedDate = viewModel.formattedDate {
-                        Text(formattedDate)
-                            .font(.subheadline)
-                    }
-                    statusView
+                    titleStatusView
+                    dateView
+                    playedStateView
                 }
                 Spacer()
                 actionButton
@@ -94,7 +112,7 @@ struct TalkRow: View {
             }
         }
         .task {
-            viewModel.fetchTalkTime()
+            viewModel.fetchTalkInfo()
         }
     }
 }
