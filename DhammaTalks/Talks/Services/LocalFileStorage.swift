@@ -55,6 +55,12 @@ struct LocalFileStorage: FileStorage {
         try fileManager.moveItem(at: url, to: destinationUrl)
     }
     
+    func saveData(_ data: Data, withFilename filename: String) throws {
+        try createDirectoryIfNeeded(for: filename)
+        let destinationUrl = createURL(for: filename)
+        try data.write(to: destinationUrl)
+    }
+    
     func remove(filename: String) throws {
         let destinationUrl = createURL(for: filename)
         if fileManager.fileExists(atPath: destinationUrl.path) {

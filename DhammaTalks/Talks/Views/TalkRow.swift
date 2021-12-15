@@ -55,6 +55,10 @@ struct TalkRow: View {
     
     var titleStatusView: some View {
         HStack(alignment: .firstTextBaseline) {
+            if viewModel.dateStyle == .day {
+                Text(viewModel.formattedDay ?? "  ")
+                    .font(.subheadline)
+            }
             Text(viewModel.title)
                 .font(.headline)
             HStack(spacing: 3) {
@@ -73,7 +77,7 @@ struct TalkRow: View {
     }
     
     @ViewBuilder
-    private var dateView: some View {
+    private var fullDateView: some View {
         if let formattedDate = viewModel.formattedDate {
             Text(formattedDate)
                 .font(.subheadline)
@@ -89,7 +93,9 @@ struct TalkRow: View {
             HStack(alignment: .center, spacing: 10) {
                 VStack(alignment: .leading, spacing: 5) {
                     titleStatusView
-                    dateView
+                    if viewModel.dateStyle == .full {
+                        fullDateView
+                    }
                     playedStateView
                 }
                 Spacer()
