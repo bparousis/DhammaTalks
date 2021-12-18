@@ -10,6 +10,7 @@ import Foundation
 
 protocol FileStorage {
     func save(at url: URL, withFilename filename: String) throws
+    func saveData(_ data: Data, withFilename filename: String) throws
     func remove(filename: String) throws
     func exists(filename: String) -> Bool
     func createURL(for filename: String) -> URL

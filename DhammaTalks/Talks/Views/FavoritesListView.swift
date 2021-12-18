@@ -30,7 +30,7 @@ struct FavoritesListView: View {
         } else {
             List {
                 ForEach(viewModel.favorites) { favoriteTalkData in
-                    TalkRow(viewModel: TalkRowViewModel(talkData: favoriteTalkData, talkUserInfoService: talkUserInfoService))
+                    TalkRow(viewModel: createTalkRowViewModel(talkData: favoriteTalkData))
                 }
             }
         }
@@ -49,6 +49,12 @@ struct FavoritesListView: View {
             await viewModel.fetchFavorites()
         }
         .navigationTitle("Favorites")
+    }
+    
+    private func createTalkRowViewModel(talkData: TalkData) -> TalkRowViewModel {
+        let viewModel = TalkRowViewModel(talkData: talkData, talkUserInfoService: talkUserInfoService)
+        viewModel.dateStyle = .full
+        return viewModel
     }
 }
 

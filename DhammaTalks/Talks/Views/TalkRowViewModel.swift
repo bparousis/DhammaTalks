@@ -13,6 +13,11 @@ import os.log
 
 class TalkRowViewModel: NSObject, ObservableObject {
 
+    enum DateStyle {
+        case day
+        case full
+    }
+    
     enum Action: String, Identifiable {
         var id: RawValue { rawValue }
         
@@ -42,6 +47,7 @@ class TalkRowViewModel: NSObject, ObservableObject {
     private let urlSession: URLSession
     private let fileStorage: FileStorage
     private static let PLAYED_TIME_BUFFER: TimeInterval = 10
+    var dateStyle: DateStyle = .day
 
     private var currentTime: CMTime? {
         didSet {
@@ -75,6 +81,13 @@ class TalkRowViewModel: NSObject, ObservableObject {
             return nil
         }
         return DateFormatter.monthDayYearFormatter.string(from: date)
+    }
+    
+    var formattedDay: String? {
+        guard let date = talkData.date else {
+            return nil
+        }
+        return DateFormatter.dayFormatter.string(from: date)
     }
     
     var currentTimeInSeconds: TimeInterval {

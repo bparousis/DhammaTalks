@@ -59,6 +59,10 @@ class DailyTalkListViewModel: ObservableObject {
         case .success(let talkSections):
             self.talkSections = talkSections
         case .failure(let error):
+            guard !error.isCancelError else {
+                return
+            }
+            
             if (error as NSError).code != URLError.cancelled.rawValue {
                 showingAlert = true
             }
