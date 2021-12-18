@@ -9,7 +9,7 @@
 import Foundation
 import SwiftSoup
 
-class TalkDataService {
+class TalkDataService: ObservableObject {
 
     private let htmlPageFetcher: HTMLPageFetcher
     

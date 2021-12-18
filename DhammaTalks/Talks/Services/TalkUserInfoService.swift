@@ -11,7 +11,7 @@ import CoreData
 import CoreMedia
 import Combine
 
-class TalkUserInfoService {
+class TalkUserInfoService: ObservableObject {
     
     var savePublisher: AnyPublisher<TalkUserInfo, Never> {
         saveSubject.eraseToAnyPublisher()
