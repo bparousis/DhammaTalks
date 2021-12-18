@@ -10,13 +10,9 @@ import SwiftUI
 import AVFoundation
 
 struct ContentView: View {
-    
-    @Environment(\.managedObjectContext) var managedObjectContext
 
-    private var talkDataService = TalkDataService()
-    private var talkUserServiceInfo: TalkUserInfoService {
-        TalkUserInfoService(managedObjectContext: managedObjectContext)
-    }
+    @EnvironmentObject private var talkDataService: TalkDataService
+    @EnvironmentObject private var talkUserServiceInfo: TalkUserInfoService
 
     private var dailyTalksView: some View {
         NavigationView {
