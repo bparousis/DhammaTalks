@@ -185,7 +185,7 @@ class TalkRowViewModel: NSObject, ObservableObject {
         if let talkUserInfo = talkUserInfoService.getTalkUserInfo(for: talkData.url) {
             currentTime = talkUserInfo.currentTime
             totalTime = talkUserInfo.totalTime
-            favorite = talkUserInfo.favorite
+            favorite = talkUserInfo.isFavorite
         }
     }
     
@@ -198,7 +198,7 @@ class TalkRowViewModel: NSObject, ObservableObject {
         if let talkUserInfo = talkUserInfoService.getTalkUserInfo(for: talkData.url) {
             return talkUserInfo
         } else {
-            return TalkUserInfo(url: talkData.url, currentTime: CMTime(), totalTime: CMTime(), favorite: false)
+            return TalkUserInfo(url: talkData.url, currentTime: CMTime(), totalTime: CMTime())
         }
     }
 
@@ -212,7 +212,7 @@ class TalkRowViewModel: NSObject, ObservableObject {
 
     private func setFavorite(to value: Bool) {
         var talkUserInfo = fetchOrCreateTalkUserInfo(for: talkData.url)
-        talkUserInfo.favorite = value
+        talkUserInfo.favoriteDetails = value ? FavoriteDetails(title: talkData.title, dateAdded: Date()) : nil
         do {
             try talkUserInfoService.save(talkUserInfo: talkUserInfo)
             favorite = value

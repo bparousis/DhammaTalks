@@ -39,7 +39,7 @@ struct FavoritesListView: View {
     var body: some View {
         favoritesListView
         .onReceive(talkUserInfoService.savePublisher) { output in
-            if output.favorite == false {
+            if !output.isFavorite {
                 Task {
                     await viewModel.fetchFavorites()
                 }
