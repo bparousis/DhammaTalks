@@ -50,6 +50,7 @@
 		7617240A275F2EB700757236 /* CircularProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76172409275F2EB700757236 /* CircularProgressBar.swift */; };
 		76227188273A159100AFBA63 /* TalkDataServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76227187273A159100AFBA63 /* TalkDataServiceTests.swift */; };
 		7622718D273A1F8800AFBA63 /* HTMLPageFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7622718C273A1F8800AFBA63 /* HTMLPageFetcher.swift */; };
+		762D0FF9278151BC00DB04FD /* FavoriteDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 762D0FF8278151BC00DB04FD /* FavoriteDetails.swift */; };
 		7637DBE7276E862800D2ACEC /* DhammaTalksApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7637DBE6276E862800D2ACEC /* DhammaTalksApp.swift */; };
 		7637DBE9276E865000D2ACEC /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7637DBE8276E865000D2ACEC /* CoreDataStack.swift */; };
 		763C950227383D4A00632633 /* UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 763C950127383D4A00632633 /* UIImage.swift */; };
@@ -155,6 +156,7 @@
 		76172409275F2EB700757236 /* CircularProgressBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircularProgressBar.swift; sourceTree = "<group>"; };
 		76227187273A159100AFBA63 /* TalkDataServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TalkDataServiceTests.swift; sourceTree = "<group>"; };
 		7622718C273A1F8800AFBA63 /* HTMLPageFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTMLPageFetcher.swift; sourceTree = "<group>"; };
+		762D0FF8278151BC00DB04FD /* FavoriteDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteDetails.swift; sourceTree = "<group>"; };
 		7637DBE6276E862800D2ACEC /* DhammaTalksApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DhammaTalksApp.swift; sourceTree = "<group>"; };
 		7637DBE8276E865000D2ACEC /* CoreDataStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
 		763C950127383D4A00632633 /* UIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImage.swift; sourceTree = "<group>"; };
@@ -458,6 +460,7 @@
 				76577E91273B699E00CB453D /* YearlyTalkData.swift */,
 				76163A5927477B6500358DDF /* DailyTalkCategory.swift */,
 				767B2C452751EEC4003643E9 /* TalkUserInfo.swift */,
+				762D0FF8278151BC00DB04FD /* FavoriteDetails.swift */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -655,6 +658,7 @@
 				760B4619276317E6007ED1E0 /* FavoritesListView.swift in Sources */,
 				76041DB32737008A00B32362 /* TalkSeries.swift in Sources */,
 				767AAC9127572D7B0003D9AC /* DateFormatter.swift in Sources */,
+				762D0FF9278151BC00DB04FD /* FavoriteDetails.swift in Sources */,
 				766CA1E123D517E300A8E770 /* TalkRow.swift in Sources */,
 				767B2C462751EEC4003643E9 /* TalkUserInfo.swift in Sources */,
 				7622718D273A1F8800AFBA63 /* HTMLPageFetcher.swift in Sources */,
@@ -856,6 +860,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 0.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.bparousis.DhammaTalks;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -877,6 +882,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 0.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.bparousis.DhammaTalks;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;

@@ -44,7 +44,12 @@ class TalkUserInfoService: ObservableObject {
             talkUserInfoMO.currentTimeScale = talkUserInfo.currentTime.timescale
             talkUserInfoMO.totalTimeValue = talkUserInfo.totalTime.value
             talkUserInfoMO.totalTimeScale = talkUserInfo.totalTime.timescale
-            talkUserInfoMO.favorite = talkUserInfo.favorite
+            if let favoriteDetails = talkUserInfo.favoriteDetails {
+                let favoriteDetailsMO = FavoriteDetailsMO(context: managedObjectContext)
+                favoriteDetailsMO.title = favoriteDetails.title
+                favoriteDetailsMO.dateAdded = favoriteDetails.dateAdded
+                talkUserInfoMO.favoriteDetails = favoriteDetailsMO
+            }
             if managedObjectContext.hasChanges {
                 try managedObjectContext.save()
             }
@@ -57,15 +62,15 @@ class TalkUserInfoService: ObservableObject {
         await self.managedObjectContext.perform {
             var favoritesList: [TalkData] = []
             let talkUserInfoFetch = NSFetchRequest<TalkUserInfoMO>(entityName: "TalkUserInfoMO")
-            talkUserInfoFetch.predicate = NSPredicate(format: "favorite = %d", true)
+            talkUserInfoFetch.predicate = NSPredicate(format: "favoriteDetails != nil")
+            talkUserInfoFetch.sortDescriptors = [NSSortDescriptor(key: "favoriteDetails.dateAdded", ascending: false)]
             guard let results = try? self.managedObjectContext.fetch(talkUserInfoFetch) else {
                 return favoritesList
             }
-            
-            let filenameParser = AudioFileNameParser()
+
             for talkUserInfoMO in results {
-                if let url = talkUserInfoMO.url, let (title, date) = filenameParser.parseFileNameWithDate(url.filename) {
-                    favoritesList.append(TalkData(id: UUID().uuidString, title: title, date: date, url: url))
+                if let url = talkUserInfoMO.url, let title = talkUserInfoMO.favoriteDetails?.title {
+                    favoritesList.append(TalkData(id: UUID().uuidString, title: title, date: nil, url: url))
                 }
             }
             return favoritesList
