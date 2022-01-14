@@ -42,7 +42,7 @@ class MockURLProtocol: URLProtocol {
         if let requestURL = request.url?.absoluteString {
             Self.requestURLHistory.append(requestURL)
             
-            if let failWithRequest = Self.failWithRequest, failWithRequest == requestURL {
+            if let failWithRequest = Self.failWithRequest, requestURL.hasPrefix(failWithRequest) {
                 client?.urlProtocol(self, didFailWithError: MockError.someError)
                 return
             }
