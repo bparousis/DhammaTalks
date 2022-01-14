@@ -19,26 +19,12 @@ class AudioFileNameParser {
         }
     }
 
-    private let YMD = "yyMMdd"
-    private let YM = "yyMM"
     private let DATE_POSITION = 0
     
     // IMPORTANT: Order matters.  For instance doing Translation(from: "_", to: " ") first would not translate correctly.
     private let translations: [Translation] = [Translation(from: "_Q.", to: "?."),
                                                Translation(from: "_Q_", to: "?_"),
                                                Translation(from: "_", to: " ")]
-
-    private lazy var ymdDateFormatter: DateFormatter = {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = YMD
-        return dateFormatter
-    }()
-    
-    private lazy var ymDateFormatter: DateFormatter = {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = YM
-        return dateFormatter
-    }()
 
     /// Returns nil if the URL isn't in date format. (e.g. https://www.dhammatalks.org/Archive/y2021/210101_A_Radiant_Practice.mp3)
     func parseFileNameWithDate(_ fileName: String) -> (title: String, date: Date)? {
@@ -53,10 +39,11 @@ class AudioFileNameParser {
         }
 
         var parsedDate: Date? = nil
-        if dateString.count == YMD.count {
-            parsedDate = ymdDateFormatter.date(from: dateString)
-        } else if dateString.count == YM.count {
-            parsedDate = ymDateFormatter.date(from: dateString)
+        
+        if dateString.count == DateFormatter.YMD.count {
+            parsedDate = DateFormatter.ymdDateFormatter.date(from: dateString)
+        } else if dateString.count == DateFormatter.YM.count {
+            parsedDate = DateFormatter.ymDateFormatter.date(from: dateString)
         }
         
         guard let date = parsedDate else {

@@ -49,11 +49,10 @@ class TalkDataServiceTests: XCTestCase {
         let sut = TalkDataService(htmlPageFetcher: MockHTMLPageFetcher(testCase: .multipleMonths))
         let result = await sut.fetchYearlyTalks(category: .evening, year: 2021)
         let talkSections = try result.get()
-        XCTAssertEqual(talkSections.count, 4)
-        XCTAssertEqual(talkSections[0].talks.count, 1)
-        XCTAssertEqual(talkSections[1].talks.count, 3)
-        XCTAssertEqual(talkSections[2].talks.count, 6)
-        XCTAssertEqual(talkSections[3].talks.count, 2)
+        XCTAssertEqual(talkSections.count, 3)
+        XCTAssertEqual(talkSections[0].talks.count, 2)
+        XCTAssertEqual(talkSections[1].talks.count, 5)
+        XCTAssertEqual(talkSections[2].talks.count, 3)
     }
     
     func testTalkSeriesList() {
@@ -67,11 +66,11 @@ class TalkDataServiceTests: XCTestCase {
 
 class MockHTMLPageFetcher: HTMLPageFetcher {
     private let testCase: TestCase
-    
+
     init(testCase: TestCase) {
         self.testCase = testCase
     }
-    
+
     enum TestCase {
         case error
         case noTalks
@@ -79,93 +78,34 @@ class MockHTMLPageFetcher: HTMLPageFetcher {
         case multipleMonths
     }
 
-    override func getYearlyHTMLForCategory(_ category: DailyTalkCategory, year: Int) async -> Result<YearlyHTMLData,Error> {
+    override func getYearlyHTMLForCategory(_ category: DailyTalkCategory, year: Int) async -> Result<YearlyTalkData, Error> {
         switch testCase {
         case .error:
             return .failure(HTMLPageFetcherError.failedToRetrieve)
         case .noTalks:
-            let html = """
-            <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
-            <html>
-             <head>
-              <title>Index of /Archive/y2021</title>
-             </head>
-             <body>
-            <h1>Index of /Archive/y2021</h1>
-              <table>
-               <tr><th valign="top"><img src="/icons/blank.gif" alt="[ICO]"></th><th><a href="?C=N;O=D">Name</a></th><th><a href="?C=M;O=A">Last modified</a></th><th><a href="?C=S;O=A">Size</a></th><th><a href="?C=D;O=A">Description</a></th></tr>
-               <tr><th colspan="5"><hr></th></tr>
-            <tr><td valign="top"><img src="/icons/back.gif" alt="[PARENTDIR]"></td><td><a href="/Archive/">Parent Directory</a></td><td>&nbsp;</td><td align="right">  - </td><td>&nbsp;</td></tr>
-            <tr><td valign="top"><img src="/icons/unknown.gif" alt="[   ]"></td><td><a href="test_a">test_a</a></td><td align="right">2021-03-09 00:38  </td><td align="right">  0 </td><td>&nbsp;</td></tr>
-            <tr><td valign="top"><img src="/icons/unknown.gif" alt="[   ]"></td><td><a href="test_b">test_b</a></td><td align="right">2021-03-09 00:38  </td><td align="right">  0 </td><td>&nbsp;</td></tr>
-               <tr><th colspan="5"><hr></th></tr>
-            </table>
-            <address>Apache/2.4.48 (Debian) Server at www.dhammatalks.org Port 443</address>
-            </body></html>
-            """
-            return .success(YearlyHTMLData(html: html, talkCategory: category, year: year))
-            
+            return .success(YearlyTalkData(talkDataList: [], talkCategory: category, year: year))
         case .oneMonth:
-            let html = """
-            <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
-            <html>
-             <head>
-              <title>Index of /Archive/y2021</title>
-             </head>
-             <body>
-            <h1>Index of /Archive/y2021</h1>
-              <table>
-               <tr><th valign="top"><img src="/icons/blank.gif" alt="[ICO]"></th><th><a href="?C=N;O=D">Name</a></th><th><a href="?C=M;O=A">Last modified</a></th><th><a href="?C=S;O=A">Size</a></th><th><a href="?C=D;O=A">Description</a></th></tr>
-               <tr><th colspan="5"><hr></th></tr>
-            <tr><td valign="top"><img src="/icons/back.gif" alt="[PARENTDIR]"></td><td><a href="/Archive/">Parent Directory</a></td><td>&nbsp;</td><td align="right">  - </td><td>&nbsp;</td></tr>
-            <tr><td valign="top"><img src="/icons/sound2.gif" alt="[SND]"></td><td><a href="210101_A_Radiant_Practice.mp3">210101_A_Radiant_Practice.mp3</a></td><td align="right">2021-01-07 03:12  </td><td align="right">6.5M</td><td>&nbsp;</td></tr>
-            <tr><td valign="top"><img src="/icons/sound2.gif" alt="[SND]"></td><td><a href="210107_Going_Out_of_Your_Way.mp3">210107_Going_Out_of_Your_Way.mp3</a></td><td align="right">2021-01-12 02:52  </td><td align="right">5.6M</td><td>&nbsp;</td></tr>
-            <tr><td valign="top"><img src="/icons/sound2.gif" alt="[SND]"></td><td><a href="210108_To_Be_Worthy_of_the_Dhamma.mp3">210108_To_Be_Worthy_of_the_Dhamma.mp3</a></td><td align="right">2021-01-12 02:52  </td><td align="right">6.6M</td><td>&nbsp;</td></tr>
-            <tr><td valign="top"><img src="/icons/compressed.gif" alt="[   ]"></td><td><a href="all_2021_01.zip">all_2021_01.zip</a></td><td align="right">2021-02-02 05:50  </td><td align="right">229M</td><td>&nbsp;</td></tr>
-            <tr><td valign="top"><img src="/icons/compressed.gif" alt="[   ]"></td><td><a href="all_2021_02.zip">all_2021_02.zip</a></td><td align="right">2021-04-18 03:06  </td><td align="right">179M</td><td>&nbsp;</td></tr>
-            <tr><td valign="top"><img src="/icons/unknown.gif" alt="[   ]"></td><td><a href="test_a">test_a</a></td><td align="right">2021-03-09 00:38  </td><td align="right">  0 </td><td>&nbsp;</td></tr>
-            <tr><td valign="top"><img src="/icons/unknown.gif" alt="[   ]"></td><td><a href="test_b">test_b</a></td><td align="right">2021-03-09 00:38  </td><td align="right">  0 </td><td>&nbsp;</td></tr>
-               <tr><th colspan="5"><hr></th></tr>
-            </table>
-            <address>Apache/2.4.48 (Debian) Server at www.dhammatalks.org Port 443</address>
-            </body></html>
-            """
-            return .success(YearlyHTMLData(html: html, talkCategory: category, year: year))
+            
+            let talkDataList = [
+                TalkData(id: "1", title: "Title 1", date: DateFormatter.ymdDateFormatter.date(from: "210101"), url: "210101_A_Radiant_Practice.mp3"),
+                TalkData(id: "2", title: "Title 2", date: DateFormatter.ymdDateFormatter.date(from: "210107"), url: "210107_Going_Out_of_Your_Way.mp3"),
+                TalkData(id: "3", title: "Title 3", date: DateFormatter.ymdDateFormatter.date(from: "210108"), url: "210108_To_Be_Worthy_of_the_Dhamma.mp3")
+            ]
+            return .success(YearlyTalkData(talkDataList: talkDataList, talkCategory: category, year: year))
         case .multipleMonths:
-            let html = """
-            <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
-            <html>
-             <head>
-              <title>Index of /Archive/y2021</title>
-             </head>
-             <body>
-            <h1>Index of /Archive/y2021</h1>
-              <table>
-               <tr><th valign="top"><img src="/icons/blank.gif" alt="[ICO]"></th><th><a href="?C=N;O=D">Name</a></th><th><a href="?C=M;O=A">Last modified</a></th><th><a href="?C=S;O=A">Size</a></th><th><a href="?C=D;O=A">Description</a></th></tr>
-               <tr><th colspan="5"><hr></th></tr>
-            <tr><td valign="top"><img src="/icons/back.gif" alt="[PARENTDIR]"></td><td><a href="/Archive/">Parent Directory</a></td><td>&nbsp;</td><td align="right">  - </td><td>&nbsp;</td></tr>
-            <tr><td valign="top"><img src="/icons/sound2.gif" alt="[SND]"></td><td><a href="210101_A_Radiant_Practice.mp3">210101_A_Radiant_Practice.mp3</a></td><td align="right">2021-01-07 03:12  </td><td align="right">6.5M</td><td>&nbsp;</td></tr>
-            <tr><td valign="top"><img src="/icons/sound2.gif" alt="[SND]"></td><td><a href="210108_To_Be_Worthy_of_the_Dhamma.mp3">210108_To_Be_Worthy_of_the_Dhamma.mp3</a></td><td align="right">2021-01-12 02:52  </td><td align="right">6.6M</td><td>&nbsp;</td></tr>
-            <tr><td valign="top"><img src="/icons/compressed.gif" alt="[   ]"></td><td><a href="all_2021_01.zip">all_2021_01.zip</a></td><td align="right">2021-02-02 05:50  </td><td align="right">229M</td><td>&nbsp;</td></tr>
-            <tr><td valign="top"><img src="/icons/compressed.gif" alt="[   ]"></td><td><a href="all_2021_02.zip">all_2021_02.zip</a></td><td align="right">2021-04-18 03:06  </td><td align="right">179M</td><td>&nbsp;</td></tr>
-            <tr><td valign="top"><img src="/icons/sound2.gif" alt="[SND]"></td><td><a href="210412_Borrowed_Goods.mp3">210412_Borrowed_Goods.mp3</a></td><td align="right">2021-04-18 02:44  </td><td align="right">5.4M</td><td>&nbsp;</td></tr>
-            <tr><td valign="top"><img src="/icons/sound2.gif" alt="[SND]"></td><td><a href="210413_Brahmaviharas_at_the_Breath.mp3">210413_Brahmaviharas_at_the_Breath.mp3</a></td><td align="right">2021-04-18 02:45  </td><td align="right">6.7M</td><td>&nbsp;</td></tr>
-            <tr><td valign="top"><img src="/icons/sound2.gif" alt="[SND]"></td><td><a href="210414_For_a_Routine_That_Isn't_Routine.mp3">210414_For_a_Routine_That_Isn't_Routine.mp3</a></td><td align="right">2021-04-18 02:45  </td><td align="right">7.4M</td><td>&nbsp;</td></tr>
-            <tr><td valign="top"><img src="/icons/sound2.gif" alt="[SND]"></td><td><a href="210416_On_the_Surface_of_Things.mp3">210416_On_the_Surface_of_Things.mp3</a></td><td align="right">2021-04-21 05:47  </td><td align="right"> 11M</td><td>&nbsp;</td></tr>
-            <tr><td valign="top"><img src="/icons/sound2.gif" alt="[SND]"></td><td><a href="210417_Virtue,_Concentration,_Discernment.mp3">210417_Virtue,_Concentration,_Discernment.mp3</a></td><td align="right">2021-04-21 05:47  </td><td align="right"> 11M</td><td>&nbsp;</td></tr>
-            <tr><td valign="top"><img src="/icons/sound2.gif" alt="[SND]"></td><td><a href="210418_Your_Ancestral_Territory.mp3">210418_Your_Ancestral_Territory.mp3</a></td><td align="right">2021-04-21 05:48  </td><td align="right"> 10M</td><td>&nbsp;</td></tr>
-            <tr><td valign="top"><img src="/icons/sound2.gif" alt="[SND]"></td><td><a href="211027_Fix_Your_Views.mp3">211027_Fix_Your_Views.mp3</a></td><td align="right">2021-10-30 03:48  </td><td align="right">6.7M</td><td>&nbsp;</td></tr>
-            <tr><td valign="top"><img src="/icons/sound2.gif" alt="[SND]"></td><td><a href="211029_Joyous_Endurance.mp3">211029_Joyous_Endurance.mp3</a></td><td align="right">2021-11-01 19:14  </td><td align="right">6.4M</td><td>&nbsp;</td></tr>
-            <tr><td valign="top"><img src="/icons/sound2.gif" alt="[SND]"></td><td><a href="211031_With_This_Body,_This_Mind.mp3">211031_With_This_Body,_This_Mind.mp3</a></td><td align="right">2021-11-01 19:14  </td><td align="right">6.2M</td><td>&nbsp;</td></tr>
-            <tr><td valign="top"><img src="/icons/sound2.gif" alt="[SND]"></td><td><a href="211101_No-Tech_Meditation.mp3">211101_No-Tech_Meditation.mp3</a></td><td align="right">2021-11-05 04:30  </td><td align="right">5.9M</td><td>&nbsp;</td></tr>
-            <tr><td valign="top"><img src="/icons/unknown.gif" alt="[   ]"></td><td><a href="test_a">test_a</a></td><td align="right">2021-03-09 00:38  </td><td align="right">  0 </td><td>&nbsp;</td></tr>
-            <tr><td valign="top"><img src="/icons/unknown.gif" alt="[   ]"></td><td><a href="test_b">test_b</a></td><td align="right">2021-03-09 00:38  </td><td align="right">  0 </td><td>&nbsp;</td></tr>
-               <tr><th colspan="5"><hr></th></tr>
-            </table>
-            <address>Apache/2.4.48 (Debian) Server at www.dhammatalks.org Port 443</address>
-            </body></html>
-            """
-            return .success(YearlyHTMLData(html: html, talkCategory: category, year: year))
+            let talkDataList = [
+                TalkData(id: "1", title: "Title 1", date: DateFormatter.ymdDateFormatter.date(from: "210101"), url: "210101_A_Radiant_Practice.mp3"),
+                TalkData(id: "2", title: "Title 2", date: DateFormatter.ymdDateFormatter.date(from: "210107"), url: "210107_Going_Out_of_Your_Way.mp3"),
+                TalkData(id: "3", title: "Title 3", date: DateFormatter.ymdDateFormatter.date(from: "210412"), url: "210412_Borrowed_Goods.mp3"),
+                TalkData(id: "4", title: "Title 4", date: DateFormatter.ymdDateFormatter.date(from: "210413"), url: "210413_Brahmaviharas_at_the_Breath.mp3"),
+                TalkData(id: "5", title: "Title 5", date: DateFormatter.ymdDateFormatter.date(from: "210414"), url: "210414_For_a_Routine_That_Isn't_Routine.mp3"),
+                TalkData(id: "6", title: "Title 6", date: DateFormatter.ymdDateFormatter.date(from: "210416"), url: "210416_On_the_Surface_of_Things.mp3"),
+                TalkData(id: "7", title: "Title 7", date: DateFormatter.ymdDateFormatter.date(from: "210417"), url: "210417_Virtue,_Concentration,_Discernment.mp3"),
+                TalkData(id: "8", title: "Title 8", date: DateFormatter.ymdDateFormatter.date(from: "211018"), url: "211018_Your_Ancestral_Territory.mp3"),
+                TalkData(id: "9", title: "Title 9", date: DateFormatter.ymdDateFormatter.date(from: "211027"), url: "211027_Fix_Your_Views.mp3"),
+                TalkData(id: "10", title: "Title 10", date: DateFormatter.ymdDateFormatter.date(from: "211029"), url: "211029_Joyous_Endurance.mp3")
+            ]
+            return .success(YearlyTalkData(talkDataList: talkDataList, talkCategory: category, year: year))
         }
     }
 }

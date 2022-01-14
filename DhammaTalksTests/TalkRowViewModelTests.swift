@@ -163,7 +163,6 @@ class TalkRowViewModelTests: XCTestCase {
         self.context.performAndWait {
             let userInfo = TalkUserInfoMO(context: self.context)
             userInfo.url = "about:blank"
-            userInfo.favorite = false
             try? self.context.save()
         }
         
@@ -181,7 +180,11 @@ class TalkRowViewModelTests: XCTestCase {
         self.context.performAndWait {
             let userInfo = TalkUserInfoMO(context: self.context)
             userInfo.url = "about:blank"
-            userInfo.favorite = true
+            
+            let favoriteDetailsMO = FavoriteDetailsMO(context: self.context)
+            favoriteDetailsMO.title = "Title"
+            favoriteDetailsMO.dateAdded = Date()
+            userInfo.favoriteDetails = favoriteDetailsMO
             try? self.context.save()
         }
         
@@ -236,5 +239,8 @@ private class MockFileStorage: FileStorage {
     
     func createURL(for filename: String) -> URL {
         return URL(string: "http://google.com")!
+    }
+    
+    func saveData(_ data: Data, withFilename filename: String) throws {
     }
 }

@@ -10,6 +10,9 @@ import Foundation
 
 extension DateFormatter {
 
+    static let YMD = "yyMMdd"
+    static let YM = "yyMM"
+
     static let monthDayYearFormatter: DateFormatter = {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "MMMM d, yyyy"
@@ -19,6 +22,18 @@ extension DateFormatter {
     static let dayFormatter: DateFormatter = {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd"
+        return dateFormatter
+    }()
+    
+    static let ymdDateFormatter: DateFormatter = {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = YMD
+        return dateFormatter
+    }()
+    
+    static let ymDateFormatter: DateFormatter = {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = YM
         return dateFormatter
     }()
 }
