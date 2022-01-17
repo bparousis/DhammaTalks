@@ -17,6 +17,7 @@ class DailyTalkListViewModelTests: XCTestCase {
     fileprivate var talkDataService: MockTalkDataService!
     
     override func setUpWithError() throws {
+        Current = .mock
         let context = TestCoreDataStack().persistentContainer.viewContext
         talkDataService = MockTalkDataService()
         sut = DailyTalkListViewModel(talkDataService: talkDataService,
@@ -62,6 +63,18 @@ class DailyTalkListViewModelTests: XCTestCase {
         XCTAssertEqual(sut.selectedYear, 2010)
         sut.selectedCategory = .evening
         XCTAssertEqual(sut.selectedYear, 2010)
+    }
+    
+    func testAppSettings() {
+        XCTAssertNil(AppSettings.selectedTalkYear)
+        XCTAssertNil(AppSettings.selectedTalkCategory)
+        sut.selectedYear = 2000
+        sut.selectedCategory = .evening
+        XCTAssertEqual(AppSettings.selectedTalkYear, 2000)
+        XCTAssertEqual(AppSettings.selectedTalkCategory, .evening)
+        sut.selectedCategory = .short
+        XCTAssertEqual(AppSettings.selectedTalkYear, 2010)
+        XCTAssertEqual(AppSettings.selectedTalkCategory, .short)
     }
     
     func testYears() {

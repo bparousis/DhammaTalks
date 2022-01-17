@@ -12,49 +12,14 @@ import AVFoundation
 struct ContentView: View {
 
     @EnvironmentObject private var talkDataService: TalkDataService
-    @EnvironmentObject private var talkUserServiceInfo: TalkUserInfoService
-
-    private var dailyTalksView: some View {
-        NavigationView {
-            DailyTalkListView(viewModel: DailyTalkListViewModel(talkDataService: talkDataService,
-                                                                talkUserInfoService: talkUserServiceInfo))
-        }
-        .tabItem {
-            Label("Daily Talks", systemImage: "mic")
-        }
-    }
-
-    private var collectionsView: some View {
-        NavigationView {
-            if let talkSeriesList = TalkDataService.talkSeriesList {
-                TalkSeriesSelectorView(talkSeriesList: talkSeriesList, talkUserInfoService: talkUserServiceInfo)
-            } else {
-                // It's not expected that this would ever be shown, since TalkDataService.talkSeriesList should
-                // load talk series from JSON file and display it in TalkSeriesSelectorView.
-                Text("No talk collections found")
-            }
-        }
-        .tabItem {
-            Label("Collections", systemImage: "square.grid.2x2")
-        }
-    }
-
-    private var favoritesView: some View {
-        NavigationView {
-            FavoritesListView(viewModel: FavoritesListViewModel(talkUserInfoService: talkUserServiceInfo))
-        }
-        .tabItem {
-            Label("Favorites", systemImage: "star.fill")
-        }
-    }
+    @EnvironmentObject private var talkUserInfoService: TalkUserInfoService
 
     var body: some View {
-        TabView {
-            dailyTalksView
-            collectionsView
-            favoritesView
+        NavigationView {
+            TalkGroupSelectorView()
+                .environmentObject(talkDataService)
+                .environmentObject(talkUserInfoService)
         }
-        .navigationTitle("Dhammatalks")
     }
 }
 
