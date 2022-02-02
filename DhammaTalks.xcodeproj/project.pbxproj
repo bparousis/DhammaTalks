@@ -13,6 +13,7 @@
 		760B461527630CD1007ED1E0 /* MockURLProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 760B461427630CD1007ED1E0 /* MockURLProtocol.swift */; };
 		760B46172763121F007ED1E0 /* TalkUserInfoMO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 760B46162763121F007ED1E0 /* TalkUserInfoMO.swift */; };
 		760B4619276317E6007ED1E0 /* FavoritesListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 760B4618276317E6007ED1E0 /* FavoritesListView.swift */; };
+		760F8EA427A799A8007F8D9A /* DownloadJob.swift in Sources */ = {isa = PBXBuildFile; fileRef = 760F8EA327A799A8007F8D9A /* DownloadJob.swift */; };
 		761218D12794DBCA00D548E5 /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 761218D02794DBCA00D548E5 /* AppSettings.swift */; };
 		761218D32794E5AF00D548E5 /* DependencyContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 761218D22794E5AF00D548E5 /* DependencyContainer.swift */; };
 		761218D62794E67600D548E5 /* MockDependencyContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 761218D52794E67600D548E5 /* MockDependencyContainer.swift */; };
@@ -78,6 +79,7 @@
 		769E69E12748BD2600DEC24C /* DailyTalkListViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 769E69E02748BD2600DEC24C /* DailyTalkListViewModelTests.swift */; };
 		769E69E3274966D300DEC24C /* TalkGroupSelectorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 769E69E2274966D300DEC24C /* TalkGroupSelectorView.swift */; };
 		769E69E52749758400DEC24C /* MediaPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 769E69E42749758400DEC24C /* MediaPlayer.swift */; };
+		76AB4D45279C995200C83F8D /* DownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76AB4D44279C995200C83F8D /* DownloadManager.swift */; };
 		76D064312761BCFC00FBFEA6 /* LocalFileStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76D064302761BCFC00FBFEA6 /* LocalFileStorage.swift */; };
 		76D064332761C75F00FBFEA6 /* FileStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76D064322761C75F00FBFEA6 /* FileStorage.swift */; };
 		76D62FA12759E24D006537DE /* TestCoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76D62FA02759E24D006537DE /* TestCoreDataStack.swift */; };
@@ -122,6 +124,7 @@
 		760B461427630CD1007ED1E0 /* MockURLProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockURLProtocol.swift; sourceTree = "<group>"; };
 		760B46162763121F007ED1E0 /* TalkUserInfoMO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TalkUserInfoMO.swift; sourceTree = "<group>"; };
 		760B4618276317E6007ED1E0 /* FavoritesListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesListView.swift; sourceTree = "<group>"; };
+		760F8EA327A799A8007F8D9A /* DownloadJob.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadJob.swift; sourceTree = "<group>"; };
 		761218D02794DBCA00D548E5 /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
 		761218D22794E5AF00D548E5 /* DependencyContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DependencyContainer.swift; sourceTree = "<group>"; };
 		761218D52794E67600D548E5 /* MockDependencyContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockDependencyContainer.swift; sourceTree = "<group>"; };
@@ -187,6 +190,7 @@
 		769E69E02748BD2600DEC24C /* DailyTalkListViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyTalkListViewModelTests.swift; sourceTree = "<group>"; };
 		769E69E2274966D300DEC24C /* TalkGroupSelectorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TalkGroupSelectorView.swift; sourceTree = "<group>"; };
 		769E69E42749758400DEC24C /* MediaPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaPlayer.swift; sourceTree = "<group>"; };
+		76AB4D44279C995200C83F8D /* DownloadManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadManager.swift; sourceTree = "<group>"; };
 		76D064302761BCFC00FBFEA6 /* LocalFileStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalFileStorage.swift; sourceTree = "<group>"; };
 		76D064322761C75F00FBFEA6 /* FileStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileStorage.swift; sourceTree = "<group>"; };
 		76D62FA02759E24D006537DE /* TestCoreDataStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestCoreDataStack.swift; sourceTree = "<group>"; };
@@ -244,6 +248,15 @@
 				760B461227630C61007ED1E0 /* XCTestCase.swift */,
 			);
 			path = Extensions;
+			sourceTree = "<group>";
+		};
+		760F8EA227A79993007F8D9A /* Download */ = {
+			isa = PBXGroup;
+			children = (
+				76AB4D44279C995200C83F8D /* DownloadManager.swift */,
+				760F8EA327A799A8007F8D9A /* DownloadJob.swift */,
+			);
+			path = Download;
 			sourceTree = "<group>";
 		};
 		761218D42794E62200D548E5 /* Mocks */ = {
@@ -354,6 +367,7 @@
 		7622718B273A1E8600AFBA63 /* Talks */ = {
 			isa = PBXGroup;
 			children = (
+				760F8EA227A79993007F8D9A /* Download */,
 				76C2262C274DF6EA00061450 /* Services */,
 				761BA31F273CCB2400F22202 /* Views */,
 				76E0652C23CA9FBE007E18C1 /* Data */,
@@ -664,6 +678,7 @@
 				766CA1E523E6600400A8E770 /* TalkSection.swift in Sources */,
 				76E0653223CAB9EB007E18C1 /* AudioFileNameParser.swift in Sources */,
 				76577E92273B699E00CB453D /* YearlyTalkData.swift in Sources */,
+				76AB4D45279C995200C83F8D /* DownloadManager.swift in Sources */,
 				767AAC8F27572C9B0003D9AC /* TalkRowViewModel.swift in Sources */,
 				76172407275F217000757236 /* Logger.swift in Sources */,
 				76D064332761C75F00FBFEA6 /* FileStorage.swift in Sources */,
@@ -679,6 +694,7 @@
 				767AAC9127572D7B0003D9AC /* DateFormatter.swift in Sources */,
 				762D0FF9278151BC00DB04FD /* FavoriteDetails.swift in Sources */,
 				766CA1E123D517E300A8E770 /* TalkRow.swift in Sources */,
+				760F8EA427A799A8007F8D9A /* DownloadJob.swift in Sources */,
 				767B2C462751EEC4003643E9 /* TalkUserInfo.swift in Sources */,
 				7622718D273A1F8800AFBA63 /* HTMLPageFetcher.swift in Sources */,
 				76F9F46127483C3600957810 /* DailyTalkListViewModel.swift in Sources */,

@@ -11,7 +11,8 @@ import SwiftUI
 struct DailyTalkListView: View {
     
     @ObservedObject private var viewModel: DailyTalkListViewModel
-    
+    @EnvironmentObject private var downloadManager: DownloadManager
+
     init(viewModel: DailyTalkListViewModel) {
         self.viewModel = viewModel
     }
@@ -30,7 +31,7 @@ struct DailyTalkListView: View {
         ForEach(viewModel.talkSections) { talkSection in
             Section(header: TalkSectionHeader(title: talkSection.title ?? "", talkCount: talkSection.talks.count)) {
                 ForEach(talkSection.talks) { talk in
-                    let viewModel = TalkRowViewModel(talkData: talk, talkUserInfoService: viewModel.talkUserInfoService)
+                    let viewModel = TalkRowViewModel(talkData: talk, talkUserInfoService: viewModel.talkUserInfoService, downloadManager: downloadManager)
                     TalkRow(viewModel: viewModel)
                 }
             }

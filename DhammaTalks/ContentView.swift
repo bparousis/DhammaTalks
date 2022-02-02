@@ -13,12 +13,14 @@ struct ContentView: View {
 
     @EnvironmentObject private var talkDataService: TalkDataService
     @EnvironmentObject private var talkUserInfoService: TalkUserInfoService
+    @EnvironmentObject private var downloadManager: DownloadManager
 
     var body: some View {
         NavigationView {
             TalkGroupSelectorView()
                 .environmentObject(talkDataService)
                 .environmentObject(talkUserInfoService)
+                .environmentObject(downloadManager)
         }
     }
 }

@@ -15,6 +15,8 @@ import Combine
 struct FavoritesListView: View {
 
     @ObservedObject private var viewModel: FavoritesListViewModel
+    @EnvironmentObject private var downloadManager: DownloadManager
+
     private var talkUserInfoService: TalkUserInfoService {
         viewModel.talkUserInfoService
     }
@@ -52,7 +54,7 @@ struct FavoritesListView: View {
     }
     
     private func createTalkRowViewModel(talkData: TalkData) -> TalkRowViewModel {
-        let viewModel = TalkRowViewModel(talkData: talkData, talkUserInfoService: talkUserInfoService)
+        let viewModel = TalkRowViewModel(talkData: talkData, talkUserInfoService: talkUserInfoService, downloadManager: downloadManager)
         viewModel.dateStyle = .full
         return viewModel
     }
