@@ -12,6 +12,8 @@ struct TalkGroupSelectorView: View {
 
     @EnvironmentObject private var talkDataService: TalkDataService
     @EnvironmentObject private var talkUserInfoService: TalkUserInfoService
+    @EnvironmentObject private var downloadManager: DownloadManager
+
     @State private var selection: String? = nil
     private static let dailyTalksTag = "dailyTalks"
     private static let favoritesTag = "favorites"
@@ -19,6 +21,7 @@ struct TalkGroupSelectorView: View {
     private var dailyTalksView: some View {
         DailyTalkListView(viewModel: DailyTalkListViewModel(talkDataService: talkDataService,
                                                             talkUserInfoService: talkUserInfoService))
+            .environmentObject(downloadManager)
             .onAppear {
                 AppSettings.talkGroupSelection = Self.dailyTalksTag
             }
@@ -26,6 +29,7 @@ struct TalkGroupSelectorView: View {
 
     private var favoritesView: some View {
         FavoritesListView(viewModel: FavoritesListViewModel(talkUserInfoService: talkUserInfoService))
+            .environmentObject(downloadManager)
             .onAppear {
                 AppSettings.talkGroupSelection = Self.favoritesTag
             }
@@ -92,7 +96,7 @@ struct TalkGroupSelectorView: View {
     private func makeTalkSeriesSection(talkSeriesList: [TalkSeries], columnWidth: CGFloat) -> some View {
         Section("Talk Series") {
             ForEach(talkSeriesList) { talkSeries in
-                let talkSeriesListView = TalkSeriesListView(talkSeries:talkSeries, talkUserInfoService: talkUserInfoService)
+                let talkSeriesListView = TalkSeriesListView(talkSeries:talkSeries, talkUserInfoService: talkUserInfoService, downloadManager: downloadManager)
                     .onAppear {
                         AppSettings.talkGroupSelection = talkSeries.title
                     }

@@ -16,10 +16,12 @@ struct DhammaTalksApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     private let talkUserInfoService: TalkUserInfoService
     private let talkDataService: TalkDataService
+    private let downloadManager: DownloadManager
     
     init() {
         self.talkUserInfoService = TalkUserInfoService(managedObjectContext: CoreDataStack.viewContext)
         self.talkDataService = TalkDataService()
+        self.downloadManager = DownloadManager()
     }
 
     var body: some Scene {
@@ -27,6 +29,7 @@ struct DhammaTalksApp: App {
             ContentView()
                 .environmentObject(talkUserInfoService)
                 .environmentObject(talkDataService)
+                .environmentObject(downloadManager)
         }
     }
 }

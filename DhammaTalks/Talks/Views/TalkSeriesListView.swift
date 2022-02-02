@@ -13,10 +13,12 @@ struct TalkSeriesListView: View {
 
     private let talkSeries: TalkSeries
     private let talkUserInfoService: TalkUserInfoService
+    private let downloadManager: DownloadManager
     
-    init(talkSeries: TalkSeries, talkUserInfoService: TalkUserInfoService) {
+    init(talkSeries: TalkSeries, talkUserInfoService: TalkUserInfoService, downloadManager: DownloadManager) {
         self.talkSeries = talkSeries
         self.talkUserInfoService = talkUserInfoService
+        self.downloadManager = downloadManager
     }
     
     var body: some View {
@@ -24,7 +26,7 @@ struct TalkSeriesListView: View {
             ForEach(talkSeries.sections) { section in
                 Section(header: TalkSectionHeader(title: section.title ?? "", talkCount: section.talks.count)) {
                     ForEach(section.talks) { talk in
-                        let viewModel = TalkRowViewModel(talkData: talk, talkUserInfoService: talkUserInfoService)
+                        let viewModel = TalkRowViewModel(talkData: talk, talkUserInfoService: talkUserInfoService, downloadManager: downloadManager)
                         TalkRow(viewModel: viewModel)
                     }
                 }

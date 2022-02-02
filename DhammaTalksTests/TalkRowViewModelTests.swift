@@ -20,6 +20,7 @@ class TalkRowViewModelTests: XCTestCase {
     var context: NSManagedObjectContext!
     var talkUserInfoService: TalkUserInfoService!
     var urlSession: URLSession!
+    var downloadManager: DownloadManager!
 
     override func setUpWithError() throws {
         MockURLProtocol.requestHandler = { request in
@@ -31,6 +32,7 @@ class TalkRowViewModelTests: XCTestCase {
         let configuration = URLSessionConfiguration.ephemeral
         configuration.protocolClasses = [MockURLProtocol.self]
         urlSession = URLSession(configuration: configuration)
+        downloadManager = DownloadManager(urlSession: urlSession, fileStorage: MockFileStorage())
         
         // Put setup code here. This method is called before the invocation of each test method in the class.
         context = TestCoreDataStack().persistentContainer.viewContext
@@ -44,7 +46,7 @@ class TalkRowViewModelTests: XCTestCase {
     func testTitleAndDateLabels() {
         let date = Calendar.current.date(from: DateComponents(year:2000, month: 1, day: 1))
         let talkData = TalkData(id: "1", title: "Title", date: date, url: "about:blank")
-        sut = TalkRowViewModel(talkData: talkData, talkUserInfoService: talkUserInfoService)
+        sut = TalkRowViewModel(talkData: talkData, talkUserInfoService: talkUserInfoService, downloadManager: downloadManager)
         XCTAssertEqual(sut.title, "Title")
         XCTAssertEqual(sut.formattedDate, "January 1, 2000")
     }
@@ -62,7 +64,7 @@ class TalkRowViewModelTests: XCTestCase {
             try? self.context.save()
         }
         
-        sut = TalkRowViewModel(talkData: talkData, talkUserInfoService: talkUserInfoService)
+        sut = TalkRowViewModel(talkData: talkData, talkUserInfoService: talkUserInfoService, downloadManager: downloadManager)
         XCTAssertEqual(sut.state, .unplayed)
         XCTAssertNil(sut.playerItem)
         await sut.play()
@@ -79,7 +81,7 @@ class TalkRowViewModelTests: XCTestCase {
         
         let talkData = TalkData(id: "1", title: "Title", date: Date(), url: "about:blank")
         
-        sut = TalkRowViewModel(talkData: talkData, talkUserInfoService: talkUserInfoService)
+        sut = TalkRowViewModel(talkData: talkData, talkUserInfoService: talkUserInfoService, downloadManager: downloadManager)
         XCTAssertNil(sut.playerItem)
         await sut.play()
         XCTAssertNotNil(sut.playerItem)
@@ -100,7 +102,7 @@ class TalkRowViewModelTests: XCTestCase {
             try? self.context.save()
         }
 
-        sut = TalkRowViewModel(talkData: talkData, talkUserInfoService: talkUserInfoService)
+        sut = TalkRowViewModel(talkData: talkData, talkUserInfoService: talkUserInfoService, downloadManager: downloadManager)
         await sut.play()
         
         let beforeFinished = talkUserInfoService.getTalkUserInfo(for: "about:blank")
@@ -120,7 +122,7 @@ class TalkRowViewModelTests: XCTestCase {
     func testFinishedPlayingAddsUserInfo() async {
         let talkData = TalkData(id: "1", title: "Title", date: Date(), url: "about:blank")
         
-        sut = TalkRowViewModel(talkData: talkData, talkUserInfoService: talkUserInfoService)
+        sut = TalkRowViewModel(talkData: talkData, talkUserInfoService: talkUserInfoService, downloadManager: downloadManager)
         await sut.play()
         
         let beforeFinished = talkUserInfoService.getTalkUserInfo(for: "about:blank")
@@ -149,7 +151,7 @@ class TalkRowViewModelTests: XCTestCase {
             try? self.context.save()
         }
         
-        sut = TalkRowViewModel(talkData: talkData, talkUserInfoService: talkUserInfoService)
+        sut = TalkRowViewModel(talkData: talkData, talkUserInfoService: talkUserInfoService, downloadManager: downloadManager)
         
         sut.fetchTalkInfo()
         XCTAssertEqual(sut.currentTimeInSeconds, 8.495278262)
@@ -166,7 +168,7 @@ class TalkRowViewModelTests: XCTestCase {
             try? self.context.save()
         }
         
-        sut = TalkRowViewModel(talkData: talkData, talkUserInfoService: talkUserInfoService)
+        sut = TalkRowViewModel(talkData: talkData, talkUserInfoService: talkUserInfoService, downloadManager: downloadManager)
         sut.fetchTalkInfo()
         XCTAssertFalse(sut.favorite)
         sut.handleAction(.addToFavorites)
@@ -188,7 +190,7 @@ class TalkRowViewModelTests: XCTestCase {
             try? self.context.save()
         }
         
-        sut = TalkRowViewModel(talkData: talkData, talkUserInfoService: talkUserInfoService)
+        sut = TalkRowViewModel(talkData: talkData, talkUserInfoService: talkUserInfoService, downloadManager: downloadManager)
         sut.fetchTalkInfo()
         XCTAssertTrue(sut.favorite)
         sut.handleAction(.removeFromFavorites)
@@ -200,7 +202,7 @@ class TalkRowViewModelTests: XCTestCase {
         let date = Calendar.current.date(from: DateComponents(year:2000, month: 1, day: 1))
         let talkData = TalkData(id: "1", title: "Title", date: date, url: "about:blank")
         let mockFileStorage = MockFileStorage()
-        sut = TalkRowViewModel(talkData: talkData, talkUserInfoService: talkUserInfoService, urlSession: urlSession, fileStorage: mockFileStorage)
+        sut = TalkRowViewModel(talkData: talkData, talkUserInfoService: talkUserInfoService, downloadManager: DownloadManager(urlSession: urlSession, fileStorage: mockFileStorage))
         XCTAssertNil(mockFileStorage.saveURL)
         let downloadProgress = sut.$downloadProgress
             .collect(2)
@@ -214,7 +216,7 @@ class TalkRowViewModelTests: XCTestCase {
         let date = Calendar.current.date(from: DateComponents(year:2000, month: 1, day: 1))
         let talkData = TalkData(id: "1", title: "Title", date: date, url: "y2020/test.mp3")
         let mockFileStorage = MockFileStorage()
-        sut = TalkRowViewModel(talkData: talkData, talkUserInfoService: talkUserInfoService, fileStorage: mockFileStorage)
+        sut = TalkRowViewModel(talkData: talkData, talkUserInfoService: talkUserInfoService, downloadManager: DownloadManager(urlSession: urlSession, fileStorage: mockFileStorage))
         XCTAssertNil(mockFileStorage.performedRemoveFilename)
         sut.handleAction(.removeDownload)
         XCTAssertEqual(mockFileStorage.performedRemoveFilename, "test.mp3")
