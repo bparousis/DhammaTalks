@@ -50,19 +50,19 @@ class DailyTalkListViewModel: ObservableObject {
     }
     
     @MainActor
-    func fetchData() async {
+    func fetchData(searchText: String? = nil) async {
         
+        print("fetchData: \(searchText ?? "")")
         defer {
             isFetchDataFinished = true
         }
 
         isFetchDataFinished = false
         
-        let result = await talkDataService.fetchYearlyTalks(category: selectedCategory, year: selectedYear)
-        switch result {
-        case .success(let talkSections):
-            self.talkSections = talkSections
-        case .failure(let error):
+        let query = DailyTalkQuery(category: selectedCategory, year: selectedYear, searchText: searchText)
+        do {
+            self.talkSections = try await talkDataService.fetchYearlyTalks(query: query)
+        } catch {
             guard !error.isCancelError else {
                 return
             }
