@@ -60,7 +60,7 @@ class HTMLPageFetcherTests: XCTestCase {
         MockURLProtocol.reset()
     }
     
-    func testEveningNonCachedRequest() async {
+    func testEveningNonCachedRequest() async throws {
 
         let configuration = URLSessionConfiguration.ephemeral
         configuration.protocolClasses = [MockURLProtocol.self]
@@ -69,19 +69,12 @@ class HTMLPageFetcherTests: XCTestCase {
 
         // The current year shouldn't be a cached request and should make a network request to get the latest info.
         let currentYear = Calendar.current.component(.year, from: Date())
-        let result = await sut.getYearlyHTMLForCategory(.evening, year: currentYear)
-        switch result {
-        case .success(let htmlData):
-            XCTAssertTrue(MockURLProtocol.requestURLHistory.first!.hasPrefix("https://www.dhammatalks.org/Archive/y\(currentYear)?q="))
-            XCTAssertEqual(htmlData.talkDataList.count, 12)
-            XCTAssertEqual(htmlData.year, currentYear)
-            XCTAssertEqual(htmlData.talkCategory, .evening)
-        case .failure:
-            XCTFail("Request should have succeeded.")
-        }
+        let talkDataList = try await sut.getYearlyHTMLForCategory(.evening, year: currentYear)
+        XCTAssertTrue(MockURLProtocol.requestURLHistory.first!.hasPrefix("https://www.dhammatalks.org/Archive/y\(currentYear)?q="))
+        XCTAssertEqual(talkDataList.count, 12)
     }
 
-    func testShortNonCachedRequest() async {
+    func testShortNonCachedRequest() async throws {
         let configuration = URLSessionConfiguration.ephemeral
         configuration.protocolClasses = [MockURLProtocol.self]
         let urlSession = URLSession(configuration: configuration)
@@ -89,48 +82,23 @@ class HTMLPageFetcherTests: XCTestCase {
 
         // The current year shouldn't be a cached request and should make a network request to get the latest info.
         let currentYear = Calendar.current.component(.year, from: Date())
-        let result = await sut.getYearlyHTMLForCategory(.short, year: currentYear)
-        switch result {
-        case .success(let htmlData):
-            XCTAssertTrue(MockURLProtocol.requestURLHistory.first!.hasPrefix("https://www.dhammatalks.org/Archive/shorttalks/y\(currentYear)?q="))
-            XCTAssertEqual(htmlData.talkDataList.count, 12)
-            XCTAssertEqual(htmlData.year, currentYear)
-            XCTAssertEqual(htmlData.talkCategory, .short)
-        case .failure:
-            XCTFail("Request should have succeeded.")
-        }
+        let talkDataList = try await sut.getYearlyHTMLForCategory(.short, year: currentYear)
+        XCTAssertTrue(MockURLProtocol.requestURLHistory.first!.hasPrefix("https://www.dhammatalks.org/Archive/shorttalks/y\(currentYear)?q="))
+        XCTAssertEqual(talkDataList.count, 12)
     }
 
-    func testEveningCachedRequest() async {
+    func testEveningCachedRequest() async throws {
         sut = HTMLPageFetcher(fileStorage: MockFileStorage())
 
         // The current year shouldn't be a cached request and should make a network request to get the latest info.
-        let result = await sut.getYearlyHTMLForCategory(.evening, year: 2000)
-        switch result {
-        case .success(let htmlData):
-            // Check to see that we didn't go over the net to get this data.
-            XCTAssertEqual(htmlData.talkDataList.count, 5)
-            XCTAssertEqual(htmlData.year, 2000)
-            XCTAssertEqual(htmlData.talkCategory, .evening)
-        case .failure:
-            XCTFail("Request should have succeeded.")
-        }
+        let talkDataList = try await sut.getYearlyHTMLForCategory(.evening, year: 2000)
+        XCTAssertEqual(talkDataList.count, 5)
     }
 
-    func testShortCachedRequest() async {
-
+    func testShortCachedRequest() async throws {
         sut = HTMLPageFetcher(fileStorage: MockFileStorage())
-
-        let result = await sut.getYearlyHTMLForCategory(.short, year: 2010)
-        switch result {
-        case .success(let htmlData):
-            // Check to see that we didn't go over the net to get this data.
-            XCTAssertEqual(htmlData.talkDataList.count, 39)
-            XCTAssertEqual(htmlData.year, 2010)
-            XCTAssertEqual(htmlData.talkCategory, .short)
-        case .failure:
-            XCTFail("Request should have succeeded.")
-        }
+        let talkDataList = try await sut.getYearlyHTMLForCategory(.short, year: 2010)
+        XCTAssertEqual(talkDataList.count, 39)
     }
 }
 

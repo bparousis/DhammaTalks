@@ -12,6 +12,8 @@ struct DailyTalkListView: View {
     
     @ObservedObject private var viewModel: DailyTalkListViewModel
     @EnvironmentObject private var downloadManager: DownloadManager
+    
+    @State private var searchText = ""
 
     init(viewModel: DailyTalkListViewModel) {
         self.viewModel = viewModel
@@ -49,6 +51,7 @@ struct DailyTalkListView: View {
                 talkSectionsView
             }
         }
+        .searchable(text: $searchText)
         .toolbar {
             Picker("Select a category", selection: $viewModel.selectedCategory) {
                 ForEach(DailyTalkCategory.allCases, id: \.self) {
@@ -60,11 +63,14 @@ struct DailyTalkListView: View {
         .alert("Failed to load talks", isPresented: $viewModel.showingAlert) {
             Button("OK", role: .cancel) { }
         }
+        .task(id: searchText) {
+            await viewModel.fetchData(searchText: searchText)
+        }
         .task(id: viewModel.selectedCategory) {
-            await viewModel.fetchData()
+            await viewModel.fetchData(searchText: searchText)
         }
         .task(id: viewModel.selectedYear) {
-            await viewModel.fetchData()
+            await viewModel.fetchData(searchText: searchText)
         }
         .listStyle(.insetGrouped)
         .navigationBarTitle("Daily Talks", displayMode: .inline)

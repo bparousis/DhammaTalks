@@ -9,6 +9,12 @@
 import Foundation
 import SwiftSoup
 
+struct DailyTalkQuery {
+    let category: DailyTalkCategory
+    let year: Int
+    var searchText: String?
+}
+
 class TalkDataService: ObservableObject {
 
     private let htmlPageFetcher: HTMLPageFetcher
@@ -30,13 +36,11 @@ class TalkDataService: ObservableObject {
         self.htmlPageFetcher = htmlPageFetcher
     }
     
-    func fetchYearlyTalks(category: DailyTalkCategory, year: Int) async -> Result<[TalkSection], Error> {
-        let fetchResult = await htmlPageFetcher.getYearlyHTMLForCategory(category, year: year)
-        switch fetchResult {
-        case .success(let yearlyTalkData):
-            return .success(yearlyTalkData.getTalkSections())
-        case .failure(let error):
-            return .failure(error)
+    func fetchYearlyTalks(query: DailyTalkQuery) async throws -> [TalkSection] {
+        var results = try await htmlPageFetcher.getYearlyHTMLForCategory(query.category, year: query.year)
+        if let searchText = query.searchText?.lowercased(), !searchText.isEmpty {
+            results = results.filter { $0.title.lowercased().contains(searchText) }
         }
+        return results.splitIntoSections()
     }
 }

@@ -36,4 +36,10 @@ extension DateFormatter {
         dateFormatter.dateFormat = YM
         return dateFormatter
     }()
+    
+    static let talkSectionDateFormatter: DateFormatter = {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "LLLL yyyy"
+        return dateFormatter
+    }()
 }
