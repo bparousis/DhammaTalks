@@ -14,6 +14,7 @@ class DailyTalkListViewModel: ObservableObject {
     private let calendar: Calendar
     private let talkDataService: TalkDataService
     let talkUserInfoService: TalkUserInfoService
+    private let downloadManager: DownloadManager
 
     @Published var selectedCategory: DailyTalkCategory {
         didSet {
@@ -30,7 +31,7 @@ class DailyTalkListViewModel: ObservableObject {
         }
     }
     @Published var showingAlert = false
-    @Published private(set) var talkSections: [TalkSection] = []
+    @Published private(set) var talkSections: [TalkSectionViewModel] = []
     @Published private(set) var isFetchDataFinished = false
 
     var currentYear: Int {
@@ -41,18 +42,52 @@ class DailyTalkListViewModel: ObservableObject {
         Array(selectedCategory.startYear...currentYear).reversed()
     }
     
-    init(talkDataService: TalkDataService, talkUserInfoService: TalkUserInfoService, calendar: Calendar = .current) {
+    init(talkDataService: TalkDataService, talkUserInfoService: TalkUserInfoService, downloadManager: DownloadManager, calendar: Calendar = .current) {
         self.talkDataService = talkDataService
         self.talkUserInfoService = talkUserInfoService
+        self.downloadManager = downloadManager
         self.calendar = calendar
         self.selectedCategory = AppSettings.selectedTalkCategory ?? .evening
         self.selectedYear = AppSettings.selectedTalkYear ?? calendar.currentYear
     }
     
+    func playRandomTalk() async -> String? {
+        guard let randomSection = talkSections.randomElement(), let randomTalkRow = randomSection.talkRows.randomElement() else {
+            return nil
+        }
+        await randomTalkRow.play()
+        return randomTalkRow.id
+    }
+    
+    private func buildTalkSectionViewModels(from talkDataList: [TalkData]) -> [TalkSectionViewModel] {
+        var talkSectionViewModelList: [TalkSectionViewModel] = []
+        var currentTalkSection: TalkSectionViewModel?
+        for talkData in talkDataList {
+            guard let date = talkData.date else {
+                continue
+            }
+
+            let sectionTitle = DateFormatter.talkSectionDateFormatter.string(from: date)
+            let talkRowViewModel = TalkRowViewModel(talkData: talkData, talkUserInfoService: talkUserInfoService, downloadManager: downloadManager)
+            if currentTalkSection?.title == sectionTitle {
+                currentTalkSection?.addTalkRow(talkRowViewModel)
+            } else {
+                if let talkSection = currentTalkSection {
+                    talkSectionViewModelList.append(talkSection)
+                }
+                currentTalkSection = TalkSectionViewModel(id: UUID().uuidString, title: sectionTitle)
+                currentTalkSection?.addTalkRow(talkRowViewModel)
+            }
+        }
+        
+        if let talkSection = currentTalkSection, !talkSection.talkRows.isEmpty {
+            talkSectionViewModelList.append(talkSection)
+        }
+        return talkSectionViewModelList
+    }
+    
     @MainActor
     func fetchData(searchText: String? = nil) async {
-        
-        print("fetchData: \(searchText ?? "")")
         defer {
             isFetchDataFinished = true
         }
@@ -61,7 +96,8 @@ class DailyTalkListViewModel: ObservableObject {
         
         let query = DailyTalkQuery(category: selectedCategory, year: selectedYear, searchText: searchText)
         do {
-            self.talkSections = try await talkDataService.fetchYearlyTalks(query: query)
+            let talkDataList = try await talkDataService.fetchYearlyTalks(query: query)
+            self.talkSections = buildTalkSectionViewModels(from: talkDataList)
         } catch {
             guard !error.isCancelError else {
                 return

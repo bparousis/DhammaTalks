@@ -11,7 +11,7 @@ import Combine
 import AVFoundation
 import os.log
 
-class TalkRowViewModel: NSObject, ObservableObject {
+class TalkRowViewModel: NSObject, Identifiable, ObservableObject {
 
     enum DateStyle {
         case day
@@ -79,6 +79,10 @@ class TalkRowViewModel: NSObject, ObservableObject {
     
     var title: String {
         talkData.title
+    }
+    
+    var id: String {
+        talkData.id
     }
     
     var isDownloadAvailable: Bool {

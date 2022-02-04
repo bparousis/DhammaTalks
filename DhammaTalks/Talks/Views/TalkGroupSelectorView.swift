@@ -20,8 +20,8 @@ struct TalkGroupSelectorView: View {
 
     private var dailyTalksView: some View {
         DailyTalkListView(viewModel: DailyTalkListViewModel(talkDataService: talkDataService,
-                                                            talkUserInfoService: talkUserInfoService))
-            .environmentObject(downloadManager)
+                                                            talkUserInfoService: talkUserInfoService,
+                                                            downloadManager: downloadManager))
             .onAppear {
                 AppSettings.talkGroupSelection = Self.dailyTalksTag
             }
