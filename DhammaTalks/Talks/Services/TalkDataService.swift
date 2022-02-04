@@ -36,11 +36,11 @@ class TalkDataService: ObservableObject {
         self.htmlPageFetcher = htmlPageFetcher
     }
     
-    func fetchYearlyTalks(query: DailyTalkQuery) async throws -> [TalkSection] {
+    func fetchYearlyTalks(query: DailyTalkQuery) async throws -> [TalkData] {
         var results = try await htmlPageFetcher.getYearlyHTMLForCategory(query.category, year: query.year)
         if let searchText = query.searchText?.lowercased(), !searchText.isEmpty {
             results = results.filter { $0.title.lowercased().contains(searchText) }
         }
-        return results.splitIntoSections()
+        return results
     }
 }

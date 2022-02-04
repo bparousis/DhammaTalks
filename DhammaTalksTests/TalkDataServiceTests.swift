@@ -36,48 +36,32 @@ class TalkDataServiceTests: XCTestCase {
         let result = try await sut.fetchYearlyTalks(query: DailyTalkQuery(category: .evening, year: 2021))
         XCTAssertEqual(result.count, 0)
     }
-    
-    func testOneMonthWithTalks() async throws {
-        let sut = TalkDataService(htmlPageFetcher: MockHTMLPageFetcher(testCase: .oneMonth))
-        let talkSections = try await sut.fetchYearlyTalks(query: DailyTalkQuery(category: .evening, year: 2021))
-        XCTAssertEqual(talkSections.count, 1)
-        XCTAssertEqual(talkSections[0].talks.count, 3)
-    }
-    
+
     func testOneMonthWithTalksWithSearch() async throws {
         let sut = TalkDataService(htmlPageFetcher: MockHTMLPageFetcher(testCase: .oneMonth))
-        var talkSections = try await sut.fetchYearlyTalks(query: DailyTalkQuery(category: .evening, year: 2021, searchText: "practice"))
-        XCTAssertEqual(talkSections.count, 1)
-        XCTAssertEqual(talkSections[0].talks.count, 1)
+        var talkDataList = try await sut.fetchYearlyTalks(query: DailyTalkQuery(category: .evening, year: 2021))
+        XCTAssertEqual(talkDataList.count, 3)
+
+        talkDataList = try await sut.fetchYearlyTalks(query: DailyTalkQuery(category: .evening, year: 2021, searchText: "practice"))
+        XCTAssertEqual(talkDataList.count, 1)
         
-        talkSections = try await sut.fetchYearlyTalks(query: DailyTalkQuery(category: .evening, year: 2021, searchText: "car"))
-        XCTAssertEqual(talkSections.count, 0)
+        talkDataList = try await sut.fetchYearlyTalks(query: DailyTalkQuery(category: .evening, year: 2021, searchText: "car"))
+        XCTAssertEqual(talkDataList.count, 0)
     }
-    
-    func testMultipleMonthsWithTalks() async throws {
-        let sut = TalkDataService(htmlPageFetcher: MockHTMLPageFetcher(testCase: .multipleMonths))
-        let talkSections = try await sut.fetchYearlyTalks(query: DailyTalkQuery(category: .evening, year: 2021))
-        XCTAssertEqual(talkSections.count, 3)
-        XCTAssertEqual(talkSections[0].talks.count, 2)
-        XCTAssertEqual(talkSections[1].talks.count, 5)
-        XCTAssertEqual(talkSections[2].talks.count, 3)
-    }
-    
+
     func testMultipleMonthsWithTalksWithSearch() async throws {
         let sut = TalkDataService(htmlPageFetcher: MockHTMLPageFetcher(testCase: .multipleMonths))
-        var talkSections = try await sut.fetchYearlyTalks(query: DailyTalkQuery(category: .evening, year: 2021, searchText: "out"))
-        XCTAssertEqual(talkSections.count, 2)
-        XCTAssertEqual(talkSections[0].talks.count, 1)
-        XCTAssertEqual(talkSections[1].talks.count, 1)
+        var talkDataList = try await sut.fetchYearlyTalks(query: DailyTalkQuery(category: .evening, year: 2021))
+        XCTAssertEqual(talkDataList.count, 10)
+
+        talkDataList = try await sut.fetchYearlyTalks(query: DailyTalkQuery(category: .evening, year: 2021, searchText: "out"))
+        XCTAssertEqual(talkDataList.count, 2)
         
-        talkSections = try await sut.fetchYearlyTalks(query: DailyTalkQuery(category: .evening, year: 2021, searchText: "your"))
-        XCTAssertEqual(talkSections.count, 3)
-        XCTAssertEqual(talkSections[0].talks.count, 1)
-        XCTAssertEqual(talkSections[1].talks.count, 1)
-        XCTAssertEqual(talkSections[2].talks.count, 2)
+        talkDataList = try await sut.fetchYearlyTalks(query: DailyTalkQuery(category: .evening, year: 2021, searchText: "your"))
+        XCTAssertEqual(talkDataList.count, 4)
         
-        talkSections = try await sut.fetchYearlyTalks(query: DailyTalkQuery(category: .evening, year: 2021, searchText: "car"))
-        XCTAssertEqual(talkSections.count, 0)
+        talkDataList = try await sut.fetchYearlyTalks(query: DailyTalkQuery(category: .evening, year: 2021, searchText: "car"))
+        XCTAssertEqual(talkDataList.count, 0)
     }
     
     func testTalkSeriesList() {

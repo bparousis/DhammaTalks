@@ -11,7 +11,6 @@ import SwiftUI
 struct DailyTalkListView: View {
     
     @ObservedObject private var viewModel: DailyTalkListViewModel
-    @EnvironmentObject private var downloadManager: DownloadManager
     
     @State private var searchText = ""
 
@@ -31,48 +30,65 @@ struct DailyTalkListView: View {
     
     private var talkSectionsView: some View {
         ForEach(viewModel.talkSections) { talkSection in
-            Section(header: TalkSectionHeader(title: talkSection.title ?? "", talkCount: talkSection.talks.count)) {
-                ForEach(talkSection.talks) { talk in
-                    let viewModel = TalkRowViewModel(talkData: talk, talkUserInfoService: viewModel.talkUserInfoService, downloadManager: downloadManager)
-                    TalkRow(viewModel: viewModel)
+            Section(header: TalkSectionHeader(title: talkSection.title ?? "", talkCount: talkSection.talkRows.count)) {
+                ForEach(talkSection.talkRows) { talkRow in
+                    TalkRow(viewModel: talkRow)
                 }
             }
         }
     }
 
     var body: some View {
-        List {
-            if !viewModel.isFetchDataFinished {
-                Section {
-                    ProgressView()
-                }
-            } else {
-                datePickerView
-                talkSectionsView
-            }
-        }
-        .searchable(text: $searchText)
-        .toolbar {
-            Picker("Select a category", selection: $viewModel.selectedCategory) {
-                ForEach(DailyTalkCategory.allCases, id: \.self) {
-                    Text($0.title)
+        ScrollViewReader { proxy in
+            List {
+                if !viewModel.isFetchDataFinished {
+                    Section {
+                        ProgressView()
+                    }
+                } else {
+                    datePickerView
+                    talkSectionsView
                 }
             }
-            .pickerStyle(.segmented)
+            .searchable(text: $searchText)
+            .toolbar {
+                ToolbarItemGroup(placement: .bottomBar) {
+                    Button {
+                        Task {
+                            if let id = await viewModel.playRandomTalk() {
+                                proxy.scrollTo(id)
+                            }
+                        }
+                    } label: {
+                        VStack {
+                            Image(systemName: "shuffle")
+                            Text("Play Random")
+                        }
+                    }
+                }
+            }
+            .toolbar {
+                Picker("Select a category", selection: $viewModel.selectedCategory) {
+                    ForEach(DailyTalkCategory.allCases, id: \.self) {
+                        Text($0.title)
+                    }
+                }
+                .pickerStyle(.segmented)
+            }
+            .alert("Failed to load talks", isPresented: $viewModel.showingAlert) {
+                Button("OK", role: .cancel) { }
+            }
+            .task(id: searchText) {
+                await viewModel.fetchData(searchText: searchText)
+            }
+            .task(id: viewModel.selectedCategory) {
+                await viewModel.fetchData(searchText: searchText)
+            }
+            .task(id: viewModel.selectedYear) {
+                await viewModel.fetchData(searchText: searchText)
+            }
+            .listStyle(.insetGrouped)
         }
-        .alert("Failed to load talks", isPresented: $viewModel.showingAlert) {
-            Button("OK", role: .cancel) { }
-        }
-        .task(id: searchText) {
-            await viewModel.fetchData(searchText: searchText)
-        }
-        .task(id: viewModel.selectedCategory) {
-            await viewModel.fetchData(searchText: searchText)
-        }
-        .task(id: viewModel.selectedYear) {
-            await viewModel.fetchData(searchText: searchText)
-        }
-        .listStyle(.insetGrouped)
         .navigationBarTitle("Daily Talks", displayMode: .inline)
     }
 }
