@@ -74,7 +74,8 @@ class TalkRowViewModelTests: XCTestCase {
         // Test that seek was performed.
         XCTAssertEqual(sut.playerItem!.currentTime().value, 2193277562)
         XCTAssertEqual(sut.playerItem!.currentTime().timescale, 1000000000)
-        XCTAssertEqual(sut.timeRemainingPhrase, "12 sec remaining")
+        XCTAssertEqual(sut.currentTimeString, "00:02")
+        XCTAssertEqual(sut.timeRemainingString, "-00:12")
     }
     
     func testPlayWithoutTalkUserInfo() async {
@@ -156,7 +157,8 @@ class TalkRowViewModelTests: XCTestCase {
         sut.fetchTalkInfo()
         XCTAssertEqual(sut.currentTimeInSeconds, 8.495278262)
         XCTAssertEqual(sut.totalTimeInSeconds, 154.433577362)
-        XCTAssertEqual(sut.timeRemainingPhrase, "2 min, 25 sec remaining")
+        XCTAssertEqual(sut.currentTimeString, "00:08")
+        XCTAssertEqual(sut.timeRemainingString, "-02:25")
     }
     
     func testAddToFavorites() async {

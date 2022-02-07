@@ -9,10 +9,11 @@
 import Foundation
 
 extension DateComponentsFormatter {
-    static let timeRemainingPhraseFormatter: DateComponentsFormatter = {
+
+    static let hmsFormatter: DateComponentsFormatter = {
         let formatter = DateComponentsFormatter()
-        formatter.unitsStyle = .short
-        formatter.includesTimeRemainingPhrase = true
+        formatter.unitsStyle = .positional
+        formatter.zeroFormattingBehavior = .pad
         formatter.allowedUnits = [.minute, .second]
         return formatter
     }()

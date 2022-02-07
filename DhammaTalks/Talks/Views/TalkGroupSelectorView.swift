@@ -28,8 +28,7 @@ struct TalkGroupSelectorView: View {
     }
 
     private var favoritesView: some View {
-        FavoritesListView(viewModel: FavoritesListViewModel(talkUserInfoService: talkUserInfoService))
-            .environmentObject(downloadManager)
+        FavoritesListView(viewModel: FavoritesListViewModel(talkUserInfoService: talkUserInfoService, downloadManager: downloadManager))
             .onAppear {
                 AppSettings.talkGroupSelection = Self.favoritesTag
             }

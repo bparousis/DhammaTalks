@@ -55,6 +55,8 @@
 		76227188273A159100AFBA63 /* TalkDataServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76227187273A159100AFBA63 /* TalkDataServiceTests.swift */; };
 		7622718D273A1F8800AFBA63 /* HTMLPageFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7622718C273A1F8800AFBA63 /* HTMLPageFetcher.swift */; };
 		762D0FF9278151BC00DB04FD /* FavoriteDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 762D0FF8278151BC00DB04FD /* FavoriteDetails.swift */; };
+		763717AF27B0431B007DF19A /* FavoritesListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 763717AE27B0431B007DF19A /* FavoritesListViewModel.swift */; };
+		763717B127B0434D007DF19A /* Array.swift in Sources */ = {isa = PBXBuildFile; fileRef = 763717B027B0434D007DF19A /* Array.swift */; };
 		7637DBE7276E862800D2ACEC /* DhammaTalksApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7637DBE6276E862800D2ACEC /* DhammaTalksApp.swift */; };
 		7637DBE9276E865000D2ACEC /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7637DBE8276E865000D2ACEC /* CoreDataStack.swift */; };
 		763C950227383D4A00632633 /* UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 763C950127383D4A00632633 /* UIImage.swift */; };
@@ -84,6 +86,8 @@
 		76D62FA12759E24D006537DE /* TestCoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76D62FA02759E24D006537DE /* TestCoreDataStack.swift */; };
 		76D62FA32759E2A9006537DE /* TalkRowViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76D62FA22759E2A9006537DE /* TalkRowViewModelTests.swift */; };
 		76DB173927ACCDDA003D7C0C /* TalkSectionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76DB173827ACCDDA003D7C0C /* TalkSectionViewModel.swift */; };
+		76DB173B27ACE089003D7C0C /* short_y2021.html in Resources */ = {isa = PBXBuildFile; fileRef = 76DB173A27ACE089003D7C0C /* short_y2021.html */; };
+		76DB173D27ACE093003D7C0C /* y2021.html in Resources */ = {isa = PBXBuildFile; fileRef = 76DB173C27ACE093003D7C0C /* y2021.html */; };
 		76E064F723CA9C6C007E18C1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76E064F623CA9C6C007E18C1 /* AppDelegate.swift */; };
 		76E064FC23CA9C6C007E18C1 /* DhammaTalks.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 76E064FA23CA9C6C007E18C1 /* DhammaTalks.xcdatamodeld */; };
 		76E064FE23CA9C6C007E18C1 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76E064FD23CA9C6C007E18C1 /* ContentView.swift */; };
@@ -166,6 +170,8 @@
 		76227187273A159100AFBA63 /* TalkDataServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TalkDataServiceTests.swift; sourceTree = "<group>"; };
 		7622718C273A1F8800AFBA63 /* HTMLPageFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTMLPageFetcher.swift; sourceTree = "<group>"; };
 		762D0FF8278151BC00DB04FD /* FavoriteDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteDetails.swift; sourceTree = "<group>"; };
+		763717AE27B0431B007DF19A /* FavoritesListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesListViewModel.swift; sourceTree = "<group>"; };
+		763717B027B0434D007DF19A /* Array.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Array.swift; sourceTree = "<group>"; };
 		7637DBE6276E862800D2ACEC /* DhammaTalksApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DhammaTalksApp.swift; sourceTree = "<group>"; };
 		7637DBE8276E865000D2ACEC /* CoreDataStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
 		763C950127383D4A00632633 /* UIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImage.swift; sourceTree = "<group>"; };
@@ -195,6 +201,8 @@
 		76D62FA02759E24D006537DE /* TestCoreDataStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestCoreDataStack.swift; sourceTree = "<group>"; };
 		76D62FA22759E2A9006537DE /* TalkRowViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TalkRowViewModelTests.swift; sourceTree = "<group>"; };
 		76DB173827ACCDDA003D7C0C /* TalkSectionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TalkSectionViewModel.swift; sourceTree = "<group>"; };
+		76DB173A27ACE089003D7C0C /* short_y2021.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = short_y2021.html; sourceTree = "<group>"; };
+		76DB173C27ACE093003D7C0C /* y2021.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = y2021.html; sourceTree = "<group>"; };
 		76E064F323CA9C6C007E18C1 /* DhammaTalks.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DhammaTalks.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		76E064F623CA9C6C007E18C1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		76E064FB23CA9C6C007E18C1 /* DhammaTalks.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DhammaTalks.xcdatamodel; sourceTree = "<group>"; };
@@ -301,6 +309,7 @@
 				76163A1B2747758300358DDF /* y2018.html */,
 				76163A192747757B00358DDF /* y2019.html */,
 				76163A172747725E00358DDF /* y2020.html */,
+				76DB173C27ACE093003D7C0C /* y2021.html */,
 			);
 			path = Eveninig;
 			sourceTree = "<group>";
@@ -319,6 +328,7 @@
 				76163A492747788D00358DDF /* short_y2018.html */,
 				76163A4C2747788D00358DDF /* short_y2019.html */,
 				76163A4D2747788D00358DDF /* short_y2020.html */,
+				76DB173A27ACE089003D7C0C /* short_y2021.html */,
 			);
 			path = Short;
 			sourceTree = "<group>";
@@ -361,6 +371,7 @@
 				767EEDB52744A58C0094697D /* TalkSectionHeader.swift */,
 				769E69E2274966D300DEC24C /* TalkGroupSelectorView.swift */,
 				760B4618276317E6007ED1E0 /* FavoritesListView.swift */,
+				763717AE27B0431B007DF19A /* FavoritesListViewModel.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -381,6 +392,7 @@
 		763C950027383D2B00632633 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				763717B027B0434D007DF19A /* Array.swift */,
 				767AAC9427572F620003D9AC /* AVPlayerItem.swift */,
 				76F9F46227483F2700957810 /* Calendar.swift */,
 				767AAC9227572E600003D9AC /* DateComponentsFormatter.swift */,
@@ -611,6 +623,7 @@
 				76163A512747788D00358DDF /* short_y2010.html in Resources */,
 				76163A4F2747788D00358DDF /* short_y2014.html in Resources */,
 				76163A3A2747766F00358DDF /* y2010.html in Resources */,
+				76DB173D27ACE093003D7C0C /* y2021.html in Resources */,
 				76163A552747788D00358DDF /* short_y2011.html in Resources */,
 				76163A532747788D00358DDF /* short_y2017.html in Resources */,
 				76E0650623CA9C6E007E18C1 /* LaunchScreen.storyboard in Resources */,
@@ -624,6 +637,7 @@
 				76163A332747766F00358DDF /* y2014.html in Resources */,
 				76163A542747788D00358DDF /* short_y2018.html in Resources */,
 				76163A382747766F00358DDF /* y2008.html in Resources */,
+				76DB173B27ACE089003D7C0C /* short_y2021.html in Resources */,
 				76163A2F2747766F00358DDF /* y2011.html in Resources */,
 				76163A3B2747766F00358DDF /* y2002.html in Resources */,
 				76E0650323CA9C6E007E18C1 /* Preview Assets.xcassets in Resources */,
@@ -677,12 +691,14 @@
 				76E064F723CA9C6C007E18C1 /* AppDelegate.swift in Sources */,
 				766CA1E523E6600400A8E770 /* TalkSection.swift in Sources */,
 				76E0653223CAB9EB007E18C1 /* AudioFileNameParser.swift in Sources */,
+				763717AF27B0431B007DF19A /* FavoritesListViewModel.swift in Sources */,
 				76AB4D45279C995200C83F8D /* DownloadManager.swift in Sources */,
 				767AAC8F27572C9B0003D9AC /* TalkRowViewModel.swift in Sources */,
 				76172407275F217000757236 /* Logger.swift in Sources */,
 				76D064332761C75F00FBFEA6 /* FileStorage.swift in Sources */,
 				763E52BE27645A0B000DCF7B /* String.swift in Sources */,
 				769E69E52749758400DEC24C /* MediaPlayer.swift in Sources */,
+				763717B127B0434D007DF19A /* Array.swift in Sources */,
 				7637DBE9276E865000D2ACEC /* CoreDataStack.swift in Sources */,
 				76E064FE23CA9C6C007E18C1 /* ContentView.swift in Sources */,
 				767EEDB62744A58C0094697D /* TalkSectionHeader.swift in Sources */,
@@ -888,7 +904,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_ASSET_PATHS = "\"DhammaTalks/Preview Content\"";
 				DEVELOPMENT_TEAM = QF6M4CC7RV;
 				ENABLE_PREVIEWS = YES;
@@ -897,7 +913,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.2.0;
+				MARKETING_VERSION = 0.3.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.bparousis.DhammaTalks;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -911,7 +927,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_ASSET_PATHS = "\"DhammaTalks/Preview Content\"";
 				DEVELOPMENT_TEAM = QF6M4CC7RV;
 				ENABLE_PREVIEWS = YES;
@@ -920,7 +936,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.2.0;
+				MARKETING_VERSION = 0.3.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.bparousis.DhammaTalks;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;

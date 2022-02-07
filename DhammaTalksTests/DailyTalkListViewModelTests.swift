@@ -101,6 +101,16 @@ class DailyTalkListViewModelTests: XCTestCase {
         sut.selectedCategory = .evening
         XCTAssertEqual(sut.years, (2000...sut.currentYear).reversed())
     }
+    
+    func testWhenRefreshable() {
+        sut.selectedYear = sut.currentYear
+        XCTAssertTrue(sut.isRefreshable)
+    }
+    
+    func testWhenNotRefreshable() {
+        sut.selectedYear = 2021
+        XCTAssertFalse(sut.isRefreshable)
+    }
 }
 
 
