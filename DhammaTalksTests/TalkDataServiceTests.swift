@@ -66,7 +66,7 @@ class TalkDataServiceTests: XCTestCase {
     
     func testTalkSeriesList() {
         let talkSeriesList = TalkDataService.talkSeriesList!
-        XCTAssertEqual(talkSeriesList.count, 9)
+        XCTAssertEqual(talkSeriesList.count, 10)
         XCTAssertEqual(talkSeriesList[0].sections.count, 1)
         XCTAssertEqual(talkSeriesList[0].sections[0].talks.count, 50)
         XCTAssertEqual(talkSeriesList[8].sections.count, 7)
