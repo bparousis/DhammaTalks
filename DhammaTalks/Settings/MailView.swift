@@ -32,11 +32,12 @@ struct MailView: UIViewControllerRepresentable {
             defer {
                 isShowing = false
             }
-            guard error == nil else {
-                self.result = .failure(error!)
-                return
+            
+            if let error = error {
+                self.result = .failure(error)
+            } else {
+                self.result = .success(result)
             }
-            self.result = .success(result)
         }
     }
 
