@@ -140,7 +140,6 @@ class TalkRowViewModel: NSObject, Identifiable, ObservableObject {
         self.talkData = talkData
         self.talkUserInfoService = talkUserInfoService
         self.downloadManager = downloadManager
-        self.downloadJob = downloadManager.findDownloadJob(for: talkData)
     }
 
     func play() async {
@@ -205,6 +204,7 @@ class TalkRowViewModel: NSObject, Identifiable, ObservableObject {
             totalTime = talkUserInfo.totalTime
             favorite = talkUserInfo.isFavorite
         }
+        self.downloadJob = downloadManager.findDownloadJob(for: talkData)
     }
     
     func cancelDownload() {

@@ -27,8 +27,8 @@ struct TalkRow: View {
         } else {
             Button(action: { showActionSheet = true }) {
                 Image(systemName: "ellipsis")
+                    .frame(width: buttonSize, height: buttonSize, alignment: .center)
             }
-            .frame(width: buttonSize, height: buttonSize, alignment: .center)
         }
     }
     
@@ -40,34 +40,28 @@ struct TalkRow: View {
                  .foregroundColor(.secondary)
                  .font(.system(size: 12))
         case .inProgress:
-            VStack {
-                ProgressView(value: viewModel.currentTimeInSeconds, total: viewModel.totalTimeInSeconds)
-                
-                HStack {
-                    if let currentTimeInSeconds = viewModel.currentTimeString {
-                        Text(currentTimeInSeconds)
-                            .foregroundColor(.secondary)
-                            .font(.system(size: 12))
-                    }
-                    Spacer()
-                    if let timeRemaining = viewModel.timeRemainingString {
-                        Text(timeRemaining)
-                            .foregroundColor(.secondary)
-                            .font(.system(size: 12))
-                    }
+            HStack {
+                if let currentTimeInSeconds = viewModel.currentTimeString {
+                    Text(currentTimeInSeconds)
+                        .foregroundColor(.secondary)
+                        .font(.system(size: 12))
                 }
-                
+                ProgressView(value: viewModel.currentTimeInSeconds, total: viewModel.totalTimeInSeconds)
+                if let timeRemaining = viewModel.timeRemainingString {
+                    Text(timeRemaining)
+                        .foregroundColor(.secondary)
+                        .font(.system(size: 12))
+                }
             }
         case .unplayed:
-            Text("")
-                .frame(width: 0, height: 0, alignment: .top)
+            EmptyView()
         }
     }
     
     var titleStatusView: some View {
         HStack(alignment: .firstTextBaseline) {
-            if viewModel.dateStyle == .day {
-                Text(viewModel.formattedDay ?? "  ")
+            if viewModel.dateStyle == .day, let formattedDay = viewModel.formattedDay, !formattedDay.isEmpty {
+                Text(formattedDay)
                     .font(.subheadline)
             }
             Text(viewModel.title)
@@ -128,7 +122,7 @@ struct TalkRow: View {
                 viewModel.finishedPlaying(item: item)
             }
         }
-        .task {
+        .onAppear {
             viewModel.fetchTalkInfo()
         }
     }

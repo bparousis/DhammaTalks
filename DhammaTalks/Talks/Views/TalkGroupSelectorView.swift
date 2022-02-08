@@ -47,13 +47,23 @@ struct TalkGroupSelectorView: View {
                     makeMainSection(columnWidth: width)
                     
                     if let talkSeriesList = TalkDataService.talkSeriesList {
-                        Spacer(minLength: 30)
                         makeTalkSeriesSection(talkSeriesList: talkSeriesList, columnWidth: width)
                     }
                 }
             }
         }
-        .navigationTitle("DhammaTalks")
+        .toolbar {
+            ToolbarItem(placement: .principal) {
+                HStack {
+                    Image("dtLogo-transparent")
+                        .resizable()
+                        .frame(width: 35.0, height: 35.0)
+                    Text("Dhamma Talks")
+                        .font(.title)
+                        .bold()
+                }
+            }
+        }
         .onAppear {
             if selection == nil {
                 selection = AppSettings.talkGroupSelection
@@ -64,7 +74,7 @@ struct TalkGroupSelectorView: View {
     }
     
     private func makeCellView(title: String, image: String, width: CGFloat) -> some View {
-        ZStack {
+        VStack {
             Image(image)
                 .resizable()
                 .frame(width: width, height:100, alignment:.center)
@@ -74,7 +84,8 @@ struct TalkGroupSelectorView: View {
                 .bold()
                 .font(.system(size:18, weight:.bold))
                 .foregroundColor(.white)
-                .frame(width: width, height:100, alignment:.center)
+                .shadow(color: .black, radius: 5.0, x: 5.0, y: 5.0)
+                .frame(width: width, height:75, alignment:.top)
         }
     }
     
@@ -93,7 +104,7 @@ struct TalkGroupSelectorView: View {
     }
     
     private func makeTalkSeriesSection(talkSeriesList: [TalkSeries], columnWidth: CGFloat) -> some View {
-        Section("Talk Series") {
+        Section {
             ForEach(talkSeriesList) { talkSeries in
                 let talkSeriesListView = TalkSeriesListView(talkSeries:talkSeries, talkUserInfoService: talkUserInfoService, downloadManager: downloadManager)
                     .onAppear {
@@ -104,6 +115,10 @@ struct TalkGroupSelectorView: View {
                     makeCellView(title: talkSeries.title, image: talkSeries.image, width: columnWidth)
                 }
             }
+        } header: {
+            Text("Talk Series")
+                .font(.system(size: 20))
+                .bold()
         }
     }
 }
