@@ -2,7 +2,7 @@
     {
         "id": "basics",
         "title": "Basics",
-        "description": "A graduated series of 50 Dhamma talks for meditators, starting with breath meditation and leading through issues of discernment. An expanded version of this series (64 talks) is available on youtube.",
+        "description": "A graduated series of 50 Dhamma talks for meditators, starting with breath meditation and leading through issues of discernment. An expanded version of this series (64 talks) is available on [youtube](https://www.youtube.com/watch?v=lGCih9KEUdA&list=PLOjrj_IM0EYrQFQSZbJgf-L-B5oCoYoTi).",
         "image": "water1",
         "sections": [
             {
@@ -350,8 +350,8 @@
     },
     {
         "id": "eightfoldPath",
-        "title": "The Eightfold Path",
-        "description": "The Noble Eightfold Path forms the framework for all the Buddha’s teachings. It was the first topic he mentioned in his first sermon, and the last topic he mentioned in his last. The edited transcripts of these talks are available in eBook form as The Noble Eightfold Path: 13 Meditations Talks on the eBooks page.",
+        "title": "The Noble Eightfold Path",
+        "description": "The Noble Eightfold Path forms the framework for all the Buddha’s teachings. It was the first topic he mentioned in his first sermon, and the last topic he mentioned in his last. The edited transcripts of these talks are available in eBook form as [The Noble Eightfold Path: 13 Meditations Talks](https://www.dhammatalks.org/ebook_index.html#eightfoldPath) on the eBooks page.",
         "image": "buddha",
         "sections": [
             {
@@ -429,7 +429,7 @@
     {
         "id": "refugeDeath",
         "title": "Refuge from Death",
-        "description": "Refuge from Death.",
+        "description": "A collection of 20 Dhamma talks, chants, sutta readings and guided meditations for listening as one approaches death.",
         "image": "wood",
         "sections": [
             {
@@ -542,7 +542,7 @@
     {
         "id": "withEach",
         "title": "With Each & Every Breath",
-        "description": "Thanissaro Bhikkhu’s meditation guide With Each & Every Breath lists recommended Dhamma talks at the end of each chapter. Those talks are presented here in that same order.",
+        "description": "Thanissaro Bhikkhu’s meditation guide _With Each & Every Breath_ lists recommended Dhamma talks at the end of each chapter. Those talks are presented here in that same order.",
         "image": "water5",
         "sections": [
             {
@@ -1226,8 +1226,8 @@
     },
     {
         "id": "chants",
-        "title": "Chants",
-        "description": "Pali chanting by the monks of Metta Forest Monastery",
+        "title": "Pali Chanting",
+        "description": "• The full Chanting Guide can now be [read online](https://www.dhammatalks.org/books/ChantingGuide/Section0001.html)\n• There are also [eBook versions](https://www.dhammatalks.org/ebook_index.html#chanting)\n• A print version is available by [request](https://www.dhammatalks.org/ebook_index.html#booklist) at no charge\n• There are [pronunciation](https://www.dhammatalks.org/books/ChantingGuide/Section0003.html) and [tone](https://www.dhammatalks.org/ebook_index.html#tone_guide) guides for those trying to learn the chants.\n",
         "image": "water7",
         "sections": [
             {
@@ -1379,6 +1379,698 @@
                         "id": "divineMantra1",
                         "title": "The Divine Mantra | Purification of the Six Properties",
                         "url": "Chants/TheDivineMantra.mp3"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "lectures",
+        "title": "Lectures",
+        "description": "These lectures, given by Thanissaro Bhikkhu at various meditation centers and about 40–60 minutes long on average, provide a systematic and focused explanation—and Q&A—on selected Dhamma themes.",
+        "image": "leaves2",
+        "sections": [
+            {
+                "id": "2019",
+                "title": "2019",
+                "talks": [
+                    {
+                        "id": "2019_1",
+                        "title": "Practicing the Dhamma in Accordance with the Dhamma",
+                        "url": "Lectures/Singapore/Ajahn%20Thanissaro_SG%20Wat%20Palelai_191203.mp3"
+                    },
+                    {
+                        "id": "2019_2",
+                        "title": "Listening to the Dhamma",
+                        "url": "Lectures/Singapore/Ajahn%20Thanissaro_SG%20Wat%20Palelai_191202.mp3"
+                    },
+                    {
+                        "id": "2019_3",
+                        "title": "Right View: Mundane and Transcendent",
+                        "url": "Lectures/PFD/Ajahn_Thanissaro_Introduction_to_Right_View_Mundane_and_Transcendent_Nov_1_2019-11_7_19_10_52_AM.mp3"
+                    },
+                    {
+                        "id": "2019_4",
+                        "title": "Right View Comes First",
+                        "url": "Lectures/IMSB/20191001-Thanissaro_Bhikkhu-IMSB-right_view_comes_first-58982.mp3"
+                    },
+                    {
+                        "id": "2019_5",
+                        "title": "The Present Moment is Not the Goal",
+                        "url": "Lectures/IMC/20190929-Ajaan_Thanissaro-IMC-the_present_moment_is_not_the_goal.mp3"
+                    },
+                    {
+                        "id": "2019_6",
+                        "title": "Skill in Questions (Part 1/3)",
+                        "url": "Lectures/IMC/20190928-Ajaan_Thanissaro-sati-skill_in_questions_part_1.mp3"
+                    },
+                    {
+                        "id": "2019_7",
+                        "title": "Skill in Questions (Part 2/3)",
+                        "url": "Lectures/IMC/20190928-Ajaan_Thanissaro-sati-skill_in_questions_part_2.mp3"
+                    },
+                    {
+                        "id": "2019_8",
+                        "title": "Skill in Questions (Part 3/3)",
+                        "url": "Lectures/IMC/20190928-Ajaan_Thanissaro-sati-skill_in_questions_part_3.mp3"
+                    },
+                    {
+                        "id": "2019_9",
+                        "title": "Self & Not-self (Part 1)",
+                        "url": "Lectures/KusalaToronto/Thanisarro%20Bhikku%20Retreat%20March%202nd,%202019%20-%20Part%201.mp3"
+                    },
+                    {
+                        "id": "2019_10",
+                        "title": "Self & Not-self (Part 2)",
+                        "url": "Lectures/KusalaToronto/Thanisarro%20Bhikku%20Retreat%20March%202nd,%202019%20-%20Part%202.mp3"
+                    }
+                ]
+            },
+            {
+                "id": "2018",
+                "title": "2018",
+                "talks": [
+                    {
+                        "id": "2018_1",
+                        "title": "The Karma of Now",
+                        "url": "Lectures/DBT/181129_Thanissaro_Bhikkhu__The%20Karma_of_Now.mp3"
+                    },
+                    {
+                        "id": "2018_2",
+                        "title": "Equanimity",
+                        "url": "Lectures/PacificHermitage/2018-11-06%20Ajahn%20Geoff_%20Equanimity%20at%20Yoga%20Samadhi.mp3"
+                    },
+                    {
+                        "id": "2018_3",
+                        "title": "Refuge",
+                        "url": "Lectures/IMSB/20180926-Thanissaro_Bhikkhu-IMSB-refuge-52512.mp3"
+                    },
+                    {
+                        "id": "2018_4",
+                        "title": "In the Elephant's Footprint",
+                        "url": "Lectures/IMC/20180923-Ajaan_Thanissaro-IMC-in_the_elephants_footprint.mp3"
+                    },
+                    {
+                        "id": "2018_5",
+                        "title": "Clinging and Craving (Part 1)",
+                        "url": "Lectures/IMC/20180922-Ajaan_Thanissaro-sati-clinging_and_craving_part_1.mp3"
+                    },
+                    {
+                        "id": "2018_6",
+                        "title": "Clinging and Craving (Part 2)",
+                        "url": "Lectures/IMC/20180922-Ajaan_Thanissaro-sati-clinging_and_craving_part_2.mp3"
+                    },
+                    {
+                        "id": "2018_7",
+                        "title": "Clinging and Craving (Part 3)",
+                        "url": "Lectures/IMC/20180922-Ajaan_Thanissaro-sati-clinging_and_craving_part_3.mp3"
+                    },
+                    {
+                        "id": "2018_8",
+                        "title": "In the Elephant's Footprint",
+                        "url": "Lectures/CIMC/20180425-Thanissaro_Bhikkhu-CIMC-in_the_elephant_s_footprint-49790.mp3"
+                    }
+                ]
+            },
+            {
+                "id": "2017",
+                "title": "2017",
+                "talks": [
+                    {
+                        "id": "2017_1",
+                        "title": "Untitled (Part 1/3)",
+                        "url": "Lectures/Singapore/Aj%20Thanissaro%20SG%20WP%20Day%201%20-%20151217.mp3"
+                    },
+                    {
+                        "id": "2017_2",
+                        "title": "Untitled (Part 2/3)",
+                        "url": "Lectures/Singapore/Aj%20Thanissaro%20SG%20WP%20Day%202%20-%20161217.mp3"
+                    },
+                    {
+                        "id": "2017_3",
+                        "title": "Untitled (Part 3/3)",
+                        "url": "Lectures/Singapore/Aj%20Thanissaro%20SG%20WP%20Day%203%20-%20171217.mp3"
+                    },
+                    {
+                        "id": "2017_4",
+                        "title": "Merit is More Important Than You Think",
+                        "url": "Lectures/DBT/171019_Thanissaro_Bhikkhu_Merit_Is_More_Important_than_You_Think.mp3"
+                    },
+                    {
+                        "id": "2017_5",
+                        "title": "Ananda: The Man with the Questions",
+                        "url": "Lectures/IMSB/20170919-Thanissaro_Bhikkhu-IMSB-ananda_the_man_with_the_questions-46864.mp3"
+                    },
+                    {
+                        "id": "2017_6",
+                        "title": "Wisdom over Justice",
+                        "url": "Lectures/IMC/20170918-Ajaan_Thanissaro-IMC-wisdom_over_justice.mp3"
+                    },
+                    {
+                        "id": "2017_7",
+                        "title": "The Ten Perfections: Discernment Teachings (Part 1)",
+                        "url": "Lectures/IMC/20170916-Ajaan_Thanissaro-IMC-the_ten_perfections_discernment_teachings.mp3"
+                    },
+                    {
+                        "id": "2017_8",
+                        "title": "The Ten Perfections: Metta (Part 2)",
+                        "url": "Lectures/IMC/20170916-Ajaan_Thanissaro-IMC-the_ten_perfections_metta.mp3"
+                    },
+                    {
+                        "id": "2017_9",
+                        "title": "The Ten Perfections: Truth and Virtue (Part 3)",
+                        "url": "Lectures/IMC/20170916-Ajaan_Thanissaro-IMC-the_ten_perfections_truth_and_virtue.mp3"
+                    },
+                    {
+                        "id": "2017_10",
+                        "title": "The Ten Perfections: Persistence and Giving (Part 4)",
+                        "url": "Lectures/IMC/20170917-Ajaan_Thanissaro-IMC-the_ten_perfections_persistence_and_giving.mp3"
+                    },
+                    {
+                        "id": "2017_11",
+                        "title": "The Ten Perfections: Renunciation Endurance Equanimity (Part 5)",
+                        "url": "Lectures/IMC/20170917-Ajaan_Thanissaro-IMC-the_ten_perfections_renunciation_endurance_equanimity.mp3"
+                    }
+                ]
+            },
+            {
+                "id": "2016",
+                "title": "2016",
+                "talks": [
+                    {
+                        "id": "2016_1",
+                        "title": "The Treasures of Spiritual Materialism",
+                        "url": "Lectures/IMC/20160925-Ajaan_Thanissaro-IMC-the_treasures_of_spiritual_materialism.mp3"
+                    },
+                    {
+                        "id": "2016_2",
+                        "title": "The Noble Eightfold Path (Part 1)",
+                        "url": "Lectures/IMC/20160924-Ajaan_Thanissaro-sati-the_noble_eightfold_path_part_1.mp3"
+                    },
+                    {
+                        "id": "2016_3",
+                        "title": "The Noble Eightfold Path (Part 2)",
+                        "url": "Lectures/IMC/20160924-Ajaan_Thanissaro-sati-the_noble_eightfold_path_part_2.mp3"
+                    },
+                    {
+                        "id": "2016_4",
+                        "title": "The Noble Eightfold Path (Part 3)",
+                        "url": "Lectures/IMC/20160924-Ajaan_Thanissaro-sati-the_noble_eightfold_path_part_3.mp3"
+                    },
+                    {
+                        "id": "2016_5",
+                        "title": "What is Insight and What Good is It?",
+                        "url": "Lectures/CIMC/20160309-Thanissaro_Bhikkhu-CIMC-what_is_insight_and_what_good_is_it-32795.mp3"
+                    }
+                ]
+            },
+            {
+                "id": "2015",
+                "title": "2015",
+                "talks": [
+                    {
+                        "id": "2015_1",
+                        "title": "The True Dharma Has Disappeared",
+                        "url": "Lectures/IMC/20150920-Thanissaro_Bhikkhu-IMC-the_true_dharma_has_disappeared.mp3"
+                    },
+                    {
+                        "id": "2015_2",
+                        "title": "The Thai Forest Masters (Part 1)",
+                        "url": "Lectures/IMC/20150919-Thanissaro_Bhikkhu-IMC-the_thai_forest_masters_part_1.mp3"
+                    },
+                    {
+                        "id": "2015_3",
+                        "title": "The Thai Forest Masters (Part 2)",
+                        "url": "Lectures/IMC/20150919-Thanissaro_Bhikkhu-IMC-the_thai_forest_masters_part_2.mp3"
+                    },
+                    {
+                        "id": "2015_4",
+                        "title": "The Thai Forest Masters (Part 3)",
+                        "url": "Lectures/IMC/20150919-Thanissaro_Bhikkhu-IMC-the_thai_forest_masters_part_3.mp3"
+                    },
+                    {
+                        "id": "2015_5",
+                        "title": "The Art and Study of Practice",
+                        "url": "Lectures/CIMC/20150318-Thanissaro_Bhikkhu-CIMC-the_art_and_study_of_practice.mp3"
+                    },
+                ]
+            },
+            {
+                "id": "2014",
+                "title": "2014",
+                "talks": [
+                    {
+                        "id": "2014_1",
+                        "title": "Buddhist Romanticism (Part 1)",
+                        "url": "Lectures/IMC/20140426-Thanissaro_Bhikkhu-IMC-romanticizing_the_buddha_part_1.mp3"
+                    },
+                    {
+                        "id": "2014_2",
+                        "title": "Buddhist Romanticism (Part 2)",
+                        "url": "Lectures/IMC/20140426-Thanissaro_Bhikkhu-IMC-romanticizing_the_buddha_part_2.mp3"
+                    },
+                    {
+                        "id": "2014_3",
+                        "title": "Buddhist Romanticism (Part 3)",
+                        "url": "Lectures/IMC/20140426-Thanissaro_Bhikkhu-IMC-romanticizing_the_buddha_part_3.mp3"
+                    }
+                ]
+            },
+            {
+                "id": "2013",
+                "title": "2013",
+                "talks": [
+                    {
+                        "id": "2013_1",
+                        "title": "The Brahmaviharas (Part 1)",
+                        "url": "Lectures/IMC/20131012-Thanissaro_Bhikkhu-IMC-the_brahmaviharas_1.mp3"
+                    },
+                    {
+                        "id": "2013_2",
+                        "title": "The Brahmaviharas (Part 2)",
+                        "url": "Lectures/IMC/20131012-Thanissaro_Bhikkhu-IMC-the_brahmaviharas_2.mp3"
+                    },
+                    {
+                        "id": "2013_3",
+                        "title": "The Brahmaviharas (Part 3)",
+                        "url": "Lectures/IMC/20131012-Thanissaro_Bhikkhu-IMC-the_brahmaviharas_3.mp3"
+                    },
+                    {
+                        "id": "2013_4",
+                        "title": "Refuge and Protection",
+                        "url": "Lectures/IMC/20131010-Thanissaro_Bhikkhu-IMC-refuge_and_protection.mp3"
+                    }
+                ]
+            },
+            {
+                "id": "2012",
+                "title": "2012",
+                "talks": [
+                    {
+                        "id": "2012_1",
+                        "title": "Equanimity is Overrated",
+                        "url": "Lectures/IMC/20120429-Thanissaro_Bhikkhu-IMC-equanimity_is_overrated.mp3"
+                    },
+                    {
+                        "id": "2012_2",
+                        "title": "Papañca (Part 1)",
+                        "url": "Lectures/IMC/20120428-Thanissaro_Bhikkhu-IMC-introduction_part_1.mp3"
+                    },
+                    {
+                        "id": "2012_3",
+                        "title": "Papañca (Part 2)",
+                        "url": "Lectures/IMC/20120428-Thanissaro_Bhikkhu-IMC-the_reading_part_2.mp3"
+                    },
+                    {
+                        "id": "2012_4",
+                        "title": "Papañca (Part 3)",
+                        "url": "Lectures/IMC/20120428-Thanissaro_Bhikkhu-IMC-reading_continued_part_3.mp3"
+                    },
+                    {
+                        "id": "2012_5",
+                        "title": "Papañca (Part 4)",
+                        "url": "Lectures/IMC/20120428-Thanissaro_Bhikkhu-IMC-reading_continued_part_4.mp3"
+                    },
+                    {
+                        "id": "2012_6",
+                        "title": "Five Aggregates",
+                        "url": "Lectures/IMC/20120423-Thanissaro_Bhikkhu-IMC-five_aggregates.mp3"
+                    },
+                    {
+                        "id": "2012_7",
+                        "title": "Lessons from the Kalama Sutta",
+                        "url": "Lectures/CIMC/20120314-Thanissaro_Bhikkhu-CIMC-lessons_from_the_kalama_sutta.mp3"
+                    },
+                    {
+                        "id": "2012_8",
+                        "title": "Willpower Strategies",
+                        "url": "Lectures/IMC/20120108-Thanissaro_Bhikkhu-IMC-willpower_strategies.mp3"
+                    }
+                ]
+            },
+            {
+                "id": "2011",
+                "title": "2011",
+                "talks": [
+                    {
+                        "id": "2011_1",
+                        "title": "Quality of Metta",
+                        "url": "Lectures/IMC/20110501-Thanissaro_Bhikkhu-IMC-quality_of_metta.mp3"
+                    },
+                    {
+                        "id": "2011_2",
+                        "title": "Karma and Causality (Part 1)",
+                        "url": "Lectures/IMC/20110430-Thanissaro_Bhikkhu-IMC-karma_and_causality_part_1.mp3"
+                    },
+                    {
+                        "id": "2011_3",
+                        "title": "Karma and Causality (Part 3) [Part 2 unrecorded]",
+                        "url": "Lectures/IMC/20110430-Thanissaro_Bhikkhu-IMC-karma_and_causality_part_3.mp3"
+                    },
+                    {
+                        "id": "2011_4",
+                        "title": "The Teachings of Ajahn Lee",
+                        "url": "Lectures/IMC/20110425-Thanissaro_Bhikkhu-IMC-the_teachings_of_ajahn_lee.mp3"
+                    }
+                ]
+            },
+            {
+                "id": "2010",
+                "title": "2010",
+                "talks": [
+                    {
+                        "id": "2010_1",
+                        "title": "The Usefulness of Judgment",
+                        "url": "Lectures/IMC/20100418-Thanissaro_Bhikkhu-IMC-the_usefulness_of_judgment.mp3"
+                    },
+                    {
+                        "id": "2010_2",
+                        "title": "Mindfulness and Concentration (Part 1)",
+                        "url": "Lectures/IMC/20100417-Thanissaro_Bhikkhu-IMC-mindfulness_and_concentration_part_1.mp3"
+                    },
+                    {
+                        "id": "2010_3",
+                        "title": "Mindfulness and Concentration (Part 2)",
+                        "url": "Lectures/IMC/20100417-Thanissaro_Bhikkhu-IMC-mindfulness_and_concentration_part_2.mp3"
+                    },
+                    {
+                        "id": "2010_4",
+                        "title": "Mindfulness and Concentration (Part 3)",
+                        "url": "Lectures/IMC/20100417-Thanissaro_Bhikkhu-IMC-mindfulness_and_concentration_part_3.mp3"
+                    },
+                    {
+                        "id": "2010_5",
+                        "title": "Mindfulness and Concentration (Part 4)",
+                        "url": "Lectures/IMC/20100417-Thanissaro_Bhikkhu-IMC-mindfulness_and_concentration_part_4.mp3"
+                    },
+                    {
+                        "id": "2010_6",
+                        "title": "The Importance of Questions",
+                        "url": "Lectures/IMC/20100412-Thanissaro_Bhikkhu-IMC-the_importance_of_questions.mp3"
+                    },
+                    {
+                        "id": "2010_7",
+                        "title": "Selves & Not-Self (Part 1)",
+                        "url": "Lectures/NYIMC/20100316-Thanissaro_Bhikkhu-NYIMC-selves_not_self_part_i.mp3"
+                    },
+                    {
+                        "id": "2010_8",
+                        "title": "Selves & Not-Self (Part 2)",
+                        "url": "Lectures/NYIMC/20100317-Thanissaro_Bhikkhu-NYIMC-selves_and_not_self_part_ii.mp3"
+                    },
+                    {
+                        "id": "2010_9",
+                        "title": "Selves & Not-Self (Part 3)",
+                        "url": "Lectures/NYIMC/20100318-Thanissaro_Bhikkhu-NYIMC-selves_not_self_part_iii.mp3"
+                    }
+                ]
+            },
+            {
+                "id": "2009",
+                "title": "2009",
+                "talks": [
+                    {
+                        "id": "2009_1",
+                        "title": "Faith and Ardency",
+                        "url": "Lectures/IMC/20090504-Thanissaro_Bhikkhu-IMC-faith_and_ardency.mp3"
+                    },
+                    {
+                        "id": "2009_2",
+                        "title": "Generosity",
+                        "url": "Lectures/IMC/20090503-Thanissaro_Bhikkhu-IMC-generosity.mp3"
+                    },
+                    {
+                        "id": "2009_3",
+                        "title": "Anatta (Part 1)",
+                        "url": "Lectures/IMC/20090502-Thanissaro_Bhikkhu-IMC-anatta_1_of_3.mp3"
+                    },
+                    {
+                        "id": "2009_4",
+                        "title": "Anatta (Part 2)",
+                        "url": "Lectures/IMC/20090502-Thanissaro_Bhikkhu-IMC-anatta_2_of_3.mp3"
+                    },
+                    {
+                        "id": "2009_5",
+                        "title": "Anatta (Part 3)",
+                        "url": "Lectures/IMC/20090502-Thanissaro_Bhikkhu-IMC-anatta_3_of_3.mp3"
+                    },
+                    {
+                        "id": "2009_6",
+                        "title": "Noble Wealth",
+                        "url": "Lectures/CIMC/20090225-Thanissaro_Bhikkhu-CIMC-noble_wealth.mp3"
+                    }
+                ]
+            },
+            {
+                "id": "2008",
+                "title": "2008",
+                "talks": [
+                    {
+                        "id": "2008_1",
+                        "title": "What is Wrong with Buddha Nature",
+                        "url": "Lectures/IMC/20081006-Thanissaro_Bhikkhu-IMC-what_is_wrong_with_buddha_nature.mp3"
+                    },
+                    {
+                        "id": "2008_2",
+                        "title": "Wealth",
+                        "url": "Lectures/IMC/20081005-Thanissaro_Bhikkhu-IMC-wealth.mp3"
+                    }
+                ]
+            },
+            {
+                "id": "2007",
+                "title": "2007",
+                "talks": [
+                    {
+                        "id": "2007_1",
+                        "title": "Bringing Wisdom to Good Will",
+                        "url": "Lectures/IMC/20070506-Thanissaro_Bhikkhu-IMC-bringing_wisdom_to_good_will.mp3"
+                    },
+                    {
+                        "id": "2007_2",
+                        "title": "Dependent Co-Arising: Guided Meditation (1 of 10)",
+                        "url": "Lectures/IMC/20070505-Thanissaro_Bhikkhu-IMC-dependent_co_arising_guided_meditation_1_of_10.mp3"
+                    },
+                    {
+                        "id": "2007_3",
+                        "title": "Dependent Co-Arising: Introduction and Q&amp;A (2 of 10)",
+                        "url": "Lectures/IMC/20070505-Thanissaro_Bhikkhu-IMC-dependent_co_arising_introduction_q_and_a_2_of_10.mp3"
+                    },
+                    {
+                        "id": "2007_4",
+                        "title": "Dependent-Co Arising: Readings and Q&amp;A (3 of 10)",
+                        "url": "Lectures/IMC/20070505-Thanissaro_Bhikkhu-IMC-dependent_co_arising_readings_1_to_2_q_and_a_3_of_10.mp3"
+                    },
+                    {
+                        "id": "2007_5",
+                        "title": "Dependent Co-Arising: Description &amp; Analysis (4 of 10)",
+                        "url": "Lectures/IMC/20070505-Thanissaro_Bhikkhu-IMC-dependent_co_arising_reading_3_description_and_analysis_4_of_10.mp3"
+                    },
+                    {
+                        "id": "2007_6",
+                        "title": "Dependent Co-Arising: Readings (5 of 10)",
+                        "url": "Lectures/IMC/20070505-Thanissaro_Bhikkhu-IMC-dependent_co_arising_readings_4_to_7_5_of_10.mp3"
+                    },
+                    {
+                        "id": "2007_7",
+                        "title": "Dependent Co-Arising: Bodily Fabrication (6 of 10)",
+                        "url": "Lectures/IMC/20070505-Thanissaro_Bhikkhu-IMC-dependent_co_arising_reading_8_bodily_fabrication_6_of_10.mp3"
+                    },
+                    {
+                        "id": "2007_8",
+                        "title": "Dependent Co-Arising: Readings (7 of 10)",
+                        "url": "Lectures/IMC/20070505-Thanissaro_Bhikkhu-IMC-dependent_co_arising_readings_9_to_11_7_of_10.mp3"
+                    },
+                    {
+                        "id": "2007_9",
+                        "title": "Dependent Co-Arising: Mental Fabrications (8 of 10)",
+                        "url": "Lectures/IMC/20070505-Thanissaro_Bhikkhu-IMC-dependent_co_arising_readings_12_to_13_mental_fabrications_8_of_10.mp3"
+                    },
+                    {
+                        "id": "2007_10",
+                        "title": "Dependent Co-Arising: Consciousness (9 of 10)",
+                        "url": "Lectures/IMC/20070505-Thanissaro_Bhikkhu-IMC-dependent_co_arising_readings_13_to_23_consciousness_9_of_10.mp3"
+                    },
+                    {
+                        "id": "2007_11",
+                        "title": "Dependent Co-Arising: Readings (10 of 10)",
+                        "url": "Lectures/IMC/20070505-Thanissaro_Bhikkhu-IMC-dependent_co_arising_readings_24_to_28_10_of_10.mp3"
+                    },
+                    {
+                        "id": "2007_12",
+                        "title": "The Wisdom of the Ego",
+                        "url": "Lectures/IMC/20070430-Thanissaro_Bhikkhu-IMC-the_wisdom_of_the_ego.mp3"
+                    }
+                ]
+            },
+            {
+                "id": "2006",
+                "title": "2006",
+                "talks": [
+                    {
+                        "id": "2006_1",
+                        "title": "Appropriate Attention",
+                        "url": "Lectures/IMC/20060507-Thanissaro_Bhikkhu-IMC-appropriate_attention.mp3"
+                    },
+                    {
+                        "id": "2006_2",
+                        "title": "The Breath: A Vehicle for Liberation (Part 1)",
+                        "url": "Lectures/IMC/20060506-Thanissaro_Bhikkhu-IMC-the_breath_a_vehicle_for_liberation_part_1.mp3"
+                    },
+                    {
+                        "id": "2006_3",
+                        "title": "The Breath: A Vehicle for Liberation (Part 2)",
+                        "url": "Lectures/IMC/20060506-Thanissaro_Bhikkhu-IMC-the_breath_a_vehicle_for_liberation_part_2.mp3"
+                    },
+                    {
+                        "id": "2006_4",
+                        "title": "The Breath: A Vehicle for Liberation (Part 3)",
+                        "url": "Lectures/IMC/20060506-Thanissaro_Bhikkhu-IMC-the_breath_a_vehicle_for_liberation_part_3.mp3"
+                    },
+                    {
+                        "id": "2006_5",
+                        "title": "Emptiness Revisited",
+                        "url": "Lectures/IMC/20060501-Thanissaro_Bhikkhu-IMC-emptiness_revisited.mp3"
+                    },
+                    {
+                        "id": "2006_6",
+                        "title": "The War on Karma",
+                        "url": "Lectures/IMSRC/20060215-Thanissaro_Bhikkhu-IMSRC-the_war_on_karma.mp3"
+                    }
+                ]
+            },
+            {
+                "id": "2005",
+                "title": "2005",
+                "talks": [
+                    {
+                        "id": "2005_1",
+                        "title": "Heedfulness",
+                        "url": "Lectures/IMC/20050501-Thanissaro_Bhikkhu-IMC-heedfulness.mp3"
+                    },
+                    {
+                        "id": "2005_2",
+                        "title": "War on Karma",
+                        "url": "Lectures/IMC/20050425-Thanissaro_Bhikkhu-IMC-war_on_karma.mp3"
+                    },
+                    {
+                        "id": "2005_3",
+                        "title": "Heedfulness",
+                        "url": "Lectures/CIMC/20050202-Thanissaro_Bhikkhu-CIMC-heedfulness.mp3"
+                    }
+                ]
+            },
+            {
+                "id": "2004",
+                "title": "2004",
+                "talks": [
+                    {
+                        "id": "2004_1",
+                        "title": "Customs of the Noble Ones",
+                        "url": "Lectures/IMC/20040425-Thanissaro_Bhikkhu-IMC-customs_of_the_noble_ones.mp3"
+                    },
+                    {
+                        "id": "2004_2",
+                        "title": "Iddhipada: The Bases for Success (Part 1)",
+                        "url": "Lectures/IMC/20040424-Thanissaro_Bhikkhu-IMC-iddhipada_the_bases_for_success_part_1.mp3"
+                    },
+                    {
+                        "id": "2004_3",
+                        "title": "Iddhipada: The Bases for Success (Part 2)",
+                        "url": "Lectures/IMC/20040424-Thanissaro_Bhikkhu-IMC-iddhipada_the_bases_for_success_part_2.mp3"
+                    },
+                    {
+                        "id": "2004_4",
+                        "title": "Iddhipada: The Bases for Success (Part 3)",
+                        "url": "Lectures/IMC/20040424-Thanissaro_Bhikkhu-IMC-iddhipada_the_bases_for_success_part_3.mp3"
+                    },
+                    {
+                        "id": "2004_5",
+                        "title": "Iddhipada: The Bases for Success (Part 4)",
+                        "url": "Lectures/IMC/20040424-Thanissaro_Bhikkhu-IMC-iddhipada_the_bases_for_success_part_4.mp3"
+                    },
+                    {
+                        "id": "2004_6",
+                        "title": "Iddhipada: The Bases for Success (Part 5)",
+                        "url": "Lectures/IMC/20040424-Thanissaro_Bhikkhu-IMC-iddhipada_the_bases_for_success_part_5.mp3"
+                    },
+                    {
+                        "id": "2004_7",
+                        "title": "Happiness",
+                        "url": "Lectures/IMC/20040419-Thanissaro_Bhikkhu-IMC-happiness.mp3"
+                    },
+                    {
+                        "id": "2004_8",
+                        "title": "Anger",
+                        "url": "Lectures/CIMC/20040204-Thanissaro_Bhikkhu-CIMC-anger.mp3"
+                    }
+                ]
+            },
+            {
+                "id": "2003",
+                "title": "2003",
+                "talks": [
+                    {
+                        "id": "2003_1",
+                        "title": "Three Characteristics",
+                        "url": "Lectures/IMC/20030330-Thanissaro_Bhikkhu-IMC-three_characteristics.mp3"
+                    },
+                    {
+                        "id": "2003_2",
+                        "title": "Five Aggregates",
+                        "url": "Lectures/IMC/20030329-Thanissaro_Bhikkhu-IMC-five_aggregates.mp3"
+                    },
+                    {
+                        "id": "2003_3",
+                        "title": "Holding on",
+                        "url": "Lectures/IMC/20030324-Thanissaro_Bhikkhu-IMC-holding_on.mp3"
+                    },
+                    {
+                        "id": "2003_4",
+                        "title": "Not-Self: Taking a Fresh Look",
+                        "url": "Lectures/CIMC/20030129-Thanissaro_Bhikkhu-CIMC-not_self_taking_a_fresh_look.mp3"
+                    },
+                    {
+                        "id": "2003_5",
+                        "title": "The Question of Not-Self",
+                        "url": "Lectures/NYIMC/20030128-Thanissaro_Bhikkhu-NYIMC-the_question_of_non_self.mp3"
+                    }
+                ]
+            },
+            {
+                "id": "2002",
+                "title": "2002",
+                "talks": [
+                    {
+                        "id": "2002_1",
+                        "title": "Four Bases for Success",
+                        "url": "Lectures/IMC/20020331-Thanissaro_Bhikkhu-IMC-four_bases_for_success.mp3"
+                    },
+                    {
+                        "id": "2002_2",
+                        "title": "Buddhist Romanticism",
+                        "url": "Lectures/IMC/20020325-Thanissaro_Bhikkhu-IMC-buddhist_romanticism.mp3"
+                    },
+                    {
+                        "id": "2002_3",
+                        "title": "Untitled",
+                        "url": "Lectures/CIMC/20020206-Thanissaro_Bhikkhu-CIMC-untitled.mp3"
+                    }
+                ]
+            },
+            {
+                "id": "2001",
+                "title": "2001",
+                "talks": [
+                    {
+                        "id": "2001_1",
+                        "title": "Persistence in Practice",
+                        "url": "Lectures/IMC/20011008-Thanissaro_Bhikkhu-IMC-persistence_in_practice.mp3"
+                    },
+                    {
+                        "id": "2001_2",
+                        "title": "Dhamma Talk",
+                        "url": "Lectures/IMSRC/20010214-Thanissaro_Bhikkhu-IMSRC-dharma_talk.mp3"
                     }
                 ]
             }

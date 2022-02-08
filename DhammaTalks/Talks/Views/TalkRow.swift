@@ -18,14 +18,16 @@ struct TalkRow: View {
     
     @ViewBuilder
     private var actionButton: some View {
+        let buttonSize: CGFloat = 25
         if viewModel.downloadProgress != nil {
             CircularProgressBar(progress: $viewModel.downloadProgress, lineWidth: 2.0) {
                 viewModel.cancelDownload()
             }
-            .frame(width: 25, height: 25, alignment: .center)
+            .frame(width: buttonSize, height: buttonSize, alignment: .center)
         } else {
             Button(action: { showActionSheet = true }) {
                 Image(systemName: "ellipsis")
+                    .frame(width: buttonSize, height: buttonSize, alignment: .center)
             }
         }
     }
@@ -39,24 +41,27 @@ struct TalkRow: View {
                  .font(.system(size: 12))
         case .inProgress:
             HStack {
+                if let currentTimeInSeconds = viewModel.currentTimeString {
+                    Text(currentTimeInSeconds)
+                        .foregroundColor(.secondary)
+                        .font(.system(size: 12))
+                }
                 ProgressView(value: viewModel.currentTimeInSeconds, total: viewModel.totalTimeInSeconds)
-                    .frame(width: 75)
-                if let timeRemainingPhrase = viewModel.timeRemainingPhrase {
-                    Text(timeRemainingPhrase)
+                if let timeRemaining = viewModel.timeRemainingString {
+                    Text(timeRemaining)
                         .foregroundColor(.secondary)
                         .font(.system(size: 12))
                 }
             }
         case .unplayed:
-            Text("")
-                .frame(width: 0, height: 0, alignment: .top)
+            EmptyView()
         }
     }
     
     var titleStatusView: some View {
         HStack(alignment: .firstTextBaseline) {
-            if viewModel.dateStyle == .day {
-                Text(viewModel.formattedDay ?? "  ")
+            if viewModel.dateStyle == .day, let formattedDay = viewModel.formattedDay, !formattedDay.isEmpty {
+                Text(formattedDay)
                     .font(.subheadline)
             }
             Text(viewModel.title)
@@ -117,7 +122,7 @@ struct TalkRow: View {
                 viewModel.finishedPlaying(item: item)
             }
         }
-        .task {
+        .onAppear {
             viewModel.fetchTalkInfo()
         }
     }

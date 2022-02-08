@@ -21,7 +21,7 @@ struct MediaPlayer: UIViewControllerRepresentable {
     }
     
     private var player: AVPlayer {
-        return AVPlayer(playerItem: playerItem)
+        AVPlayer(playerItem: playerItem)
     }
 
     init(playerItem:AVPlayerItem, title: String) {
@@ -30,12 +30,14 @@ struct MediaPlayer: UIViewControllerRepresentable {
     }
 
     func makeUIViewController(context: UIViewControllerRepresentableContext<MediaPlayer>) -> AVPlayerViewController {
-        return AVPlayerViewController()
+        let playerVC = AVPlayerViewController()
+        playerVC.exitsFullScreenWhenPlaybackEnds = true
+        return playerVC
     }
 
     func updateUIViewController(_ viewController: AVPlayerViewController, context: UIViewControllerRepresentableContext<MediaPlayer>) {
         viewController.player = player
-        
+
         if let view = viewController.contentOverlayView {
             view.translatesAutoresizingMaskIntoConstraints = false
             let imageView = UIImageView(image: playerImage)

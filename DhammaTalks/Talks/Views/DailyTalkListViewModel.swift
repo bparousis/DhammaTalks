@@ -38,6 +38,10 @@ class DailyTalkListViewModel: ObservableObject {
         calendar.currentYear
     }
     
+    var isRefreshable: Bool {
+        currentYear == selectedYear
+    }
+    
     var years: [Int] {
         Array(selectedCategory.startYear...currentYear).reversed()
     }
@@ -52,11 +56,8 @@ class DailyTalkListViewModel: ObservableObject {
     }
     
     func playRandomTalk() async -> String? {
-        guard let randomSection = talkSections.randomElement(), let randomTalkRow = randomSection.talkRows.randomElement() else {
-            return nil
-        }
-        await randomTalkRow.play()
-        return randomTalkRow.id
+        guard let randomSection = talkSections.randomElement() else { return nil }
+        return await randomSection.talkRows.playRandom()
     }
     
     private func buildTalkSectionViewModels(from talkDataList: [TalkData]) -> [TalkSectionViewModel] {

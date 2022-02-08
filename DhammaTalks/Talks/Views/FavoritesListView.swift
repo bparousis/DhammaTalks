@@ -15,11 +15,7 @@ import Combine
 struct FavoritesListView: View {
 
     @ObservedObject private var viewModel: FavoritesListViewModel
-    @EnvironmentObject private var downloadManager: DownloadManager
-
-    private var talkUserInfoService: TalkUserInfoService {
-        viewModel.talkUserInfoService
-    }
+    @State var searchText: String = ""
 
     init(viewModel: FavoritesListViewModel) {
         self.viewModel = viewModel
@@ -27,49 +23,51 @@ struct FavoritesListView: View {
     
     @ViewBuilder
     private var favoritesListView: some View {
-        if viewModel.favorites.isEmpty {
+        if viewModel.favorites.isEmpty && searchText.isEmpty {
             Text("No favorites")
         } else {
-            List {
-                ForEach(viewModel.favorites) { favoriteTalkData in
-                    TalkRow(viewModel: createTalkRowViewModel(talkData: favoriteTalkData))
+            ScrollViewReader { proxy in
+                List {
+                    ForEach(viewModel.favorites) { favoriteRow in
+                        TalkRow(viewModel: favoriteRow)
+                    }
                 }
+                .toolbar {
+                    ToolbarItemGroup(placement: .bottomBar) {
+                        Button {
+                            Task {
+                                if let id = await viewModel.playRandomTalk() {
+                                    proxy.scrollTo(id)
+                                }
+                            }
+                        } label: {
+                            VStack {
+                                Image(systemName: "shuffle")
+                                Text("Play")
+                            }
+                        }
+                    }
+                }
+                .searchable(text: $searchText)
             }
         }
     }
     
     var body: some View {
         favoritesListView
-        .onReceive(talkUserInfoService.savePublisher) { output in
+        .onReceive(viewModel.savePublisher) { output in
             if !output.isFavorite {
                 Task {
-                    await viewModel.fetchFavorites()
+                    await viewModel.fetchFavorites(searchText: searchText)
                 }
             }
         }
         .task {
-            await viewModel.fetchFavorites()
+            await viewModel.fetchFavorites(searchText: searchText)
+        }
+        .task(id: searchText) {
+            await viewModel.fetchFavorites(searchText: searchText)
         }
         .navigationTitle("Favorites")
-    }
-    
-    private func createTalkRowViewModel(talkData: TalkData) -> TalkRowViewModel {
-        let viewModel = TalkRowViewModel(talkData: talkData, talkUserInfoService: talkUserInfoService, downloadManager: downloadManager)
-        viewModel.dateStyle = .full
-        return viewModel
-    }
-}
-
-
-class FavoritesListViewModel: ObservableObject {
-    @Published var favorites: [TalkData] = []
-    let talkUserInfoService: TalkUserInfoService
-    
-    init(talkUserInfoService: TalkUserInfoService) {
-        self.talkUserInfoService = talkUserInfoService
-    }
-    
-    func fetchFavorites() async {
-        favorites = await talkUserInfoService.fetchFavoriteTalks()
     }
 }

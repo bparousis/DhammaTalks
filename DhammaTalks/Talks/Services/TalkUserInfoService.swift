@@ -58,11 +58,15 @@ class TalkUserInfoService: ObservableObject {
     }
     
     @MainActor
-    func fetchFavoriteTalks() async -> [TalkData] {
+    func fetchFavoriteTalks(searchText: String) async -> [TalkData] {
         await self.managedObjectContext.perform {
             var favoritesList: [TalkData] = []
             let talkUserInfoFetch = NSFetchRequest<TalkUserInfoMO>(entityName: "TalkUserInfoMO")
-            talkUserInfoFetch.predicate = NSPredicate(format: "favoriteDetails != nil")
+            var predicates: [NSPredicate] = [NSPredicate(format: "favoriteDetails != nil")]
+            if !searchText.isEmpty {
+                predicates.append(NSPredicate(format: "favoriteDetails.title contains[cd] %@", searchText))
+            }
+            talkUserInfoFetch.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: predicates)
             talkUserInfoFetch.sortDescriptors = [NSSortDescriptor(key: "favoriteDetails.dateAdded", ascending: false)]
             guard let results = try? self.managedObjectContext.fetch(talkUserInfoFetch) else {
                 return favoritesList

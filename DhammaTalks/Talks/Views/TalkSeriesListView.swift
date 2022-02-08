@@ -23,6 +23,10 @@ struct TalkSeriesListView: View {
     
     var body: some View {
         List {
+            Section {
+                // .init is a workaround so that markdown in text works.
+                Text(.init(talkSeries.description))
+            }
             ForEach(talkSeries.sections) { section in
                 Section(header: TalkSectionHeader(title: section.title ?? "", talkCount: section.talks.count)) {
                     ForEach(section.talks) { talk in

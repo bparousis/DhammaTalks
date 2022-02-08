@@ -117,8 +117,16 @@ class TalkRowViewModel: NSObject, Identifiable, ObservableObject {
         return TimeInterval(totalTime.value)/TimeInterval(totalTime.timescale)
     }
     
-    var timeRemainingPhrase: String? {
-        DateComponentsFormatter.timeRemainingPhraseFormatter.string(from: totalTimeInSeconds - currentTimeInSeconds)
+    var currentTimeString: String? {
+        guard currentTimeInSeconds > 0 else { return nil }
+        return DateComponentsFormatter.hmsFormatter.string(from: currentTimeInSeconds)
+    }
+    
+    var timeRemainingString: String? {
+        guard let timeRemaining = DateComponentsFormatter.hmsFormatter.string(from: totalTimeInSeconds - currentTimeInSeconds) else {
+            return nil
+        }
+        return "-\(timeRemaining)"
     }
     
 
@@ -132,7 +140,6 @@ class TalkRowViewModel: NSObject, Identifiable, ObservableObject {
         self.talkData = talkData
         self.talkUserInfoService = talkUserInfoService
         self.downloadManager = downloadManager
-        self.downloadJob = downloadManager.findDownloadJob(for: talkData)
     }
 
     func play() async {
@@ -143,9 +150,16 @@ class TalkRowViewModel: NSObject, Identifiable, ObservableObject {
             currentTime = talkUserInfo.currentTime
             totalTime = talkUserInfo.totalTime
         }
+        
+        
 
         self.playerItem = AVPlayerItem(url: playItemURL)
-        if let currentTime = currentTime, currentTimeInSeconds > 0 {
+        if var currentTime = currentTime, currentTimeInSeconds > 0 {
+            if state == .played {
+                // If it's played then start it from the beginning again.
+                currentTime = CMTime(seconds: 0, preferredTimescale: currentTime.timescale)
+                self.currentTime = currentTime
+            }
             await playerItem?.seek(to: currentTime)
         }
     }
@@ -190,6 +204,7 @@ class TalkRowViewModel: NSObject, Identifiable, ObservableObject {
             totalTime = talkUserInfo.totalTime
             favorite = talkUserInfo.isFavorite
         }
+        self.downloadJob = downloadManager.findDownloadJob(for: talkData)
     }
     
     func cancelDownload() {

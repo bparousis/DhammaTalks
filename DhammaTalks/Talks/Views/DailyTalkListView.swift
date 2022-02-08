@@ -51,6 +51,11 @@ struct DailyTalkListView: View {
                 }
             }
             .searchable(text: $searchText)
+            .refreshable {
+                if viewModel.isRefreshable {
+                    await viewModel.fetchData()
+                }
+            }
             .toolbar {
                 ToolbarItemGroup(placement: .bottomBar) {
                     Button {
@@ -62,7 +67,7 @@ struct DailyTalkListView: View {
                     } label: {
                         VStack {
                             Image(systemName: "shuffle")
-                            Text("Play Random")
+                            Text("Play")
                         }
                     }
                 }
