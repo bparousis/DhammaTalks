@@ -15,6 +15,7 @@ struct TalkGroupSelectorView: View {
     @EnvironmentObject private var downloadManager: DownloadManager
 
     @State private var selection: String? = nil
+    @State private var showSettings: Bool = false
     private static let dailyTalksTag = "dailyTalks"
     private static let favoritesTag = "favorites"
 
@@ -63,6 +64,17 @@ struct TalkGroupSelectorView: View {
                         .bold()
                 }
             }
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button {
+                    showSettings = true
+                } label: {
+                    Image(systemName: "gearshape")
+                }
+                .tint(.primary)
+            }
+        }
+        .sheet(isPresented: $showSettings) {
+            SettingsView()
         }
         .onAppear {
             if selection == nil {

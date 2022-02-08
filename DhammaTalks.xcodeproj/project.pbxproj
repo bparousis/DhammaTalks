@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		76041DB12736EB2100B32362 /* TalkSeriesList.json in Resources */ = {isa = PBXBuildFile; fileRef = 76041DB02736EB2100B32362 /* TalkSeriesList.json */; };
 		76041DB32737008A00B32362 /* TalkSeries.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76041DB22737008900B32362 /* TalkSeries.swift */; };
+		76068C6827B2183100726860 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76068C6727B2183100726860 /* SettingsView.swift */; };
+		76068C6A27B2184100726860 /* MailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76068C6927B2184100726860 /* MailView.swift */; };
 		760B461327630C61007ED1E0 /* XCTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 760B461227630C61007ED1E0 /* XCTestCase.swift */; };
 		760B461527630CD1007ED1E0 /* MockURLProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 760B461427630CD1007ED1E0 /* MockURLProtocol.swift */; };
 		760B46172763121F007ED1E0 /* TalkUserInfoMO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 760B46162763121F007ED1E0 /* TalkUserInfoMO.swift */; };
@@ -124,6 +126,8 @@
 /* Begin PBXFileReference section */
 		76041DB02736EB2100B32362 /* TalkSeriesList.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = TalkSeriesList.json; sourceTree = "<group>"; };
 		76041DB22737008900B32362 /* TalkSeries.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TalkSeries.swift; sourceTree = "<group>"; };
+		76068C6727B2183100726860 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		76068C6927B2184100726860 /* MailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MailView.swift; sourceTree = "<group>"; };
 		760B461227630C61007ED1E0 /* XCTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XCTestCase.swift; sourceTree = "<group>"; };
 		760B461427630CD1007ED1E0 /* MockURLProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockURLProtocol.swift; sourceTree = "<group>"; };
 		760B46162763121F007ED1E0 /* TalkUserInfoMO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TalkUserInfoMO.swift; sourceTree = "<group>"; };
@@ -250,6 +254,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		76068C6627B2180C00726860 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				76068C6727B2183100726860 /* SettingsView.swift */,
+				76068C6927B2184100726860 /* MailView.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
 		760B461127630C51007ED1E0 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
@@ -440,6 +453,7 @@
 		76E064F523CA9C6C007E18C1 /* DhammaTalks */ = {
 			isa = PBXGroup;
 			children = (
+				76068C6627B2180C00726860 /* Settings */,
 				76172408275F2EA200757236 /* UI */,
 				76163A5B2747F90C00358DDF /* Resources */,
 				7622718B273A1E8600AFBA63 /* Talks */,
@@ -702,6 +716,7 @@
 				7637DBE9276E865000D2ACEC /* CoreDataStack.swift in Sources */,
 				76E064FE23CA9C6C007E18C1 /* ContentView.swift in Sources */,
 				767EEDB62744A58C0094697D /* TalkSectionHeader.swift in Sources */,
+				76068C6827B2183100726860 /* SettingsView.swift in Sources */,
 				761218D32794E5AF00D548E5 /* DependencyContainer.swift in Sources */,
 				760B4619276317E6007ED1E0 /* FavoritesListView.swift in Sources */,
 				761218D12794DBCA00D548E5 /* AppSettings.swift in Sources */,
@@ -714,6 +729,7 @@
 				7622718D273A1F8800AFBA63 /* HTMLPageFetcher.swift in Sources */,
 				76F9F46127483C3600957810 /* DailyTalkListViewModel.swift in Sources */,
 				76D064312761BCFC00FBFEA6 /* LocalFileStorage.swift in Sources */,
+				76068C6A27B2184100726860 /* MailView.swift in Sources */,
 				7637DBE7276E862800D2ACEC /* DhammaTalksApp.swift in Sources */,
 				763C950427386ECC00632633 /* DailyTalkListView.swift in Sources */,
 				76DB173927ACCDDA003D7C0C /* TalkSectionViewModel.swift in Sources */,
