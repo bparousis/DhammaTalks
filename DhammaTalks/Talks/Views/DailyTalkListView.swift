@@ -30,7 +30,7 @@ struct DailyTalkListView: View {
     
     private var talkSectionsView: some View {
         ForEach(viewModel.talkSections) { talkSection in
-            Section(header: TalkSectionHeader(title: talkSection.title ?? "", talkCount: talkSection.talkRows.count)) {
+            Section(header: TalkSectionHeader(title: talkSection.title, talkCount: talkSection.talkRows.count)) {
                 ForEach(talkSection.talkRows) { talkRow in
                     TalkRow(viewModel: talkRow)
                 }
