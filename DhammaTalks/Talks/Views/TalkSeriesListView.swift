@@ -33,7 +33,7 @@ struct TalkSeriesListView: View {
             }
         }
         .searchable(text: $searchText)
-        .onAppear {
+        .task {
             viewModel.fetchData()
         }
         .task(id: searchText) {
