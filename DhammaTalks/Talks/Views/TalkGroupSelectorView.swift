@@ -118,7 +118,9 @@ struct TalkGroupSelectorView: View {
     private func makeTalkSeriesSection(talkSeriesList: [TalkSeries], columnWidth: CGFloat) -> some View {
         Section {
             ForEach(talkSeriesList) { talkSeries in
-                let talkSeriesListView = TalkSeriesListView(talkSeries:talkSeries, talkUserInfoService: talkUserInfoService, downloadManager: downloadManager)
+                let viewModel = TalkSeriesListViewModel(talkSeries: talkSeries, talkUserInfoService: talkUserInfoService,
+                                                        downloadManager: downloadManager)
+                let talkSeriesListView = TalkSeriesListView(viewModel: viewModel)
                     .onAppear {
                         AppSettings.talkGroupSelection = talkSeries.title
                     }

@@ -10,12 +10,12 @@ import Foundation
 
 class TalkSectionViewModel: Identifiable {
     let id: String
-    let title: String?
+    let title: String
     var talkRows: [TalkRowViewModel] = []
-    
+
     init(id: String, title: String? = nil) {
         self.id = id
-        self.title = title
+        self.title = title ?? ""
     }
 
     func addTalkRow(_ talkRow: TalkRowViewModel) {

@@ -65,6 +65,7 @@
 		763C950427386ECC00632633 /* DailyTalkListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 763C950327386ECC00632633 /* DailyTalkListView.swift */; };
 		763E52BE27645A0B000DCF7B /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 763E52BD27645A0B000DCF7B /* String.swift */; };
 		7658CA0F2736CA67009FF527 /* Localizable.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = 7658CA0E2736CA67009FF527 /* Localizable.stringsdict */; };
+		765B6C7627B6144000696693 /* TalkSeriesListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 765B6C7527B6144000696693 /* TalkSeriesListViewModel.swift */; };
 		76679E76273B4C4500D7046C /* AudioFileNameParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76679E75273B4C4500D7046C /* AudioFileNameParserTests.swift */; };
 		766B078D27658AF30047F663 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766B078C27658AF30047F663 /* Error.swift */; };
 		766CA1E123D517E300A8E770 /* TalkRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766CA1E023D517E300A8E770 /* TalkRow.swift */; };
@@ -182,6 +183,7 @@
 		763C950327386ECC00632633 /* DailyTalkListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyTalkListView.swift; sourceTree = "<group>"; };
 		763E52BD27645A0B000DCF7B /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		7658CA0E2736CA67009FF527 /* Localizable.stringsdict */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; path = Localizable.stringsdict; sourceTree = "<group>"; };
+		765B6C7527B6144000696693 /* TalkSeriesListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TalkSeriesListViewModel.swift; sourceTree = "<group>"; };
 		76679E75273B4C4500D7046C /* AudioFileNameParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioFileNameParserTests.swift; sourceTree = "<group>"; };
 		766B078C27658AF30047F663 /* Error.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Error.swift; sourceTree = "<group>"; };
 		766CA1E023D517E300A8E770 /* TalkRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TalkRow.swift; sourceTree = "<group>"; };
@@ -381,6 +383,7 @@
 				767AAC8E27572C9B0003D9AC /* TalkRowViewModel.swift */,
 				76DB173827ACCDDA003D7C0C /* TalkSectionViewModel.swift */,
 				767EEDB32744A55A0094697D /* TalkSeriesListView.swift */,
+				765B6C7527B6144000696693 /* TalkSeriesListViewModel.swift */,
 				767EEDB52744A58C0094697D /* TalkSectionHeader.swift */,
 				769E69E2274966D300DEC24C /* TalkGroupSelectorView.swift */,
 				760B4618276317E6007ED1E0 /* FavoritesListView.swift */,
@@ -736,6 +739,7 @@
 				767AAC9527572F620003D9AC /* AVPlayerItem.swift in Sources */,
 				763C950227383D4A00632633 /* UIImage.swift in Sources */,
 				76F9F46327483F2700957810 /* Calendar.swift in Sources */,
+				765B6C7627B6144000696693 /* TalkSeriesListViewModel.swift in Sources */,
 				7617240A275F2EB700757236 /* CircularProgressBar.swift in Sources */,
 				76E0652E23CA9FDE007E18C1 /* TalkDataService.swift in Sources */,
 				766B078D27658AF30047F663 /* Error.swift in Sources */,

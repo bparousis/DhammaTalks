@@ -11,32 +11,35 @@ import SwiftUI
 
 struct TalkSeriesListView: View {
 
-    private let talkSeries: TalkSeries
-    private let talkUserInfoService: TalkUserInfoService
-    private let downloadManager: DownloadManager
+    @ObservedObject private var viewModel: TalkSeriesListViewModel
+    @State private var searchText: String = ""
     
-    init(talkSeries: TalkSeries, talkUserInfoService: TalkUserInfoService, downloadManager: DownloadManager) {
-        self.talkSeries = talkSeries
-        self.talkUserInfoService = talkUserInfoService
-        self.downloadManager = downloadManager
+    init(viewModel: TalkSeriesListViewModel) {
+        self.viewModel = viewModel
     }
     
     var body: some View {
         List {
             Section {
                 // .init is a workaround so that markdown in text works.
-                Text(.init(talkSeries.description))
+                Text(.init(viewModel.description))
             }
-            ForEach(talkSeries.sections) { section in
-                Section(header: TalkSectionHeader(title: section.title ?? "", talkCount: section.talks.count)) {
-                    ForEach(section.talks) { talk in
-                        let viewModel = TalkRowViewModel(talkData: talk, talkUserInfoService: talkUserInfoService, downloadManager: downloadManager)
-                        TalkRow(viewModel: viewModel)
+            ForEach(viewModel.talkSections) { section in
+                Section(header: TalkSectionHeader(title: section.title, talkCount: section.talkRows.count)) {
+                    ForEach(section.talkRows) { talkRowViewModel in
+                        TalkRow(viewModel: talkRowViewModel)
                     }
                 }
             }
         }
+        .searchable(text: $searchText)
+        .onAppear {
+            viewModel.fetchData()
+        }
+        .task(id: searchText) {
+            viewModel.fetchData(searchText: searchText)
+        }
         .listStyle(.insetGrouped)
-        .navigationBarTitle(talkSeries.title, displayMode: .inline)
+        .navigationBarTitle(viewModel.title, displayMode: .inline)
     }
 }
