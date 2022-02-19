@@ -37,19 +37,26 @@ struct DailyTalkListView: View {
             }
         }
     }
+    
+    private var listView: some View {
+        List {
+            switch viewModel.state {
+            case .unloaded, .error:
+                EmptyView()
+            case .loading:
+                Section {
+                    ProgressView()
+                }
+            case .loaded:
+                datePickerView
+                talkSectionsView
+            }
+        }
+    }
 
     var body: some View {
         ScrollViewReader { proxy in
-            List {
-                if !viewModel.isFetchDataFinished {
-                    Section {
-                        ProgressView()
-                    }
-                } else {
-                    datePickerView
-                    talkSectionsView
-                }
-            }
+            listView
             .searchable(text: $searchText)
             .refreshable {
                 if viewModel.isRefreshable {

@@ -15,6 +15,13 @@ class DailyTalkListViewModel: ObservableObject {
     private let talkDataService: TalkDataService
     let talkUserInfoService: TalkUserInfoService
     private let downloadManager: DownloadManager
+    
+    enum State {
+        case unloaded
+        case loading
+        case loaded
+        case error(_ error: Error)
+    }
 
     @Published var selectedCategory: DailyTalkCategory {
         didSet {
@@ -30,9 +37,11 @@ class DailyTalkListViewModel: ObservableObject {
             AppSettings.selectedTalkYear = selectedYear
         }
     }
+
     @Published var showingAlert = false
     @Published private(set) var talkSections: [TalkSectionViewModel] = []
     @Published private(set) var isFetchDataFinished = false
+    @Published private(set) var state: State = .unloaded
 
     var currentYear: Int {
         calendar.currentYear
@@ -89,24 +98,20 @@ class DailyTalkListViewModel: ObservableObject {
     
     @MainActor
     func fetchData(searchText: String? = nil) async {
-        defer {
-            isFetchDataFinished = true
-        }
-
-        isFetchDataFinished = false
+        
+        state = .loading
         
         let query = DailyTalkQuery(category: selectedCategory, year: selectedYear, searchText: searchText)
         do {
             let talkDataList = try await talkDataService.fetchYearlyTalks(query: query)
             self.talkSections = buildTalkSectionViewModels(from: talkDataList)
+            state = .loaded
         } catch {
             guard !error.isCancelError else {
                 return
             }
-            
-            if (error as NSError).code != URLError.cancelled.rawValue {
-                showingAlert = true
-            }
+            state = .error(error)
+            showingAlert = true
         }
     }
 }

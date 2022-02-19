@@ -43,12 +43,27 @@ struct TalkGroupSelectorView: View {
     var body: some View {
         GeometryReader { geo in
             ScrollView {
-                LazyVGrid(columns: columns, alignment: .center, spacing: 10) {
-                    let width = geo.size.width * 0.475
-                    makeMainSection(columnWidth: width)
-                    
-                    if let talkSeriesList = TalkDataService.talkSeriesList {
-                        makeTalkSeriesSection(talkSeriesList: talkSeriesList, columnWidth: width)
+                ScrollViewReader { proxy in
+                    LazyVGrid(columns: columns, alignment: .center, spacing: 10) {
+                        let width = geo.size.width * 0.475
+                        makeMainSection(columnWidth: width)
+                        
+                        if let talkSeriesList = TalkDataService.talkSeriesList {
+                            makeTalkSeriesSection(talkSeriesList: talkSeriesList, columnWidth: width)
+                        }
+                    }
+                    .onAppear {
+                        proxy.scrollTo(AppSettings.talkGroupSelection)
+                        // If selection is nil then first time we're loading screen without a selection.  Therefore, we check
+                        // to see if one exists from before and set it.  Otherwise, if onAppear gets triggered and selection is
+                        // non-nil then we clear the previous stored selection.
+                        if selection == nil {
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                                selection = AppSettings.talkGroupSelection
+                            }
+                        } else {
+                            AppSettings.talkGroupSelection = nil
+                        }
                     }
                 }
             }
@@ -76,13 +91,6 @@ struct TalkGroupSelectorView: View {
         .sheet(isPresented: $showSettings) {
             SettingsView()
         }
-        .onAppear {
-            if selection == nil {
-                selection = AppSettings.talkGroupSelection
-            } else {
-                AppSettings.talkGroupSelection = nil
-            }
-        }
     }
     
     private func makeCellView(title: String, image: String, width: CGFloat) -> some View {
@@ -107,11 +115,13 @@ struct TalkGroupSelectorView: View {
             {
                 makeCellView(title: "Daily Talks", image: "water8", width: columnWidth)
             }
+            .id(Self.dailyTalksTag)
             
             NavigationLink(destination: favoritesView, tag: Self.favoritesTag, selection: $selection)
             {
                 makeCellView(title: "Favorites", image: "leaves", width: columnWidth)
             }
+            .id(Self.favoritesTag)
         }
     }
     
@@ -128,6 +138,7 @@ struct TalkGroupSelectorView: View {
                 NavigationLink(destination: talkSeriesListView, tag: talkSeries.title, selection: $selection) {
                     makeCellView(title: talkSeries.title, image: talkSeries.image, width: columnWidth)
                 }
+                .id(talkSeries.title)
             }
         } header: {
             Text("Talk Series")
