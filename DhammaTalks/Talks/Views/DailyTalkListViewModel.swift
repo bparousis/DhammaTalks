@@ -17,7 +17,7 @@ class DailyTalkListViewModel: ObservableObject {
     private let downloadManager: DownloadManager
     
     enum State {
-        case unloaded
+        case initial
         case loading
         case loaded
         case error(_ error: Error)
@@ -41,7 +41,7 @@ class DailyTalkListViewModel: ObservableObject {
     @Published var showingAlert = false
     @Published private(set) var talkSections: [TalkSectionViewModel] = []
     @Published private(set) var isFetchDataFinished = false
-    @Published private(set) var state: State = .unloaded
+    @Published private(set) var state: State = .initial
 
     var currentYear: Int {
         calendar.currentYear

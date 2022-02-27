@@ -41,7 +41,8 @@ struct DailyTalkListView: View {
     private var listView: some View {
         List {
             switch viewModel.state {
-            case .unloaded, .error:
+            // For error showingAlert will be true, which will cause an alert to be shown.
+            case .initial, .error:
                 EmptyView()
             case .loading:
                 Section {
