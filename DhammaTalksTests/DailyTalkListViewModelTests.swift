@@ -31,20 +31,27 @@ class DailyTalkListViewModelTests: XCTestCase {
     func testFetchOneMonth() async {
         talkDataService.testCase = .oneMonth
         XCTAssertTrue(sut.talkSections.isEmpty)
-        XCTAssertFalse(sut.isFetchDataFinished)
+        if case .initial = sut.state {} else {
+            XCTFail("Expected state to be initial.")
+        }
         await sut.fetchData()
-        XCTAssertTrue(sut.isFetchDataFinished)
+        if case .loaded = sut.state {} else {
+            XCTFail("Expected state to be loaded.")
+        }
         XCTAssertEqual(sut.talkSections.count, 1)
-
         XCTAssertEqual(sut.talkSections[0].talkRows.count, 3)
     }
     
     func testFetchMultipleMonths() async {
         talkDataService.testCase = .multipleMonths
         XCTAssertTrue(sut.talkSections.isEmpty)
-        XCTAssertFalse(sut.isFetchDataFinished)
+        if case .initial = sut.state {} else {
+            XCTFail("Expected state to be initial.")
+        }
         await sut.fetchData()
-        XCTAssertTrue(sut.isFetchDataFinished)
+        if case .loaded = sut.state {} else {
+            XCTFail("Expected state to be loaded.")
+        }
         XCTAssertEqual(sut.talkSections.count, 3)
 
         XCTAssertEqual(sut.talkSections[0].talkRows.count, 2)
@@ -55,20 +62,34 @@ class DailyTalkListViewModelTests: XCTestCase {
     func testFailedFetchData() async {
         talkDataService.testCase = .fail
         XCTAssertTrue(sut.talkSections.isEmpty)
-        XCTAssertFalse(sut.isFetchDataFinished)
+        if case .initial = sut.state {} else {
+            XCTFail("Expected state to be initial.")
+        }
         await sut.fetchData()
+        
+        if case .error = sut.state {} else {
+            XCTFail("Expected state to be error.")
+        }
+        
         XCTAssertTrue(sut.showingAlert)
-        XCTAssertTrue(sut.isFetchDataFinished)
+        
         XCTAssertTrue(sut.talkSections.isEmpty)
     }
     
     func testCanceledRequestWithFetchData() async {
         talkDataService.testCase = .cancel
         XCTAssertTrue(sut.talkSections.isEmpty)
-        XCTAssertFalse(sut.isFetchDataFinished)
+        if case .initial = sut.state {} else {
+            XCTFail("Expected state to be initial.")
+        }
         await sut.fetchData()
         XCTAssertFalse(sut.showingAlert)
-        XCTAssertTrue(sut.isFetchDataFinished)
+        // If a request gets canceled it's due to a rapid request canceling the previous one.
+        // So we still want it to be in a loading state in this scenario, since the second
+        // request is loading.
+        if case .loading = sut.state {} else {
+            XCTFail("Expected state to be loading.")
+        }
         XCTAssertTrue(sut.talkSections.isEmpty)
     }
     
