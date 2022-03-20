@@ -10,7 +10,6 @@ import SwiftUI
 
 struct TalkGroupSelectorView: View {
 
-    @EnvironmentObject private var talkDataService: TalkDataService
     @EnvironmentObject private var talkUserInfoService: TalkUserInfoService
     @EnvironmentObject private var downloadManager: DownloadManager
 
@@ -18,34 +17,42 @@ struct TalkGroupSelectorView: View {
     @State private var showSettings: Bool = false
     private static let dailyTalksTag = "dailyTalks"
     private static let favoritesTag = "favorites"
+    private let dailyTalkListViewModel: DailyTalkListViewModel
+    private let favoritesListViewModel: FavoritesListViewModel
 
     private var dailyTalksView: some View {
-        DailyTalkListView(viewModel: DailyTalkListViewModel(talkDataService: talkDataService,
-                                                            talkUserInfoService: talkUserInfoService,
-                                                            downloadManager: downloadManager))
+        DailyTalkListView(viewModel: dailyTalkListViewModel)
             .onAppear {
                 AppSettings.talkGroupSelection = Self.dailyTalksTag
             }
     }
 
     private var favoritesView: some View {
-        FavoritesListView(viewModel: FavoritesListViewModel(talkUserInfoService: talkUserInfoService, downloadManager: downloadManager))
+        FavoritesListView(viewModel: favoritesListViewModel)
             .onAppear {
                 AppSettings.talkGroupSelection = Self.favoritesTag
             }
     }
+
+    private var widthPercentage: CGFloat {
+        UIDevice.current.userInterfaceIdiom == .pad ? 0.30 : 0.475
+    }
     
-    private let columns = [
-        GridItem(.flexible()),
-        GridItem(.flexible())
-    ]
+    private var columns: [GridItem] {
+        Array(repeating: GridItem(.flexible()), count: UIDevice.current.userInterfaceIdiom == .pad ? 3 : 2)
+    }
+    
+    init(dailyTalkListViewModel: DailyTalkListViewModel, favoritesListViewModel: FavoritesListViewModel) {
+        self.dailyTalkListViewModel = dailyTalkListViewModel
+        self.favoritesListViewModel = favoritesListViewModel
+    }
 
     var body: some View {
         GeometryReader { geo in
             ScrollView {
                 ScrollViewReader { proxy in
                     LazyVGrid(columns: columns, alignment: .center, spacing: 10) {
-                        let width = geo.size.width * 0.475
+                        let width = geo.size.width * widthPercentage
                         makeMainSection(columnWidth: width)
                         
                         if let talkSeriesList = TalkDataService.talkSeriesList {
@@ -103,8 +110,7 @@ struct TalkGroupSelectorView: View {
             Text(title)
                 .bold()
                 .font(.system(size:18, weight:.bold))
-                .foregroundColor(.white)
-                .shadow(color: .black, radius: 5.0, x: 5.0, y: 5.0)
+                .foregroundColor(.primary)
                 .frame(width: width, height:75, alignment:.top)
         }
     }

@@ -19,7 +19,7 @@ class DailyTalkListViewModel: ObservableObject {
     enum State {
         case initial
         case loading
-        case loaded
+        case loaded(sections: [TalkSectionViewModel])
         case error(_ error: Error)
     }
 
@@ -39,9 +39,9 @@ class DailyTalkListViewModel: ObservableObject {
     }
 
     @Published var showingAlert = false
-    @Published private(set) var talkSections: [TalkSectionViewModel] = []
     @Published private(set) var isFetchDataFinished = false
     @Published private(set) var state: State = .initial
+    private(set) var talkSections: [TalkSectionViewModel] = []
 
     var currentYear: Int {
         calendar.currentYear
@@ -99,18 +99,18 @@ class DailyTalkListViewModel: ObservableObject {
     @MainActor
     func fetchData(searchText: String? = nil) async {
         
-        state = .loading
+        self.state = .loading
         
         let query = DailyTalkQuery(category: selectedCategory, year: selectedYear, searchText: searchText)
         do {
             let talkDataList = try await talkDataService.fetchYearlyTalks(query: query)
             self.talkSections = buildTalkSectionViewModels(from: talkDataList)
-            state = .loaded
+            self.state = .loaded(sections: talkSections)
         } catch {
             guard !error.isCancelError else {
                 return
             }
-            state = .error(error)
+            self.state = .error(error)
             showingAlert = true
         }
     }

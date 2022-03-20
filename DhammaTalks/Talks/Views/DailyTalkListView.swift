@@ -28,8 +28,8 @@ struct DailyTalkListView: View {
         }
     }
     
-    private var talkSectionsView: some View {
-        ForEach(viewModel.talkSections) { talkSection in
+    private func createTalkSectionsView(_ talkSections: [TalkSectionViewModel]) -> some View {
+        ForEach(talkSections) { talkSection in
             Section(header: TalkSectionHeader(title: talkSection.title, talkCount: talkSection.talkRows.count)) {
                 ForEach(talkSection.talkRows) { talkRow in
                     TalkRow(viewModel: talkRow)
@@ -48,9 +48,9 @@ struct DailyTalkListView: View {
                 Section {
                     ProgressView()
                 }
-            case .loaded:
+            case .loaded(let sections):
                 datePickerView
-                talkSectionsView
+                createTalkSectionsView(sections)
             }
         }
     }
@@ -91,13 +91,7 @@ struct DailyTalkListView: View {
             .alert("Failed to load talks", isPresented: $viewModel.showingAlert) {
                 Button("OK", role: .cancel) { }
             }
-            .task(id: searchText) {
-                await viewModel.fetchData(searchText: searchText)
-            }
-            .task(id: viewModel.selectedCategory) {
-                await viewModel.fetchData(searchText: searchText)
-            }
-            .task(id: viewModel.selectedYear) {
+            .task(id: DailyTalkQuery(category: viewModel.selectedCategory, year: viewModel.selectedYear, searchText:searchText)) {
                 await viewModel.fetchData(searchText: searchText)
             }
             .listStyle(.insetGrouped)
