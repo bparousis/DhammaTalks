@@ -17,11 +17,13 @@ struct ContentView: View {
 
     var body: some View {
         NavigationView {
-            TalkGroupSelectorView()
-                .environmentObject(talkDataService)
+            let dailyTalkListViewModel = DailyTalkListViewModel(talkDataService: talkDataService, talkUserInfoService: talkUserInfoService, downloadManager: downloadManager)
+            let favoritesListViewModel = FavoritesListViewModel(talkUserInfoService: talkUserInfoService, downloadManager: downloadManager)
+            TalkGroupSelectorView(dailyTalkListViewModel: dailyTalkListViewModel, favoritesListViewModel: favoritesListViewModel)
                 .environmentObject(talkUserInfoService)
                 .environmentObject(downloadManager)
         }
+        .navigationViewStyle(.stack)
     }
 }
 

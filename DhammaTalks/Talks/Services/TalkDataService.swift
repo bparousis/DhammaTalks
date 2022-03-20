@@ -9,7 +9,7 @@
 import Foundation
 import SwiftSoup
 
-struct DailyTalkQuery {
+struct DailyTalkQuery: Equatable {
     let category: DailyTalkCategory
     let year: Int
     var searchText: String?

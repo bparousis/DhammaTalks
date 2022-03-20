@@ -29,7 +29,7 @@ class TalkRowViewModel: NSObject, Identifiable, ObservableObject {
         var title: String {
             switch self {
             case .download: return "Download"
-            case .removeDownload: return "Remove Donwload"
+            case .removeDownload: return "Remove Download"
             case .addToFavorites: return "Add to Favorites"
             case .removeFromFavorites: return "Remove from Favorites"
             }
