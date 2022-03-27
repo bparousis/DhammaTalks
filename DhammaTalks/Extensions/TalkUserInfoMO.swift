@@ -14,7 +14,7 @@ extension TalkUserInfoMO {
         let currentCMTime = CMTime(value: currentTimeValue, timescale: currentTimeScale)
         let totalCMTime = CMTime(value: totalTimeValue, timescale: totalTimeScale)
         
-        var talkUserInfo = TalkUserInfo(url: url ?? "", currentTime: currentCMTime, totalTime: totalCMTime)
+        var talkUserInfo = TalkUserInfo(url: url ?? "", currentTime: currentCMTime, totalTime: totalCMTime, notes: notes)
         if let favoriteDetails = favoriteDetails, let title = favoriteDetails.title, let dateAdded = favoriteDetails.dateAdded {
             talkUserInfo.favoriteDetails = FavoriteDetails(title: title, dateAdded: dateAdded)   
         }

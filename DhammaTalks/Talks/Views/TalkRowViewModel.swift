@@ -25,6 +25,7 @@ class TalkRowViewModel: NSObject, Identifiable, ObservableObject {
         case removeDownload
         case addToFavorites
         case removeFromFavorites
+        case notes
         
         var title: String {
             switch self {
@@ -32,6 +33,7 @@ class TalkRowViewModel: NSObject, Identifiable, ObservableObject {
             case .removeDownload: return "Remove Download"
             case .addToFavorites: return "Add to Favorites"
             case .removeFromFavorites: return "Remove from Favorites"
+            case .notes: return "Notes"
             }
         }
     }
@@ -74,6 +76,7 @@ class TalkRowViewModel: NSObject, Identifiable, ObservableObject {
         var actionList: [Action] = []
         actionList.append(isDownloadAvailable ? .removeDownload : .download)
         actionList.append(favorite ? .removeFromFavorites : .addToFavorites)
+        actionList.append(.notes)
         return actionList
     }
     
@@ -128,18 +131,29 @@ class TalkRowViewModel: NSObject, Identifiable, ObservableObject {
         }
         return "-\(timeRemaining)"
     }
-    
 
     @Published var playerItem: AVPlayerItem?
     @Published var state: TalkState = .unplayed
     @Published var downloadProgress: CGFloat?
-    @Published var favorite: Bool = false
+    @Published var favorite = false
+    @Published var showNotes = false
+    @Published var notes: String = ""
     
     init(talkData: TalkData, talkUserInfoService: TalkUserInfoService, downloadManager: DownloadManager)
     {
         self.talkData = talkData
         self.talkUserInfoService = talkUserInfoService
         self.downloadManager = downloadManager
+    }
+    
+    func saveNotes() {
+        do {
+            var talkUserInfo = fetchOrCreateTalkUserInfo(for: talkData.url)
+            talkUserInfo.notes = notes
+            try talkUserInfoService.save(talkUserInfo: talkUserInfo)
+        } catch {
+            Logger.talkUserInfo.error("Error saving TalkUserInfo: \(String(describing: error))")
+        }
     }
 
     func play() async {
@@ -151,17 +165,16 @@ class TalkRowViewModel: NSObject, Identifiable, ObservableObject {
             totalTime = talkUserInfo.totalTime
         }
         
-        
-
-        self.playerItem = AVPlayerItem(url: playItemURL)
+        let playerItem = AVPlayerItem(url: playItemURL)
         if var currentTime = currentTime, currentTimeInSeconds > 0 {
             if state == .played {
                 // If it's played then start it from the beginning again.
                 currentTime = CMTime(seconds: 0, preferredTimescale: currentTime.timescale)
                 self.currentTime = currentTime
             }
-            await playerItem?.seek(to: currentTime)
+            await playerItem.seek(to: currentTime)
         }
+        self.playerItem = playerItem
     }
     
     func finishedPlaying(item: AVPlayerItem) {
@@ -192,9 +205,11 @@ class TalkRowViewModel: NSObject, Identifiable, ObservableObject {
         case .removeDownload:
             removeDownload()
         case .addToFavorites:
-            addToFavorites()
+            setFavorite(to: true)
         case .removeFromFavorites:
-            removeFromFavorites()
+            setFavorite(to: false)
+        case .notes:
+            showNotes = true
         }
     }
     
@@ -203,6 +218,7 @@ class TalkRowViewModel: NSObject, Identifiable, ObservableObject {
             currentTime = talkUserInfo.currentTime
             totalTime = talkUserInfo.totalTime
             favorite = talkUserInfo.isFavorite
+            notes = talkUserInfo.notes ?? ""
         }
         self.downloadJob = downloadManager.findDownloadJob(for: talkData)
     }
@@ -234,15 +250,7 @@ class TalkRowViewModel: NSObject, Identifiable, ObservableObject {
             Logger.talkUserInfo.error("Error setting favorite value: \(String(describing: error))")
         }
     }
-    
-    private func addToFavorites() {
-        setFavorite(to: true)
-    }
 
-    private func removeFromFavorites() {
-        setFavorite(to: false)
-    }
-    
     private func removeDownload() {
         downloadManager.removeDownload(filename: talkData.filename)
     }

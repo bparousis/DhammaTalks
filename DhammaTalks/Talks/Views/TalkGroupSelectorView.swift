@@ -35,11 +35,11 @@ struct TalkGroupSelectorView: View {
     }
 
     private var widthPercentage: CGFloat {
-        UIDevice.current.userInterfaceIdiom == .pad ? 0.30 : 0.475
+        isIpad ? 0.20 : 0.475
     }
     
     private var columns: [GridItem] {
-        Array(repeating: GridItem(.flexible()), count: UIDevice.current.userInterfaceIdiom == .pad ? 3 : 2)
+        Array(repeating: GridItem(.flexible()), count: isIpad ? 4 : 2)
     }
     
     init(dailyTalkListViewModel: DailyTalkListViewModel, favoritesListViewModel: FavoritesListViewModel) {
