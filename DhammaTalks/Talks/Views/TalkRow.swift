@@ -12,7 +12,6 @@ import CoreData
 import AVFoundation
 
 struct TalkRow: View {
-    
     @ObservedObject var viewModel: TalkRowViewModel
     @State private var showActionSheet = false
     
@@ -57,6 +56,19 @@ struct TalkRow: View {
             EmptyView()
         }
     }
+
+    @ViewBuilder
+    private func makeMediaPlayerView(item: AVPlayerItem) -> some View {
+        if isIpad {
+            MediaPlayer(playerItem: item, title: viewModel.title)
+        } else {
+            VStack {
+                swipeBar
+                MediaPlayer(playerItem: item, title: viewModel.title)
+            }
+            .padding(EdgeInsets(top: 10, leading: 0, bottom: 0, trailing: 0))
+        }
+    }
     
     var titleStatusView: some View {
         HStack(alignment: .firstTextBaseline) {
@@ -66,17 +78,27 @@ struct TalkRow: View {
             }
             Text(viewModel.title)
                 .font(.headline)
-            HStack(spacing: 3) {
-                if viewModel.favorite {
-                    Image(systemName: "star.fill")
-                        .font(.system(size: 11.5))
-                        .foregroundColor(Color(.systemYellow))
-                }
-                if viewModel.isDownloadAvailable {
-                    Image(systemName: "arrow.down.circle.fill")
-                        .font(.system(size: 11.5))
-                        .foregroundColor(Color(.systemBlue))
-                }
+            talkIcons
+        }
+    }
+    
+    private var talkIcons: some View {
+        HStack(spacing: 2) {
+            let iconSize: CGFloat = 11.5
+            if viewModel.favorite {
+                Image(systemName: "star.fill")
+                    .font(.system(size: iconSize))
+                    .foregroundColor(Color(.systemYellow))
+            }
+            if viewModel.isDownloadAvailable {
+                Image(systemName: "arrow.down.circle.fill")
+                    .font(.system(size: iconSize))
+                    .foregroundColor(Color(.systemBlue))
+            }
+            if !viewModel.notes.isEmpty {
+                Image(systemName: "note.text")
+                    .font(.system(size: iconSize))
+                    .foregroundColor(Color(.systemGray))
             }
         }
     }
@@ -116,9 +138,27 @@ struct TalkRow: View {
         }
         .foregroundColor(.primary)
         .padding(5)
-        .sheet(item: $viewModel.playerItem) { item in
-            MediaPlayer(playerItem: item, title: viewModel.title)
-            .onDisappear{
+        .sheet(isPresented: $viewModel.showNotes) {
+            NavigationView {
+                TextEditor(text: $viewModel.notes)
+                    .foregroundColor(.primary)
+                    .padding(.horizontal)
+                    .navigationBarTitleDisplayMode(.inline)
+                    .navigationTitle("Notes")
+                    .toolbar {
+                        ToolbarItemGroup(placement: .navigationBarTrailing) {
+                            Button("Done") {
+                                viewModel.saveNotes()
+                                viewModel.showNotes = false
+                            }
+                        }
+                    }
+            }
+            .interactiveDismissDisabled()
+        }
+        .sheet(item: $viewModel.playerItem) {  item in
+            makeMediaPlayerView(item: item)
+            .onDisappear {
                 viewModel.finishedPlaying(item: item)
             }
         }

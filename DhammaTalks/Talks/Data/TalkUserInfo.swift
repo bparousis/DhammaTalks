@@ -14,8 +14,16 @@ struct TalkUserInfo {
     var currentTime: CMTime
     var totalTime: CMTime
     var favoriteDetails: FavoriteDetails?
+    var notes: String?
     
     var isFavorite: Bool {
         favoriteDetails != nil
+    }
+
+    var hasNotes: Bool {
+        guard let notes = notes else {
+            return false
+        }
+        return !notes.isEmpty
     }
 }

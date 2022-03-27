@@ -44,6 +44,7 @@ class TalkUserInfoService: ObservableObject {
             talkUserInfoMO.currentTimeScale = talkUserInfo.currentTime.timescale
             talkUserInfoMO.totalTimeValue = talkUserInfo.totalTime.value
             talkUserInfoMO.totalTimeScale = talkUserInfo.totalTime.timescale
+            talkUserInfoMO.notes = talkUserInfo.notes
             if let favoriteDetails = talkUserInfo.favoriteDetails {
                 let favoriteDetailsMO = FavoriteDetailsMO(context: managedObjectContext)
                 favoriteDetailsMO.title = favoriteDetails.title
