@@ -39,7 +39,9 @@ struct MediaPlayer: UIViewControllerRepresentable {
         viewController.player = player
 
         if let view = viewController.contentOverlayView {
-            view.translatesAutoresizingMaskIntoConstraints = false
+            if #unavailable(iOS 16.0) {
+                view.translatesAutoresizingMaskIntoConstraints = false
+            }
             let imageView = UIImageView(image: playerImage)
             imageView.translatesAutoresizingMaskIntoConstraints = false
             view.addSubview(imageView)
@@ -54,6 +56,8 @@ struct MediaPlayer: UIViewControllerRepresentable {
             NSLayoutConstraint.activate([
                 imageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
                 imageView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+                imageView.widthAnchor.constraint(equalToConstant: 290),
+                imageView.heightAnchor.constraint(equalToConstant: 290),
                 titleLabel.bottomAnchor.constraint(equalTo: imageView.topAnchor, constant: -20),
                 titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
                 titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor),
