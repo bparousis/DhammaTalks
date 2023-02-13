@@ -20,6 +20,7 @@ class TalkRowViewModelTests: XCTestCase {
     var context: NSManagedObjectContext!
     var talkUserInfoService: TalkUserInfoService!
     var urlSession: URLSession!
+    fileprivate var fileStorage: MockFileStorage!
     var downloadManager: DownloadManager!
 
     override func setUpWithError() throws {
@@ -32,7 +33,8 @@ class TalkRowViewModelTests: XCTestCase {
         let configuration = URLSessionConfiguration.ephemeral
         configuration.protocolClasses = [MockURLProtocol.self]
         urlSession = URLSession(configuration: configuration)
-        downloadManager = DownloadManager(urlSession: urlSession, fileStorage: MockFileStorage())
+        fileStorage = MockFileStorage()
+        downloadManager = DownloadManager(urlSession: urlSession, fileStorage: fileStorage)
         
         // Put setup code here. This method is called before the invocation of each test method in the class.
         context = TestCoreDataStack().persistentContainer.viewContext
@@ -244,11 +246,61 @@ class TalkRowViewModelTests: XCTestCase {
         sut.fetchTalkInfo()
         XCTAssertEqual(sut.notes, "Edited Notes")
     }
+    
+    func testHasNotesFilter() {
+        let talkData = TalkData(id: "1", title: "Title", date: Date(), url: "about:blank")
+
+        sut = TalkRowViewModel(talkData: talkData, talkUserInfoService: talkUserInfoService, downloadManager: downloadManager)
+
+        XCTAssertFalse(sut.applyFilter(.hasNotes))
+
+        self.context.performAndWait {
+            let userInfo = TalkUserInfoMO(context: self.context)
+            userInfo.url = "about:blank"
+            userInfo.notes = "Test Notes"
+            try? self.context.save()
+        }
+        
+        sut = TalkRowViewModel(talkData: talkData, talkUserInfoService: talkUserInfoService, downloadManager: downloadManager)
+
+        XCTAssertTrue(sut.applyFilter(.hasNotes))
+    }
+    
+    func testDownloadedFilter() {
+        let talkData = TalkData(id: "1", title: "Title", date: Date(), url: "about:blank")
+        fileStorage.exists = false
+
+        sut = TalkRowViewModel(talkData: talkData, talkUserInfoService: talkUserInfoService, downloadManager: downloadManager)
+
+        XCTAssertFalse(sut.applyFilter(.downloaded))
+        
+        fileStorage.exists = true
+        
+        XCTAssertTrue(sut.applyFilter(.downloaded))
+    }
+    
+    func testFavoritedFilter() {
+        let talkData = TalkData(id: "1", title: "Title", date: Date(), url: "about:blank")
+        
+        self.context.performAndWait {
+            let userInfo = TalkUserInfoMO(context: self.context)
+            userInfo.url = "about:blank"
+            try? self.context.save()
+        }
+        
+        sut = TalkRowViewModel(talkData: talkData,
+                               talkUserInfoService: talkUserInfoService,
+                               downloadManager: downloadManager)
+        XCTAssertFalse(sut.applyFilter(.favorited))
+        sut.handleAction(.addToFavorites)
+        XCTAssertTrue(sut.applyFilter(.favorited))
+    }
 }
 
 private class MockFileStorage: FileStorage {
     var saveURL: URL?
     var performedRemoveFilename: String?
+    var exists = true
     
     func save(at url: URL, withFilename filename: String) throws {
         saveURL = url
@@ -259,7 +311,7 @@ private class MockFileStorage: FileStorage {
     }
     
     func exists(filename: String) -> Bool {
-        return true
+        return exists
     }
     
     func createURL(for filename: String) -> URL {

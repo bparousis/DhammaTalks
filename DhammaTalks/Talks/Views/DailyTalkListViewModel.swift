@@ -23,12 +23,21 @@ class DailyTalkListViewModel: ObservableObject {
         case error(_ error: Error)
     }
 
+    let filters: [Filter] = [.downloaded, .favorited, .hasNotes]
+
     @Published var selectedCategory: DailyTalkCategory {
         didSet {
             AppSettings.selectedTalkCategory = selectedCategory
             if selectedYear < selectedCategory.startYear {
                 selectedYear = selectedCategory.startYear
             }
+        }
+    }
+
+    @Published var selectedFilter: Filter = .empty {
+        didSet {
+            self.talkSections = buildTalkSectionViewModels()
+            self.state = .loaded(sections: talkSections)
         }
     }
 
@@ -41,6 +50,7 @@ class DailyTalkListViewModel: ObservableObject {
     @Published var showingAlert = false
     @Published private(set) var isFetchDataFinished = false
     @Published private(set) var state: State = .initial
+    private var talkDataList: [TalkData] = []
     private(set) var talkSections: [TalkSectionViewModel] = []
 
     var currentYear: Int {
@@ -55,6 +65,14 @@ class DailyTalkListViewModel: ObservableObject {
         Array(selectedCategory.startYear...currentYear).reversed()
     }
     
+    var filterImageName: String {
+        selectedFilter.imageName
+    }
+    
+    var filterTitle: String {
+        selectedFilter.title
+    }
+
     init(talkDataService: TalkDataService, talkUserInfoService: TalkUserInfoService, downloadManager: DownloadManager, calendar: Calendar = .current) {
         self.talkDataService = talkDataService
         self.talkUserInfoService = talkUserInfoService
@@ -69,10 +87,10 @@ class DailyTalkListViewModel: ObservableObject {
         return await randomSection.talkRows.playRandom()
     }
     
-    private func buildTalkSectionViewModels(from talkDataList: [TalkData]) -> [TalkSectionViewModel] {
+    private func buildTalkSectionViewModels() -> [TalkSectionViewModel] {
         var talkSectionViewModelList: [TalkSectionViewModel] = []
         var currentTalkSection: TalkSectionViewModel?
-        for talkData in talkDataList {
+        for talkData in self.talkDataList {
             guard let date = talkData.date else {
                 continue
             }
@@ -80,13 +98,17 @@ class DailyTalkListViewModel: ObservableObject {
             let sectionTitle = DateFormatter.talkSectionDateFormatter.string(from: date)
             let talkRowViewModel = TalkRowViewModel(talkData: talkData, talkUserInfoService: talkUserInfoService, downloadManager: downloadManager)
             if currentTalkSection?.title == sectionTitle {
-                currentTalkSection?.addTalkRow(talkRowViewModel)
+                if talkRowViewModel.applyFilter(selectedFilter) {
+                    currentTalkSection?.addTalkRow(talkRowViewModel)
+                }
             } else {
-                if let talkSection = currentTalkSection {
+                if let talkSection = currentTalkSection, !talkSection.talkRows.isEmpty {
                     talkSectionViewModelList.append(talkSection)
                 }
                 currentTalkSection = TalkSectionViewModel(id: UUID().uuidString, title: sectionTitle)
-                currentTalkSection?.addTalkRow(talkRowViewModel)
+                if talkRowViewModel.applyFilter(selectedFilter) {
+                    currentTalkSection?.addTalkRow(talkRowViewModel)
+                }
             }
         }
         
@@ -101,10 +123,12 @@ class DailyTalkListViewModel: ObservableObject {
         
         self.state = .loading
         
-        let query = DailyTalkQuery(category: selectedCategory, year: selectedYear, searchText: searchText)
+        let query = DailyTalkQuery(category: selectedCategory,
+                                   year: selectedYear,
+                                   searchText: searchText)
         do {
-            let talkDataList = try await talkDataService.fetchYearlyTalks(query: query)
-            self.talkSections = buildTalkSectionViewModels(from: talkDataList)
+            self.talkDataList = try await talkDataService.fetchYearlyTalks(query: query)
+            self.talkSections = buildTalkSectionViewModels()
             self.state = .loaded(sections: talkSections)
         } catch {
             guard !error.isCancelError else {
