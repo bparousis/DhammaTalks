@@ -13,6 +13,7 @@ struct DailyTalkListView: View {
     @ObservedObject private var viewModel: DailyTalkListViewModel
     
     @State private var searchText = ""
+    @State private var showFilterSheet = false
 
     init(viewModel: DailyTalkListViewModel) {
         self.viewModel = viewModel
@@ -28,11 +29,55 @@ struct DailyTalkListView: View {
         }
     }
     
+    private var filterButton: some View {
+        Button {
+            if viewModel.selectedFilter == .empty {
+                showFilterSheet = true
+            } else {
+                viewModel.selectedFilter = .empty
+            }
+        } label: {
+            VStack {
+                Image(systemName: viewModel.filterImageName)
+                Text(viewModel.filterTitle)
+            }
+        }
+        .confirmationDialog(Text("Filter"), isPresented: $showFilterSheet) {
+            ForEach(viewModel.filters) { filter in
+                Button(filter.title) {
+                    viewModel.selectedFilter = filter
+                }
+            }
+        }
+    }
+    
+    private func randomPlayButton(proxy: ScrollViewProxy) -> some View {
+        Button {
+            Task {
+                if let id = await viewModel.playRandomTalk() {
+                    proxy.scrollTo(id)
+                }
+            }
+        } label: {
+            VStack {
+                Image(systemName: "shuffle")
+                Text("Play")
+            }
+        }
+    }
+    
+    @ViewBuilder
     private func createTalkSectionsView(_ talkSections: [TalkSectionViewModel]) -> some View {
-        ForEach(talkSections) { talkSection in
-            Section(header: TalkSectionHeader(title: talkSection.title, talkCount: talkSection.talkRows.count)) {
-                ForEach(talkSection.talkRows) { talkRow in
-                    TalkRow(viewModel: talkRow)
+        if talkSections.isEmpty {
+            Text(viewModel.selectedFilter.emptyListText)
+                .frame(maxWidth: .infinity, alignment: .center)
+        } else {
+            ForEach(talkSections) { talkSection in
+                Section(header: TalkSectionHeader(title: talkSection.title,
+                                                  talkCount: talkSection.talkRows.count)) {
+                    ForEach(talkSection.talkRows) { talkRow in
+                        TalkRow(viewModel: talkRow)
+                    }
                 }
             }
         }
@@ -66,18 +111,11 @@ struct DailyTalkListView: View {
             }
             .toolbar {
                 ToolbarItemGroup(placement: .bottomBar) {
-                    Button {
-                        Task {
-                            if let id = await viewModel.playRandomTalk() {
-                                proxy.scrollTo(id)
-                            }
-                        }
-                    } label: {
-                        VStack {
-                            Image(systemName: "shuffle")
-                            Text("Play")
-                        }
-                    }
+                    Spacer()
+                    randomPlayButton(proxy: proxy)
+                    Spacer()
+                    filterButton
+                    Spacer()
                 }
             }
             .toolbar {
@@ -86,12 +124,14 @@ struct DailyTalkListView: View {
                         Text($0.title)
                     }
                 }
-                .pickerStyle(.segmented)
+                .pickerStyle(.menu)
             }
             .alert("Failed to load talks", isPresented: $viewModel.showingAlert) {
                 Button("OK", role: .cancel) { }
             }
-            .task(id: DailyTalkQuery(category: viewModel.selectedCategory, year: viewModel.selectedYear, searchText:searchText)) {
+            .task(id: DailyTalkQuery(category: viewModel.selectedCategory,
+                                     year: viewModel.selectedYear,
+                                     searchText:searchText)) {
                 await viewModel.fetchData(searchText: searchText)
             }
             .listStyle(.insetGrouped)

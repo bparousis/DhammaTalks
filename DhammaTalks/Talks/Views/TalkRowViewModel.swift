@@ -156,6 +156,7 @@ class TalkRowViewModel: NSObject, Identifiable, ObservableObject {
         }
     }
 
+    @MainActor
     func play() async {
 
         guard let playItemURL = downloadManager.downloadURL(for: talkData.filename) ?? talkData.makeURL() else { return }
@@ -225,6 +226,21 @@ class TalkRowViewModel: NSObject, Identifiable, ObservableObject {
     
     func cancelDownload() {
         downloadJob?.cancel()
+    }
+    
+    func applyFilter(_ filter: Filter) -> Bool {
+        switch filter {
+        case .empty:
+            return true
+        case .downloaded:
+            return isDownloadAvailable
+        case .hasNotes:
+            let talkUserInfo = fetchOrCreateTalkUserInfo(for: talkData.url)
+            return talkUserInfo.hasNotes
+        case .favorited:
+            let talkUserInfo = fetchOrCreateTalkUserInfo(for: talkData.url)
+            return talkUserInfo.isFavorite
+        }
     }
     
     private func fetchOrCreateTalkUserInfo(for url: String) -> TalkUserInfo {
