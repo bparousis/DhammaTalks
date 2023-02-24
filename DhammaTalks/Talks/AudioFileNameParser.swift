@@ -8,6 +8,12 @@
 
 import Foundation
 
+struct AudioData {
+    let title: String
+    let date: Date
+    let filename: String
+}
+
 class AudioFileNameParser {
     
     private struct Translation {
@@ -27,14 +33,16 @@ class AudioFileNameParser {
                                                Translation(from: "_", to: " ")]
 
     /// Returns nil if the URL isn't in date format. (e.g. https://www.dhammatalks.org/Archive/y2021/210101_A_Radiant_Practice.mp3)
-    func parseFileNameWithDate(_ fileName: String) -> (title: String, date: Date)? {
+    func parseFilenameWithDate(_ filename: String) -> AudioData? {
 
-        guard fileName.hasSuffix(".mp3") else {
+        guard filename.hasSuffix(".mp3") else {
             return nil
         }
+        
+        let filename = formatFilename(filename)
 
-        var fileNameSplit = extractTextFromFileName(fileName)
-        guard let dateString = validateDateString(String(fileNameSplit[DATE_POSITION])) else {
+        var filenameSplit = extractTextFromFilename(filename)
+        guard let dateString = validateDateString(String(filenameSplit[DATE_POSITION])) else {
             return nil
         }
 
@@ -50,28 +58,39 @@ class AudioFileNameParser {
             return nil
         }
         
-        fileNameSplit.removeFirst()
-        let title = fileNameSplit.joined(separator: " ")
-        return (title, date)
+        filenameSplit.removeFirst()
+        let title = filenameSplit.joined(separator: " ")
+        return AudioData(title: title, date: date, filename: filename)
     }
 }
 
 private extension AudioFileNameParser {
-    func extractTextFromFileName(_ fileName: String) -> [Substring] {
-        guard var formattedFileName = fileName.removingPercentEncoding else {
+    
+    func formatFilename(_ filename: String) -> String{
+        if let lastSlashIndex = filename.lastIndex(of: "/") {
+            let afterSlashIndex = filename.index(after: lastSlashIndex)
+            return String(filename[afterSlashIndex...])
+        } else {
+            return filename
+        }
+    }
+
+    func extractTextFromFilename(_ filename: String) -> [Substring] {
+
+        guard var formattedFilename = filename.removingPercentEncoding else {
             return []
         }
 
         for translation in translations {
-            formattedFileName = translation.translate(value: formattedFileName)
+            formattedFilename = translation.translate(value: formattedFilename)
         }
         
-        formattedFileName.removeLast(".mp3".count)
-        if formattedFileName.last == "Q" {
-            formattedFileName.removeLast()
-            formattedFileName.append("?")
+        formattedFilename.removeLast(".mp3".count)
+        if formattedFilename.last == "Q" {
+            formattedFilename.removeLast()
+            formattedFilename.append("?")
         }
-        return formattedFileName.split(separator: " ")
+        return formattedFilename.split(separator: " ")
     }
 
     func validateDateString(_ dateString: String) -> String? {

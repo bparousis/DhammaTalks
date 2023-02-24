@@ -21,20 +21,21 @@ class AudioFileNameParserTests: XCTestCase {
 
     func testInvalidFileName() throws {
         let sut = AudioFileNameParser()
-        let result = sut.parseFileNameWithDate("kajdflkjad")
+        let result = sut.parseFilenameWithDate("kajdflkjad")
         XCTAssertNil(result)
     }
     
     func testMP3WithoutDateInfo() throws {
         let sut = AudioFileNameParser()
-        let result = sut.parseFileNameWithDate("something.mp3")
+        let result = sut.parseFilenameWithDate("something.mp3")
         XCTAssertNil(result)
     }
     
     func testValidYMDFileName() throws {
         let sut = AudioFileNameParser()
-        let result = sut.parseFileNameWithDate("211103_A_Radiant_Practice.mp3")
+        let result = sut.parseFilenameWithDate("211103_A_Radiant_Practice.mp3")
         XCTAssertEqual(result?.title, "A Radiant Practice")
+        XCTAssertEqual(result?.filename, "211103_A_Radiant_Practice.mp3")
         XCTAssertEqual(2021, Calendar.current.component(.year, from: result!.date))
         XCTAssertEqual(11, Calendar.current.component(.month, from: result!.date))
         XCTAssertEqual(3, Calendar.current.component(.day, from: result!.date))
@@ -42,7 +43,7 @@ class AudioFileNameParserTests: XCTestCase {
     
     func testValidYMFileName() {
         let sut = AudioFileNameParser()
-        let result = sut.parseFileNameWithDate("0112n1a1%20Encouragement.mp3")
+        let result = sut.parseFilenameWithDate("0112n1a1%20Encouragement.mp3")
         
         XCTAssertEqual(result?.title, "Encouragement")
         XCTAssertEqual(2001, Calendar.current.component(.year, from: result!.date))
@@ -51,7 +52,7 @@ class AudioFileNameParserTests: XCTestCase {
     
     func testQuestionMark() {
         let sut = AudioFileNameParser()
-        let result = sut.parseFileNameWithDate("210629_Why_Limit_YourselfQ.mp3")
+        let result = sut.parseFilenameWithDate("210629_Why_Limit_YourselfQ.mp3")
         XCTAssertEqual(result?.title, "Why Limit Yourself?")
         XCTAssertEqual(2021, Calendar.current.component(.year, from: result!.date))
         XCTAssertEqual(6, Calendar.current.component(.month, from: result!.date))
@@ -60,10 +61,20 @@ class AudioFileNameParserTests: XCTestCase {
     
     func testUnderscoreQuestionMark() {
         let sut = AudioFileNameParser()
-        let result = sut.parseFileNameWithDate("180509_Where_Are_You_Going_Q.mp3")
+        let result = sut.parseFilenameWithDate("180509_Where_Are_You_Going_Q.mp3")
         XCTAssertEqual(result?.title, "Where Are You Going?")
         XCTAssertEqual(2018, Calendar.current.component(.year, from: result!.date))
         XCTAssertEqual(5, Calendar.current.component(.month, from: result!.date))
         XCTAssertEqual(9, Calendar.current.component(.day, from: result!.date))
+    }
+    
+    func testWithSlashse() {
+        let sut = AudioFileNameParser()
+        let result = sut.parseFilenameWithDate("/Archive/y2023/230129_The_Projector.mp3")
+        XCTAssertEqual(result?.title, "The Projector")
+        XCTAssertEqual(result?.filename, "230129_The_Projector.mp3")
+        XCTAssertEqual(2023, Calendar.current.component(.year, from: result!.date))
+        XCTAssertEqual(1, Calendar.current.component(.month, from: result!.date))
+        XCTAssertEqual(29, Calendar.current.component(.day, from: result!.date))
     }
 }
