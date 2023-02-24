@@ -31,6 +31,7 @@ struct SettingsView: View {
             
             Section {
                 Link("Dhamma Talks Site", destination: URL(string: "https://www.dhammatalks.org")!)
+                Link("Donate to Dhamma Talks", destination: URL(string: "https://www.dhammatalks.org/donations.html")!)
                 if MFMailComposeViewController.canSendMail() {
                     Button {
                         showMailView = true
