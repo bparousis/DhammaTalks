@@ -21,10 +21,15 @@ class HTMLPageFetcher {
     
     private let urlSession: URLSession
     private let fileStorage: FileStorage
+    private let calendar: Calendar
     
-    init(urlSession: URLSession = .shared, fileStorage: FileStorage = LocalFileStorage(fileManager: .default)) {
+    init(urlSession: URLSession = .shared,
+         fileStorage: FileStorage = LocalFileStorage(fileManager: .default),
+         calendar: Calendar = .current)
+    {
         self.urlSession = urlSession
         self.fileStorage = fileStorage
+        self.calendar = calendar
     }
     
     /// Since HTML page from past years will never change, since all those talks have been conducted the app has those pages stored and uses
@@ -43,13 +48,13 @@ class HTMLPageFetcher {
 
     func getYearlyHTMLForCategory(_ category: DailyTalkCategory, year: Int) async throws -> [TalkData] {
         
-        if let cachedData = await checkForCachedPage(category, year: year) {
+        if year != calendar.currentYear, let cachedData = await checkForCachedPage(category, year: year) {
             return cachedData
         }
 
         // Adding query parameter for cache busting, to avoid getting a CDN cached page.  Not ideal, since it
         // means we can't use URLCache since quwery changes each time.
-        guard let talkURL = URL(string:"\(HTMLPageFetcher.archivePath)/\(category.directoryForYear(year))?q=\(UUID().uuidString)") else {
+        guard let talkURL = urlForCategory(category, year: year) else {
             throw HTMLPageFetcherError.invalidURL
         }
 
@@ -58,6 +63,19 @@ class HTMLPageFetcher {
         } catch {
             let url = fileStorage.createURL(for: cacheFilenameFromURL(talkURL))
             return try await talkDataFromURL(url, category: category, year: year)
+        }
+    }
+    
+    private func urlForCategory(_ category: DailyTalkCategory, year: Int) -> URL? {
+        if year == calendar.currentYear {
+            switch category {
+            case .short:
+                return URL(string: "https://www.dhammatalks.org/mp3_short_index_current.html")
+            case .evening:
+                return URL(string: "https://www.dhammatalks.org/mp3_index_current.html")
+            }
+        } else {
+            return URL(string:"\(HTMLPageFetcher.archivePath)/\(category.directoryForYear(year))?q=\(UUID().uuidString)")
         }
     }
     
@@ -92,10 +110,14 @@ class HTMLPageFetcher {
         let document = try SwiftSoup.parse(html)
         try document.select("a").forEach { element in
             let hrefValue = try element.attr("href")
-            if let (title, date) = audioFileNameParser.parseFileNameWithDate(hrefValue) {
-                let url = "\(category.directoryForYear(year))/\(hrefValue)"
-                let talkData = TalkData(id: url, title: title, date: date, url: url)
-                talkDataList.insert(talkData, at: 0)
+            if let audioData = audioFileNameParser.parseFilenameWithDate(hrefValue) {
+                let url = "\(category.directoryForYear(year))/\(audioData.filename)"
+                let talkData = TalkData(id: url, title: audioData.title, date: audioData.date, url: url)
+                if year == calendar.currentYear {
+                    talkDataList.append(talkData)
+                } else {
+                    talkDataList.insert(talkData, at: 0)
+                }
             }
         }
         

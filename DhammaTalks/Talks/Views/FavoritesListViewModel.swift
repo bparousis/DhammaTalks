@@ -23,6 +23,7 @@ class FavoritesListViewModel: ObservableObject {
         self.downloadManager = downloadManager
     }
     
+    @MainActor
     func fetchFavorites(searchText: String) async {
         favorites = await talkUserInfoService.fetchFavoriteTalks(searchText: searchText)
             .map{ createTalkRowViewModel(talkData: $0) }
