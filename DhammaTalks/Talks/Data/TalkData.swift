@@ -12,9 +12,14 @@ struct TalkData: Identifiable, Decodable {
 
     let id: String
     let title: String
-    let date: Date?
     let url: String
     
+    init(id: String, title: String, url: String) {
+        self.id = id
+        self.title = title
+        self.url = url
+    }
+
     var filename: String {
         url.filename
     }
@@ -24,5 +29,9 @@ struct TalkData: Identifiable, Decodable {
             return nil
         }
         return talkURL
+    }
+    
+    var date: Date? {
+        AudioFileNameParser.extractDate(filename)
     }
 }

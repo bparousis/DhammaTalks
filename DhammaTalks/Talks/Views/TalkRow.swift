@@ -75,6 +75,7 @@ struct TalkRow: View {
             if viewModel.dateStyle == .day, let formattedDay = viewModel.formattedDay, !formattedDay.isEmpty {
                 Text(formattedDay)
                     .font(.subheadline)
+                    .foregroundColor(.secondary)
             }
             Text(viewModel.title)
                 .font(.headline)
@@ -108,6 +109,7 @@ struct TalkRow: View {
         if let formattedDate = viewModel.formattedDate {
             Text(formattedDate)
                 .font(.subheadline)
+                .foregroundColor(.secondary)
         }
     }
 

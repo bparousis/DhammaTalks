@@ -13,6 +13,7 @@ import MessageUI
 struct SettingsView: View {
     
     @State private var showMailView: Bool = false
+    @State private var showMailAlert: Bool = false
     @State var result: Result<MFMailComposeResult, Error>? = nil
     
     private var appVersion: String {
@@ -32,17 +33,22 @@ struct SettingsView: View {
             Section {
                 Link("Dhamma Talks Site", destination: URL(string: "https://www.dhammatalks.org")!)
                 Link("Donate to Dhamma Talks", destination: URL(string: "https://www.dhammatalks.org/donations.html")!)
-                if MFMailComposeViewController.canSendMail() {
-                    Button {
+                Button {
+                    if MFMailComposeViewController.canSendMail() {
                         showMailView = true
-                    } label: {
-                        Text("Questions & Feedback")
+                    } else {
+                        showMailAlert = true
                     }
+                } label: {
+                    Text("Questions & Feedback")
                 }
             }
         }
         .sheet(isPresented: $showMailView) {
             MailView(isShowing: $showMailView, result: self.$result)
+        }
+        .alert("Device is not setup to send mail", isPresented: $showMailAlert) {
+            Button("OK", role: .cancel) { }
         }
     }
 }

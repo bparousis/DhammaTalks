@@ -46,15 +46,14 @@ class TalkRowViewModelTests: XCTestCase {
     }
     
     func testTitleAndDateLabels() {
-        let date = Calendar.current.date(from: DateComponents(year:2000, month: 1, day: 1))
-        let talkData = TalkData(id: "1", title: "Title", date: date, url: "about:blank")
+        let talkData = TalkData(id: "1", title: "Title", url: "about:blank")
         sut = TalkRowViewModel(talkData: talkData, talkUserInfoService: talkUserInfoService, downloadManager: downloadManager)
         XCTAssertEqual(sut.title, "Title")
-        XCTAssertEqual(sut.formattedDate, "January 1, 2000")
+        XCTAssertNil(sut.formattedDate)
     }
     
     func testPlayWithTalkUserInfo() async {
-        let talkData = TalkData(id: "1", title: "Title", date: Date(), url: "about:blank")
+        let talkData = TalkData(id: "1", title: "Title", url: "about:blank")
         
         self.context.performAndWait {
             let userInfo = TalkUserInfoMO(context: self.context)
@@ -82,7 +81,7 @@ class TalkRowViewModelTests: XCTestCase {
     
     func testPlayWithoutTalkUserInfo() async {
         
-        let talkData = TalkData(id: "1", title: "Title", date: Date(), url: "about:blank")
+        let talkData = TalkData(id: "1", title: "Title", url: "about:blank")
         
         sut = TalkRowViewModel(talkData: talkData, talkUserInfoService: talkUserInfoService, downloadManager: downloadManager)
         XCTAssertNil(sut.playerItem)
@@ -93,7 +92,7 @@ class TalkRowViewModelTests: XCTestCase {
     }
     
     func testFinishedPlayingUpdatesUserInfo() async {
-        let talkData = TalkData(id: "1", title: "Title", date: Date(), url: "about:blank")
+        let talkData = TalkData(id: "1", title: "Title", url: "about:blank")
         
         self.context.performAndWait {
             let userInfo = TalkUserInfoMO(context: self.context)
@@ -123,7 +122,7 @@ class TalkRowViewModelTests: XCTestCase {
     }
     
     func testFinishedPlayingAddsUserInfo() async {
-        let talkData = TalkData(id: "1", title: "Title", date: Date(), url: "about:blank")
+        let talkData = TalkData(id: "1", title: "Title", url: "about:blank")
         
         sut = TalkRowViewModel(talkData: talkData, talkUserInfoService: talkUserInfoService, downloadManager: downloadManager)
         await sut.play()
@@ -142,7 +141,7 @@ class TalkRowViewModelTests: XCTestCase {
     }
     
     func testFetchTime() async {
-        let talkData = TalkData(id: "1", title: "Title", date: Date(), url: "about:blank")
+        let talkData = TalkData(id: "1", title: "Title", url: "about:blank")
         
         self.context.performAndWait {
             let userInfo = TalkUserInfoMO(context: self.context)
@@ -164,7 +163,7 @@ class TalkRowViewModelTests: XCTestCase {
     }
     
     func testAddToFavorites() async {
-        let talkData = TalkData(id: "1", title: "Title", date: Date(), url: "about:blank")
+        let talkData = TalkData(id: "1", title: "Title", url: "about:blank")
         
         self.context.performAndWait {
             let userInfo = TalkUserInfoMO(context: self.context)
@@ -181,7 +180,7 @@ class TalkRowViewModelTests: XCTestCase {
     }
     
     func testRemoveFromFavorites() async {
-        let talkData = TalkData(id: "1", title: "Title", date: Date(), url: "about:blank")
+        let talkData = TalkData(id: "1", title: "Title", url: "about:blank")
         
         self.context.performAndWait {
             let userInfo = TalkUserInfoMO(context: self.context)
@@ -204,7 +203,7 @@ class TalkRowViewModelTests: XCTestCase {
 
     func testDownload() throws {
         let date = Calendar.current.date(from: DateComponents(year:2000, month: 1, day: 1))
-        let talkData = TalkData(id: "1", title: "Title", date: date, url: "about:blank")
+        let talkData = TalkData(id: "1", title: "Title", url: "about:blank")
         let mockFileStorage = MockFileStorage()
         sut = TalkRowViewModel(talkData: talkData, talkUserInfoService: talkUserInfoService, downloadManager: DownloadManager(urlSession: urlSession, fileStorage: mockFileStorage))
         XCTAssertNil(mockFileStorage.saveURL)
@@ -217,8 +216,7 @@ class TalkRowViewModelTests: XCTestCase {
     }
     
     func testRemoveDownload() throws {
-        let date = Calendar.current.date(from: DateComponents(year:2000, month: 1, day: 1))
-        let talkData = TalkData(id: "1", title: "Title", date: date, url: "y2020/test.mp3")
+        let talkData = TalkData(id: "1", title: "Title", url: "y2020/test.mp3")
         let mockFileStorage = MockFileStorage()
         sut = TalkRowViewModel(talkData: talkData, talkUserInfoService: talkUserInfoService, downloadManager: DownloadManager(urlSession: urlSession, fileStorage: mockFileStorage))
         XCTAssertNil(mockFileStorage.performedRemoveFilename)
@@ -227,7 +225,7 @@ class TalkRowViewModelTests: XCTestCase {
     }
     
     func testNotes() async {
-        let talkData = TalkData(id: "1", title: "Title", date: Date(), url: "about:blank")
+        let talkData = TalkData(id: "1", title: "Title", url: "about:blank")
         
         self.context.performAndWait {
             let userInfo = TalkUserInfoMO(context: self.context)
@@ -248,7 +246,7 @@ class TalkRowViewModelTests: XCTestCase {
     }
     
     func testHasNotesFilter() {
-        let talkData = TalkData(id: "1", title: "Title", date: Date(), url: "about:blank")
+        let talkData = TalkData(id: "1", title: "Title", url: "about:blank")
 
         sut = TalkRowViewModel(talkData: talkData, talkUserInfoService: talkUserInfoService, downloadManager: downloadManager)
 
@@ -267,7 +265,7 @@ class TalkRowViewModelTests: XCTestCase {
     }
     
     func testDownloadedFilter() {
-        let talkData = TalkData(id: "1", title: "Title", date: Date(), url: "about:blank")
+        let talkData = TalkData(id: "1", title: "Title", url: "about:blank")
         fileStorage.exists = false
 
         sut = TalkRowViewModel(talkData: talkData, talkUserInfoService: talkUserInfoService, downloadManager: downloadManager)
@@ -280,7 +278,7 @@ class TalkRowViewModelTests: XCTestCase {
     }
     
     func testFavoritedFilter() {
-        let talkData = TalkData(id: "1", title: "Title", date: Date(), url: "about:blank")
+        let talkData = TalkData(id: "1", title: "Title", url: "about:blank")
         
         self.context.performAndWait {
             let userInfo = TalkUserInfoMO(context: self.context)
