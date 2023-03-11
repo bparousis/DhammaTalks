@@ -90,7 +90,6 @@ class HTMLPageFetcher {
     
     private func talkDataFromURL(_ url: URL, category: DailyTalkCategory, year: Int) async throws -> [TalkData] {
         var talkDataList: [TalkData] = []
-        let audioFileNameParser = AudioFileNameParser()
 
         let (data, _) = try await urlSession.data(from: url)
         let cacheFilename = cacheFilenameFromURL(url)
@@ -110,9 +109,9 @@ class HTMLPageFetcher {
         let document = try SwiftSoup.parse(html)
         try document.select("a").forEach { element in
             let hrefValue = try element.attr("href")
-            if let audioData = audioFileNameParser.parseFilenameWithDate(hrefValue) {
+            if let audioData = AudioFileNameParser.extractTitleAndFilename(hrefValue) {
                 let url = "\(category.directoryForYear(year))/\(audioData.filename)"
-                let talkData = TalkData(id: url, title: audioData.title, date: audioData.date, url: url)
+                let talkData = TalkData(id: url, title: audioData.title, url: url)
                 if year == calendar.currentYear {
                     talkDataList.append(talkData)
                 } else {

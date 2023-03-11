@@ -60,7 +60,8 @@ class TalkUserInfoService: ObservableObject {
     
     @MainActor
     func fetchFavoriteTalks(searchText: String) async -> [TalkData] {
-        await self.managedObjectContext.perform {
+        await managedObjectContext.perform { [weak self] in
+            guard let self else { return [] }
             var favoritesList: [TalkData] = []
             let talkUserInfoFetch = NSFetchRequest<TalkUserInfoMO>(entityName: "TalkUserInfoMO")
             var predicates: [NSPredicate] = [NSPredicate(format: "favoriteDetails != nil")]
@@ -75,7 +76,7 @@ class TalkUserInfoService: ObservableObject {
 
             for talkUserInfoMO in results {
                 if let url = talkUserInfoMO.url, let title = talkUserInfoMO.favoriteDetails?.title {
-                    favoritesList.append(TalkData(id: UUID().uuidString, title: title, date: nil, url: url))
+                    favoritesList.append(TalkData(id: UUID().uuidString, title: title, url: url))
                 }
             }
             return favoritesList

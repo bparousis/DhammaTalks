@@ -43,8 +43,10 @@ class TalkSeriesListViewModel: ObservableObject {
             }
             
             if !talkRows.isEmpty {
-                sectionViewModel.talkRows = talkRows.map{
-                    TalkRowViewModel(talkData: $0, talkUserInfoService: talkUserInfoService, downloadManager: downloadManager)
+                sectionViewModel.talkRows = talkRows.map {
+                    let talkRowViewModel = TalkRowViewModel(talkData: $0, talkUserInfoService: talkUserInfoService, downloadManager: downloadManager)
+                    talkRowViewModel.dateStyle = .full
+                    return talkRowViewModel
                 }
                 
                 talkSectionViewModelList.append(sectionViewModel)

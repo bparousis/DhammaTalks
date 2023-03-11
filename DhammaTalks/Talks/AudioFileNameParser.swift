@@ -8,13 +8,7 @@
 
 import Foundation
 
-struct AudioData {
-    let title: String
-    let date: Date
-    let filename: String
-}
-
-class AudioFileNameParser {
+struct AudioFileNameParser {
     
     private struct Translation {
         let from: String
@@ -25,48 +19,48 @@ class AudioFileNameParser {
         }
     }
 
-    private let DATE_POSITION = 0
+    private static let DATE_POSITION = 0
     
     // IMPORTANT: Order matters.  For instance doing Translation(from: "_", to: " ") first would not translate correctly.
-    private let translations: [Translation] = [Translation(from: "_Q.", to: "?."),
+    private static let translations: [Translation] = [Translation(from: "_Q.", to: "?."),
                                                Translation(from: "_Q_", to: "?_"),
                                                Translation(from: "_", to: " ")]
 
     /// Returns nil if the URL isn't in date format. (e.g. https://www.dhammatalks.org/Archive/y2021/210101_A_Radiant_Practice.mp3)
-    func parseFilenameWithDate(_ filename: String) -> AudioData? {
+    static func extractTitleAndFilename(_ urlString: String) -> (title: String, filename: String)? {
 
-        guard filename.hasSuffix(".mp3") else {
+        guard urlString.hasSuffix(".mp3") else {
             return nil
         }
-        
-        let filename = formatFilename(filename)
 
+        let filename = formatFilename(urlString)
         var filenameSplit = extractTextFromFilename(filename)
+        filenameSplit.removeFirst()
+        let title = filenameSplit.joined(separator: " ")
+        return (title, filename)
+    }
+    
+    static func extractDate(_ urlString: String) -> Date? {
+        let filename = formatFilename(urlString)
+
+        let filenameSplit = extractTextFromFilename(filename)
         guard let dateString = validateDateString(String(filenameSplit[DATE_POSITION])) else {
             return nil
         }
 
         var parsedDate: Date? = nil
-        
         if dateString.count == DateFormatter.YMD.count {
             parsedDate = DateFormatter.ymdDateFormatter.date(from: dateString)
         } else if dateString.count == DateFormatter.YM.count {
             parsedDate = DateFormatter.ymDateFormatter.date(from: dateString)
         }
-        
-        guard let date = parsedDate else {
-            return nil
-        }
-        
-        filenameSplit.removeFirst()
-        let title = filenameSplit.joined(separator: " ")
-        return AudioData(title: title, date: date, filename: filename)
+        return parsedDate
     }
 }
 
 private extension AudioFileNameParser {
     
-    func formatFilename(_ filename: String) -> String{
+    static func formatFilename(_ filename: String) -> String{
         if let lastSlashIndex = filename.lastIndex(of: "/") {
             let afterSlashIndex = filename.index(after: lastSlashIndex)
             return String(filename[afterSlashIndex...])
@@ -75,7 +69,7 @@ private extension AudioFileNameParser {
         }
     }
 
-    func extractTextFromFilename(_ filename: String) -> [Substring] {
+    static func extractTextFromFilename(_ filename: String) -> [Substring] {
 
         guard var formattedFilename = filename.removingPercentEncoding else {
             return []
@@ -93,7 +87,7 @@ private extension AudioFileNameParser {
         return formattedFilename.split(separator: " ")
     }
 
-    func validateDateString(_ dateString: String) -> String? {
+    static func validateDateString(_ dateString: String) -> String? {
         var positionIndex = dateString.startIndex
         for dateChar in dateString {
             if dateChar.isWholeNumber {

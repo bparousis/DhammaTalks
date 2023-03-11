@@ -2075,5 +2075,353 @@
                 ]
             }
         ]
+    },
+    {
+        "id": "otherThemes",
+        "title": "Other Themes",
+        "description": "Some of these collections have had quite a lot of thought put into them, such as 'Digging Out of Despair', and others not as much. They only contain talks up to 2007.",
+        "image": "water10",
+        "sections": [
+            {
+                "id": "theSublimeAttitudes",
+                "title": "The Sublime Attitudes",
+                "talks": [
+                    {
+                        "id": "limitlessThoughts",
+                        "title": "Limitless Thoughts",
+                        "url": "y2003/031220%20Limitless%20Thoughts.mp3"
+                    },
+                    {
+                        "id": "gratitudeGoodwillGenerosity",
+                        "title": "Gratitude, Goodwill & Generosity",
+                        "url": "y2004/040327%20Gratitude,%20Goodwill%20&%20Generosity.mp3"
+                    },
+                    {
+                        "id": "theStairwayUp",
+                        "title": "The Stairway Up",
+                        "url": "y2004/040428%20Stairway%20Up,%20The.mp3"
+                    },
+                    {
+                        "id": "aSenseOfEntitlement",
+                        "title": "A Sense of Entitlement",
+                        "url": "y2004/040412%20Entitlement,%20A%20Sense%20of.mp3"
+                    },
+                    {
+                        "id": "theWishForHappiness",
+                        "title": "The Wish for Happiness",
+                        "url": "y2004/040416%20Wish%20for%20Happiness,%20The.mp3"
+                    },
+                    {
+                        "id": "aGoodInnerRelationship",
+                        "title": "A Good Inner Relationship",
+                        "url": "y2004/040430%20Good%20Inner%20Relationship,%20A.mp3"
+                    }
+                ]
+            },
+            {
+                "id": "aWarriorsResolve",
+                "title": "A Warrior’s Resolve",
+                "talks": [
+                    {
+                        "id": "theThreeCharacteristics",
+                        "title": "The Three Characteristics",
+                        "url": "y2003/031230%20Three%20Characteristics,%20The.mp3"
+                    },
+                    {
+                        "id": "makingAnEffort",
+                        "title": "Making an Effort",
+                        "url": "y2004/040303%20Making%20an%20Effort.mp3"
+                    },
+                    {
+                        "id": "customsOfTheNobleOnes",
+                        "title": "Customs of the Noble Ones",
+                        "url": "y2004/040312%20Customs%20of%20the%20Noble%20Ones.mp3"
+                    },
+                    {
+                        "id": "freedomToChoose",
+                        "title": "Freedom to Choose",
+                        "url": "y2004/040401%20Freedom%20to%20Choose.mp3"
+                    },
+                    {
+                        "id": "desireReality",
+                        "title": "Desire & Reality",
+                        "url": "y2004/040427%20Desire%20&%20Reality.mp3"
+                    },
+                    {
+                        "id": "directionDetermination",
+                        "title": "Direction & Determination",
+                        "url": "y2004/040502%20Direction%20&%20Determination.mp3"
+                    }
+                ]
+            },
+            {
+                "id": "lifeStories",
+                "title": "Life Stories",
+                "talks": [
+                    {
+                        "id": "outsideTheNarratives",
+                        "title": "Outside the Narratives",
+                        "url": "y2003/031009%20Outside%20the%20Narratives.mp3"
+                    },
+                    {
+                        "id": "aMuchBetterPlace",
+                        "title": "A Much Better Place",
+                        "url": "y2003/031209%20Much%20Better%20Place,%20A.mp3"
+                    },
+                    {
+                        "id": "theWallsOfIgnorance",
+                        "title": "The Walls of Ignorance",
+                        "url": "y2004/040129%20Walls%20of%20Ignorance,%20The.mp3"
+                    },
+                    {
+                        "id": "lifeCrises",
+                        "title": "Life Crises",
+                        "url": "y2004/040319%20Life%20Crises.mp3"
+                    },
+                    {
+                        "id": "theCommunityOfTheWise",
+                        "title": "The Community of the Wise",
+                        "url": "y2004/040612%20Community%20of%20the%20Wise,%20The.mp3"
+                    }
+                ]
+            },
+            {
+                "id": "selfAndNotSelf",
+                "title": "Self & Not-Self",
+                "talks": [
+                    {
+                        "id": "selfIdentityView",
+                        "title": "Self-Identity View",
+                        "url": "y2004/040611%20Self-Identity%20View.mp3"
+                    },
+                    {
+                        "id": "karmaNotself",
+                        "title": "Karma & Not-self",
+                        "url": "y2005/050420%20Karma%20&%20Not-self.mp3"
+                    },
+                    {
+                        "id": "aDecentEducation",
+                        "title": "A Decent Education",
+                        "url": "y2005/050518%20Decent%20Education,%20A.mp3"
+                    },
+                    {
+                        "id": "theKarmaOfSelfNotself",
+                        "title": "The Karma of Self & Not-self",
+                        "url": "y2005/050521%20Karma%20of%20Self%20&%20Not-self,%20The.mp3"
+                    },
+                    {
+                        "id": "selfControl",
+                        "title": "Self Control",
+                        "url": "y2005/050527%20Self%20Control.mp3"
+                    }
+                ]
+            },
+            {
+                "id": "breathMeditation",
+                "title": "Breath Meditation",
+                "talks": [
+                    {
+                        "id": "breathMeditation",
+                        "title": "Breath Meditation",
+                        "url": "y2005/050117%20Breath%20Meditation.mp3"
+                    },
+                    {
+                        "id": "theEndOfUncertainty",
+                        "title": "The End of Uncertainty",
+                        "url": "y2005/050505%20End%20of%20Uncertainty,%20The.mp3"
+                    },
+                    {
+                        "id": "stayWithTheBreath",
+                        "title": "Stay with the Breath",
+                        "url": "y2005/050408%20Stay%20with%20the%20Breath.mp3"
+                    },
+                    {
+                        "id": "analyzingTheBreath",
+                        "title": "Analyzing the Breath",
+                        "url": "y2005/050418%20Analyzing%20the%20Breath.mp3"
+                    },
+                    {
+                        "id": "breathByBreath",
+                        "title": "Breath by Breath",
+                        "url": "y2005/050705%20Breath%20by%20Breath.mp3"
+                    },
+                    {
+                        "id": "guidedMeditation",
+                        "title": "Guided Meditation",
+                        "url": "y2005/050704%20Guided%20Meditation.mp3"
+                    }
+                ]
+            },
+            {
+                "id": "pain",
+                "title": "Pain",
+                "talks": [
+                    {
+                        "id": "pleasurePain_04_15_2005",
+                        "title": "Pleasure & Pain (April 15, 2005)",
+                        "url": "y2005/050415%20Pleasure%20&%20Pain.mp3"
+                    },
+                    {
+                        "id": "pleasurePain_08_08_2005",
+                        "title": "Pleasure & Pain (Aug. 8, 2005)",
+                        "url": "y2005/050802%20Pleasure%20&%20Pain.mp3"
+                    },
+                    {
+                        "id": "theWebOfPain",
+                        "title": "The Web of Pain",
+                        "url": "y2005/050807%20Web%20of%20Pain,The.mp3"
+                    },
+                    {
+                        "id": "friendsWithPain",
+                        "title": "Friends With Pain",
+                        "url": "y2005/050811%20Friends%20With%20Pain.mp3"
+                    },
+                    {
+                        "id": "painDistraction",
+                        "title": "Pain & Distraction",
+                        "url": "y2006/060725%20Pain%20&%20Distraction.mp3"
+                    }
+                ]
+            },
+            {
+                "id": "diggingOutOfDespair",
+                "title": "Digging Out of Despair",
+                "talks": [
+                    {
+                        "id": "mistakes",
+                        "title": "Mistakes",
+                        "url": "y2003/0301n1a2%20Mistakes.mp3"
+                    },
+                    {
+                        "id": "mindstorms",
+                        "title": "Mindstorms",
+                        "url": "y2004/041201%20Mindstorms.mp3"
+                    },
+                    {
+                        "id": "everybodySuffers",
+                        "title": "Everybody Suffers",
+                        "url": "y2005/050327%20Everybody%20Suffers.mp3"
+                    },
+                    {
+                        "id": "socialAnxiety",
+                        "title": "Social Anxiety",
+                        "url": "y2005/050910_Social_Anxiety.mp3"
+                    },
+                    {
+                        "id": "selfEsteem",
+                        "title": "Self Esteem",
+                        "url": "y2005/050914%20Self%20Esteem.mp3"
+                    },
+                    {
+                        "id": "peopleSufferFromTheirThinking",
+                        "title": "People Suffer from Their Thinking",
+                        "url": "y2006/060704%20People%20Suffer%20from%20Their%20Thinking.mp3"
+                    }
+                ]
+            },
+            {
+                "id": "bodyAsPath",
+                "title": "Body as Path",
+                "talks": [
+                    {
+                        "id": "thisFathomLongBody",
+                        "title": "This Fathom Long Body",
+                        "url": "y2005/050812%20This%20Fathom%20Long%20Body.mp3"
+                    },
+                    {
+                        "id": "bodyAsPath",
+                        "title": "Body as Path",
+                        "url": "y2005/051126%20Body%20as%20Path.mp3"
+                    },
+                    {
+                        "id": "seeingWithTheBody",
+                        "title": "Seeing with the Body",
+                        "url": "y2006/060106%20Seeing%20with%20the%20Body.mp3"
+                    },
+                    {
+                        "id": "theMiddleWay",
+                        "title": "The Middle Way",
+                        "url": "y2006/060109%20The%20Middle%20Way.mp3"
+                    },
+                    {
+                        "id": "gettingIntoTheBody",
+                        "title": "Getting into the Body",
+                        "url": "y2006/060613%20Getting%20into%20the%20Body.mp3"
+                    },
+                    {
+                        "id": "theEnergyInTheBody",
+                        "title": "The Energy in the Body",
+                        "url": "y2006/060721%20The%20Energy%20in%20the%20Body.mp3"
+                    }
+                ]
+            },
+            {
+                "id": "breakingOldHabits",
+                "title": "Breaking Old Habits",
+                "talks": [
+                    {
+                        "id": "aSeekersHabits",
+                        "title": "A Seeker’s Habits",
+                        "url": "y2002/0208n3a1%20Seeker's%20Habits,%20A.mp3"
+                    },
+                    {
+                        "id": "breakingOldHabits",
+                        "title": "Breaking Old Habits",
+                        "url": "y2003/0307n1b2%20Breaking%20Old%20Habits.mp3"
+                    },
+                    {
+                        "id": "unskillfulHabits",
+                        "title": "Unskillful Habits",
+                        "url": "y2004/040202%20Unskillful%20Habits.mp3"
+                    },
+                    {
+                        "id": "aSlaveToTheDefilements",
+                        "title": "A Slave to the Defilements",
+                        "url": "y2004/040522%20Slave%20to%20the%20Defilements,%20A.mp3"
+                    },
+                    {
+                        "id": "catchItInTheAct",
+                        "title": "Catch It in the Act",
+                        "url": "y2005/050725%20Catch%20It%20in%20the%20Act.mp3"
+                    },
+                    {
+                        "id": "intoxication",
+                        "title": "Intoxication",
+                        "url": "y2006/060205%20Intoxication.mp3"
+                    }
+                ]
+            },
+            {
+                "id": "strength",
+                "title": "Strength",
+                "talks": [
+                    {
+                        "id": "limitations",
+                        "title": "Limitations",
+                        "url": "y2007/070325%20Limitations.mp3"
+                    },
+                    {
+                        "id": "shootYourPainsWithWisdom",
+                        "title": "Shoot Your Pains with Wisdom",
+                        "url": "y2007/070403%20Shoot%20Your%20Pains%20with%20Wisdom.mp3"
+                    },
+                    {
+                        "id": "theJoyOfEffort",
+                        "title": "The Joy of Effort",
+                        "url": "y2007/070906%20The%20Joy%20of%20Effort.mp3"
+                    },
+                    {
+                        "id": "aPostByTheOcean",
+                        "title": "A Post by the Ocean",
+                        "url": "y2007/070921%20A%20Post%20by%20the%20Ocean.mp3"
+                    },
+                    {
+                        "id": "stupidAboutPleasure",
+                        "title": "Stupid About Pleasure",
+                        "url": "y2007/070927%20Stupid%20About%20Pleasure.mp3"
+                    }
+                ]
+            }
+        ]
     }
 ]
