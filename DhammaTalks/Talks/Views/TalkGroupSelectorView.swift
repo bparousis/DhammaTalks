@@ -17,8 +17,10 @@ struct TalkGroupSelectorView: View {
     @State private var showSettings: Bool = false
     private static let dailyTalksTag = "dailyTalks"
     private static let favoritesTag = "favorites"
+    private static let playlistsTag = "playlists"
     private let dailyTalkListViewModel: DailyTalkListViewModel
     private let favoritesListViewModel: FavoritesListViewModel
+    private let playlistViewModel: PlaylistSelectorViewModel
 
     private var dailyTalksView: some View {
         DailyTalkListView(viewModel: dailyTalkListViewModel)
@@ -33,6 +35,14 @@ struct TalkGroupSelectorView: View {
                 AppSettings.talkGroupSelection = Self.favoritesTag
             }
     }
+    
+    private var playlistSelectorView: some View {
+        PlaylistSelectorView(viewModel: playlistViewModel)
+            .onAppear {
+                AppSettings.talkGroupSelection = Self.playlistsTag
+            }
+    }
+    
 
     private var widthPercentage: CGFloat {
         isIpad ? 0.20 : 0.475
@@ -42,9 +52,13 @@ struct TalkGroupSelectorView: View {
         Array(repeating: GridItem(.flexible()), count: isIpad ? 4 : 2)
     }
     
-    init(dailyTalkListViewModel: DailyTalkListViewModel, favoritesListViewModel: FavoritesListViewModel) {
+    init(dailyTalkListViewModel: DailyTalkListViewModel,
+         favoritesListViewModel: FavoritesListViewModel,
+         playlistViewModel: PlaylistSelectorViewModel)
+    {
         self.dailyTalkListViewModel = dailyTalkListViewModel
         self.favoritesListViewModel = favoritesListViewModel
+        self.playlistViewModel = playlistViewModel
     }
 
     var body: some View {
@@ -128,6 +142,12 @@ struct TalkGroupSelectorView: View {
                 makeCellView(title: "Favorites", image: "leaves", width: columnWidth)
             }
             .id(Self.favoritesTag)
+
+            NavigationLink(destination: playlistSelectorView, tag: Self.playlistsTag, selection: $selection)
+            {
+                makeCellView(title: "Playlists", image: "water9", width: columnWidth)
+            }
+            .id(Self.playlistsTag)
         }
     }
     

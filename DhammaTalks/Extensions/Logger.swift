@@ -13,4 +13,5 @@ extension Logger {
     static let talkUserInfo = Logger(subsystem: "com.bparousis.DhammaTalks", category: "TalkUserInfo")
     static let fileStorage = Logger(subsystem: "com.bparousis.DhammaTalks", category: "FileStorage")
     static let audio = Logger(subsystem: "com.bparousis.DhammaTalks", category: "Audio")
+    static let playlist = Logger(subsystem: "com.bparousis.DhammaTalks", category: "Playlist")
 }
