@@ -1,9 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="19574" systemVersion="21C52" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="21513" systemVersion="22D68" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="FavoriteDetailsMO" representedClassName="FavoriteDetailsMO" syncable="YES" codeGenerationType="class">
         <attribute name="dateAdded" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="title" optional="YES" attributeType="String"/>
         <relationship name="talkUserInfo" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="TalkUserInfoMO" inverseName="favoriteDetails" inverseEntity="TalkUserInfoMO"/>
+    </entity>
+    <entity name="PlaylistItemMO" representedClassName="PlaylistItemMO" syncable="YES" codeGenerationType="class">
+        <attribute name="order" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="title" optional="YES" attributeType="String"/>
+        <attribute name="url" optional="YES" attributeType="String"/>
+        <relationship name="playlist" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="PlaylistMO" inverseName="playlistItems" inverseEntity="PlaylistMO"/>
+    </entity>
+    <entity name="PlaylistMO" representedClassName="PlaylistMO" syncable="YES" codeGenerationType="class">
+        <attribute name="desc" optional="YES" attributeType="String"/>
+        <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="title" optional="YES" attributeType="String"/>
+        <relationship name="playlistItems" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="PlaylistItemMO" inverseName="playlist" inverseEntity="PlaylistItemMO"/>
     </entity>
     <entity name="TalkUserInfoMO" representedClassName="TalkUserInfoMO" syncable="YES" codeGenerationType="class">
         <attribute name="currentTimeScale" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
@@ -19,8 +31,4 @@
             </uniquenessConstraint>
         </uniquenessConstraints>
     </entity>
-    <elements>
-        <element name="FavoriteDetailsMO" positionX="-63" positionY="27" width="128" height="74"/>
-        <element name="TalkUserInfoMO" positionX="-63" positionY="-18" width="128" height="134"/>
-    </elements>
 </model>
