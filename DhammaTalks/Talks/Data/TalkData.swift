@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct TalkData: Identifiable {
+struct TalkData: Identifiable, Decodable, Hashable {
 
     static let archivePath = "https://www.dhammatalks.org/Archive"
 

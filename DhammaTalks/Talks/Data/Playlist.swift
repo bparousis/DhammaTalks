@@ -9,8 +9,14 @@
 import Foundation
 
 struct Playlist: Identifiable {
-    let id: String
+    let id: UUID
     let title: String
     let desc: String?
     let playlistItems: [PlaylistItem]
+}
+
+extension Playlist: Equatable, Hashable {
+    static func == (lhs: Self, rhs: Self) -> Bool {
+        lhs.id == rhs.id
+    }
 }

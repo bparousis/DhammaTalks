@@ -22,7 +22,8 @@ class DailyTalkListViewModelTests: XCTestCase {
         talkDataService = MockTalkDataService()
         sut = DailyTalkListViewModel(talkDataService: talkDataService,
                                      talkUserInfoService: TalkUserInfoService(managedObjectContext: context),
-                                     downloadManager: DownloadManager())
+                                     downloadManager: DownloadManager(),
+                                     playlistService: PlaylistService(managedObjectContext: context))
     }
 
     override func tearDownWithError() throws {
