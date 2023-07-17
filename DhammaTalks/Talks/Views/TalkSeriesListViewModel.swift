@@ -14,6 +14,7 @@ class TalkSeriesListViewModel: ObservableObject {
     private let talkSeries: TalkSeries
     private let talkUserInfoService: TalkUserInfoService
     private let downloadManager: DownloadManager
+    private let playlistService: PlaylistService
 
     var title: String {
         talkSeries.title
@@ -25,10 +26,15 @@ class TalkSeriesListViewModel: ObservableObject {
     
     @Published private(set) var talkSections: [TalkSectionViewModel] = []
     
-    init(talkSeries: TalkSeries, talkUserInfoService: TalkUserInfoService, downloadManager: DownloadManager) {
+    init(talkSeries: TalkSeries,
+         talkUserInfoService: TalkUserInfoService,
+         downloadManager: DownloadManager,
+         playlistService: PlaylistService)
+    {
         self.talkSeries = talkSeries
         self.talkUserInfoService = talkUserInfoService
         self.downloadManager = downloadManager
+        self.playlistService = playlistService
     }
     
     func fetchData(searchText: String = "") {
@@ -44,7 +50,10 @@ class TalkSeriesListViewModel: ObservableObject {
             
             if !talkRows.isEmpty {
                 sectionViewModel.talkRows = talkRows.map {
-                    let talkRowViewModel = TalkRowViewModel(talkData: $0, talkUserInfoService: talkUserInfoService, downloadManager: downloadManager)
+                    let talkRowViewModel = TalkRowViewModel(talkData: $0,
+                                                            talkUserInfoService: talkUserInfoService,
+                                                            downloadManager: downloadManager,
+                                                            playlistService: playlistService)
                     talkRowViewModel.dateStyle = .full
                     return talkRowViewModel
                 }

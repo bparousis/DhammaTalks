@@ -14,11 +14,7 @@ class PlaylistSelectorViewModel: ObservableObject {
     
     @Published var playlists: [Playlist] = []
     
-    
-//    [Playlist(id: "1", title: "Emotions", desc: "Talks on emotions", playlistItems: [PlaylistItem(talkData: TalkData(title: "Mental Karma", url: "y2023/230101_Mental_Karma.mp3"), order: 1), PlaylistItem(talkData: TalkData(title: "A Year That's Always New", url: "shorttalks/y2023/230101(short)_A_Year_That's_Always_New.mp3"), order: 1)]),
-//                                            Playlist(id: "2", title: "Meditation", desc: "Talks on meditation", playlistItems: [])]
-    
-    private let playlistService: PlaylistService
+    let playlistService: PlaylistService
     let talkUserInfoService: TalkUserInfoService
     let downloadManager: DownloadManager
 
@@ -29,15 +25,18 @@ class PlaylistSelectorViewModel: ObservableObject {
         self.talkUserInfoService = talkUserInfoService
         self.downloadManager = downloadManager
     }
-    
+
+    @MainActor
     func fetchPlaylists() async {
         playlists = await playlistService.fetchPlaylists()
     }
     
     func createPlaylist(title: String, description: String?) {
         do {
-            let playlist = Playlist(id: UUID().uuidString, title: title,
-                                    desc: description, playlistItems: [])
+            let playlist = Playlist(id: UUID(),
+                                    title: title,
+                                    desc: description,
+                                    playlistItems: [])
             try playlistService.createPlaylist(playlist)
         } catch {
             Logger.playlist.error("Error saving Playlist: \(String(describing: error))")
@@ -46,7 +45,12 @@ class PlaylistSelectorViewModel: ObservableObject {
     
     func deletePlaylists(at indexSet: IndexSet) {
         for index in indexSet {
-//            playlists[index].id
+            do {
+                try playlistService.deletePlaylist(id: playlists[index].id)
+                playlists.remove(at: index)
+            } catch {
+                Logger.playlist.error("Error deleting Playlist: \(String(describing: error))")
+            }
         }
     }
 }

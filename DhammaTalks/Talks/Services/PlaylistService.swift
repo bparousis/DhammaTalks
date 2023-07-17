@@ -22,48 +22,70 @@ class PlaylistService: ObservableObject {
     @MainActor
     func fetchPlaylists() async -> [Playlist] {
         await self.managedObjectContext.perform {
-            var playlists: [Playlist] = []
             let playlistFetch = NSFetchRequest<PlaylistMO>(entityName: "PlaylistMO")
-
             guard let results = try? self.managedObjectContext.fetch(playlistFetch) else {
-                return playlists
+                return []
             }
-
-            for playlistMO in results {
-                playlists.append(playlistMO.toDomainModel())
-            }
-            return playlists
+            return results.map { $0.toDomainModel() }
         }
     }
     
-    func createPlaylist(_ playlist: Playlist) throws {
+    @discardableResult
+    func createPlaylist(_ playlist: Playlist) throws -> Bool {
+        guard !playlist.title.isEmpty else {
+            return false
+        }
+
+        var createResult = false
         try managedObjectContext.performAndWait {
             let playlistMO = PlaylistMO(context: managedObjectContext)
+            playlistMO.id = playlist.id
             playlistMO.title = playlist.title
             playlistMO.desc = playlist.desc
-            if managedObjectContext.hasChanges {
-                try managedObjectContext.save()
+            try managedObjectContext.save()
+            createResult = true
+        }
+        return createResult
+    }
+    
+    func addTalkData(_ talkData: TalkData, toPlaylistWithID playlistID: UUID) throws -> Bool {
+        try managedObjectContext.performAndWait {
+            guard let playlistMO = try fetchPlaylistWithID(playlistID) else {
+                return false
             }
+            let playlistItemMO = PlaylistItemMO(context: managedObjectContext)
+            playlistItemMO.order = 0
+            playlistItemMO.playlist = playlistMO
+            playlistItemMO.title = talkData.title
+            playlistItemMO.url = talkData.url
+            try managedObjectContext.save()
+            return true
         }
     }
     
-    func deletePlaylist(id: String) throws {
+    func deletePlaylist(id: UUID) throws {
+        if let playlistToDelete = try fetchPlaylistWithID(id, includesPropertyValues: false) {
+            managedObjectContext.delete(playlistToDelete)
+        }
         
+        if managedObjectContext.hasChanges {
+            try managedObjectContext.save()
+        }
+    }
+    
+    private func fetchPlaylistWithID(_ id: UUID,
+                                     includesPropertyValues: Bool = true) throws -> PlaylistMO?
+    {
         let fetchRequest: NSFetchRequest<PlaylistMO> = PlaylistMO.fetchRequest()
-
-        fetchRequest.predicate = NSPredicate(format: "id==\(id)")
+        fetchRequest.predicate = NSPredicate(format: "id==%@", id.uuidString)
 
         // Setting includesPropertyValues to false means
         // the fetch request will only get the managed
         // object ID for each object
-        fetchRequest.includesPropertyValues = false
-
-        // Get a reference to a managed object context
+        fetchRequest.includesPropertyValues = includesPropertyValues
 
         // Perform the fetch request
-        if let playlistToDelete = try managedObjectContext.fetch(fetchRequest).first {
-            managedObjectContext.delete(playlistToDelete)
-        }
+        return try managedObjectContext.fetch(fetchRequest).first
     }
 }
 

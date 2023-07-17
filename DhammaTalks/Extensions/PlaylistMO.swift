@@ -23,6 +23,9 @@ extension PlaylistMO {
                 }
             }
         }
-        return Playlist(id: UUID().uuidString, title: title ?? "", desc: desc, playlistItems: playlistItemList)
+        return Playlist(id: id!,
+                        title: title ?? "",
+                        desc: desc,
+                        playlistItems: playlistItemList)
     }
 }

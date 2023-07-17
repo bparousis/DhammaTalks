@@ -15,8 +15,14 @@ struct TalkRow: View {
     @Environment(\.openURL) var openURL
     
     @ObservedObject var viewModel: TalkRowViewModel
+
     @State private var showActionSheet = false
-    
+    @State private var selectedPlaylist: Playlist? = nil
+    @State private var showCreatePlaylistSheet = false
+    @State private var title: String = ""
+    @State private var desc: String = ""
+    @State private var addedToPlaylist = false
+
     @ViewBuilder
     private var actionButton: some View {
         let buttonSize: CGFloat = 25
@@ -114,6 +120,80 @@ struct TalkRow: View {
                 .foregroundColor(.secondary)
         }
     }
+    
+    private var playlistSelectorView: some View {
+        NavigationView {
+            if !addedToPlaylist {
+                List {
+                    ForEach(viewModel.playlists, id: \.self) { playlist in
+                        Button {
+                            viewModel.addToPlaylist(playlist)
+                            addedToPlaylist = true
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                                self.viewModel.showPlaylistSelector = false
+                                addedToPlaylist = false
+                            }
+                        } label: {
+                            PlaylistRow(playlist: playlist)
+                        }
+                        .foregroundColor(.primary)
+                        .padding(5)
+                    }
+                }
+                .task {
+                    await viewModel.fetchPlaylists()
+                }
+                .sheet(isPresented: $showCreatePlaylistSheet, content: {
+                    NavigationView {
+                        Form {
+                            Section("New Playlist") {
+                                TextField("Title", text: $title)
+                                TextField("Description", text: $desc)
+                            }
+                        }
+                        .toolbar {
+                            ToolbarItemGroup(placement: .navigationBarTrailing) {
+                                Button("Create", action: {
+                                    viewModel.createPlaylist(title: title, description: desc)
+                                })
+                                .disabled(title.isEmpty)
+                                Button("Cancel", action: {
+                                    showCreatePlaylistSheet = false
+                                })
+                            }
+                        }
+                    }
+                })
+                .toolbar {
+                    ToolbarItemGroup(placement: .navigationBarTrailing) {
+                        Button("Cancel") {
+                            viewModel.showPlaylistSelector = false
+                        }
+                    }
+                }
+                .toolbar {
+                    ToolbarItemGroup(placement: .navigationBarTrailing) {
+                        Button {
+                            showCreatePlaylistSheet = true
+                        } label: {
+                            VStack {
+                                Image(systemName: "plus")
+                            }
+                        }
+                    }
+                }
+                .navigationTitle("Playlists")
+            } else {
+                VStack(spacing: 10) {
+                    Text("Successfully added to playlist")
+                        .font(.headline)
+                    Image(systemName: "checkmark.circle")
+                        .foregroundColor(.green)
+                        .font(.system(size: 100))
+                }
+            }
+        }
+    }
 
     var body: some View {
         Button(action: {
@@ -171,6 +251,9 @@ struct TalkRow: View {
             .onDisappear {
                 viewModel.finishedPlaying(item: item)
             }
+        }
+        .sheet(isPresented: $viewModel.showPlaylistSelector) {
+            playlistSelectorView
         }
         .onAppear {
             viewModel.fetchTalkInfo()
