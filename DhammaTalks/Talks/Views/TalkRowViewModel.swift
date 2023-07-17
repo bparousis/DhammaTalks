@@ -26,6 +26,7 @@ class TalkRowViewModel: NSObject, Identifiable, ObservableObject {
         case addToFavorites
         case removeFromFavorites
         case notes
+        case addToPlaylist
         
         var title: String {
             switch self {
@@ -34,6 +35,7 @@ class TalkRowViewModel: NSObject, Identifiable, ObservableObject {
             case .addToFavorites: return "Add to Favorites"
             case .removeFromFavorites: return "Remove from Favorites"
             case .notes: return "Notes"
+            case .addToPlaylist: return "Add to Playlist"
             }
         }
     }
@@ -47,6 +49,8 @@ class TalkRowViewModel: NSObject, Identifiable, ObservableObject {
     private let talkData: TalkData
     private let talkUserInfoService: TalkUserInfoService
     private let downloadManager: DownloadManager
+    private let playlistService: PlaylistService
+
     private static let PLAYED_TIME_BUFFER: TimeInterval = 10
     var dateStyle: DateStyle = .day
     private var downloadJob: DownloadJob? {
@@ -74,8 +78,10 @@ class TalkRowViewModel: NSObject, Identifiable, ObservableObject {
     
     var actions: [Action] {
         var actionList: [Action] = []
-        actionList.append(isDownloadAvailable ? .removeDownload : .download)
         actionList.append(favorite ? .removeFromFavorites : .addToFavorites)
+        actionList.append(.addToPlaylist)
+        actionList.append(isDownloadAvailable ? .removeDownload : .download)
+        
         actionList.append(.notes)
         return actionList
     }
@@ -137,13 +143,19 @@ class TalkRowViewModel: NSObject, Identifiable, ObservableObject {
     @Published var downloadProgress: CGFloat?
     @Published var favorite = false
     @Published var showNotes = false
+    @Published var showPlaylistSelector = false
     @Published var notes: String = ""
+    @Published var playlists: [Playlist] = []
     
-    init(talkData: TalkData, talkUserInfoService: TalkUserInfoService, downloadManager: DownloadManager)
+    init(talkData: TalkData,
+         talkUserInfoService: TalkUserInfoService,
+         downloadManager: DownloadManager,
+         playlistService: PlaylistService)
     {
         self.talkData = talkData
         self.talkUserInfoService = talkUserInfoService
         self.downloadManager = downloadManager
+        self.playlistService = playlistService
     }
     
     func saveNotes() {
@@ -153,6 +165,27 @@ class TalkRowViewModel: NSObject, Identifiable, ObservableObject {
             try talkUserInfoService.save(talkUserInfo: talkUserInfo)
         } catch {
             Logger.talkUserInfo.error("Error saving TalkUserInfo: \(String(describing: error))")
+        }
+    }
+    
+    @MainActor
+    func fetchPlaylists() async {
+        playlists = await playlistService.fetchPlaylists()
+    }
+
+    func addToPlaylist(_ playlist: Playlist) {
+        try? playlistService.addTalkData(talkData, toPlaylistWithID: playlist.id)
+    }
+    
+    func createPlaylist(title: String, description: String?) {
+        do {
+            let playlist = Playlist(id: UUID(),
+                                    title: title,
+                                    desc: description,
+                                    playlistItems: [])
+            try playlistService.createPlaylist(playlist)
+        } catch {
+            Logger.playlist.error("Error saving Playlist: \(String(describing: error))")
         }
     }
 
@@ -211,6 +244,8 @@ class TalkRowViewModel: NSObject, Identifiable, ObservableObject {
             setFavorite(to: false)
         case .notes:
             showNotes = true
+        case .addToPlaylist:
+            showPlaylistSelector = true
         }
     }
     
@@ -242,7 +277,9 @@ class TalkRowViewModel: NSObject, Identifiable, ObservableObject {
             return talkUserInfo.isFavorite
         }
     }
-    
+
+    // MARK: Private
+
     private func fetchOrCreateTalkUserInfo(for url: String) -> TalkUserInfo {
         if let talkUserInfo = talkUserInfoService.getTalkUserInfo(for: talkData.url) {
             return talkUserInfo

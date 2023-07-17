@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct TalkData: Identifiable, Decodable {
+struct TalkData: Identifiable, Decodable, Hashable {
 
     let id: String
     let title: String

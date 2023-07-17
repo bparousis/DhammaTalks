@@ -12,6 +12,7 @@ struct TalkGroupSelectorView: View {
 
     @EnvironmentObject private var talkUserInfoService: TalkUserInfoService
     @EnvironmentObject private var downloadManager: DownloadManager
+    @EnvironmentObject private var playlistService: PlaylistService
 
     @State private var selection: String? = nil
     @State private var showSettings: Bool = false
@@ -35,14 +36,6 @@ struct TalkGroupSelectorView: View {
                 AppSettings.talkGroupSelection = Self.favoritesTag
             }
     }
-    
-    private var playlistSelectorView: some View {
-        PlaylistSelectorView(viewModel: playlistViewModel)
-            .onAppear {
-                AppSettings.talkGroupSelection = Self.playlistsTag
-            }
-    }
-    
 
     private var widthPercentage: CGFloat {
         isIpad ? 0.20 : 0.475
@@ -143,6 +136,10 @@ struct TalkGroupSelectorView: View {
             }
             .id(Self.favoritesTag)
 
+            let playlistSelectorView = PlaylistSelectorView(viewModel: playlistViewModel)
+                .onAppear {
+                    AppSettings.talkGroupSelection = Self.playlistsTag
+                }
             NavigationLink(destination: playlistSelectorView, tag: Self.playlistsTag, selection: $selection)
             {
                 makeCellView(title: "Playlists", image: "water9", width: columnWidth)
@@ -154,8 +151,10 @@ struct TalkGroupSelectorView: View {
     private func makeTalkSeriesSection(talkSeriesList: [TalkSeries], columnWidth: CGFloat) -> some View {
         Section {
             ForEach(talkSeriesList) { talkSeries in
-                let viewModel = TalkSeriesListViewModel(talkSeries: talkSeries, talkUserInfoService: talkUserInfoService,
-                                                        downloadManager: downloadManager)
+                let viewModel = TalkSeriesListViewModel(talkSeries: talkSeries,
+                                                        talkUserInfoService: talkUserInfoService,
+                                                        downloadManager: downloadManager,
+                                                        playlistService: playlistService)
                 let talkSeriesListView = TalkSeriesListView(viewModel: viewModel)
                     .onAppear {
                         AppSettings.talkGroupSelection = talkSeries.title
