@@ -27,6 +27,7 @@ class TalkRowViewModel: NSObject, Identifiable, ObservableObject {
         case removeFromFavorites
         case notes
         case addToPlaylist
+        case removeFromPlaylist
         
         var title: String {
             switch self {
@@ -36,6 +37,7 @@ class TalkRowViewModel: NSObject, Identifiable, ObservableObject {
             case .removeFromFavorites: return "Remove from Favorites"
             case .notes: return "Notes"
             case .addToPlaylist: return "Add to Playlist"
+            case .removeFromPlaylist: return "Remove from Playlist"
             }
         }
     }
@@ -50,6 +52,7 @@ class TalkRowViewModel: NSObject, Identifiable, ObservableObject {
     private let talkUserInfoService: TalkUserInfoService
     private let downloadManager: DownloadManager
     private let playlistService: PlaylistService
+    var playlist: Playlist?
 
     private static let PLAYED_TIME_BUFFER: TimeInterval = 10
     var dateStyle: DateStyle = .day
@@ -79,7 +82,7 @@ class TalkRowViewModel: NSObject, Identifiable, ObservableObject {
     var actions: [Action] {
         var actionList: [Action] = []
         actionList.append(favorite ? .removeFromFavorites : .addToFavorites)
-        actionList.append(.addToPlaylist)
+        actionList.append(isInPlaylist ? .removeFromPlaylist : .addToPlaylist)
         actionList.append(isDownloadAvailable ? .removeDownload : .download)
         
         actionList.append(.notes)
@@ -96,6 +99,10 @@ class TalkRowViewModel: NSObject, Identifiable, ObservableObject {
     
     var isDownloadAvailable: Bool {
         downloadManager.isDownloadAvailable(filename: talkData.filename)
+    }
+    
+    var isInPlaylist: Bool {
+        playlist != nil
     }
     
     var formattedDate: String? {
@@ -246,6 +253,9 @@ class TalkRowViewModel: NSObject, Identifiable, ObservableObject {
             showNotes = true
         case .addToPlaylist:
             showPlaylistSelector = true
+        case .removeFromPlaylist:
+            //TODO: Implement
+            break
         }
     }
     

@@ -8,13 +8,7 @@
 
 import Foundation
 
-struct PlaylistItem: Hashable {
+struct PlaylistItem {
     let talkData: TalkData
     let order: Int16
-}
-
-extension PlaylistItem: Equatable {
-    static func == (lhs: Self, rhs: Self) -> Bool {
-        lhs.talkData.id == rhs.talkData.id && lhs.order == rhs.order
-    }
 }

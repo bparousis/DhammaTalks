@@ -24,7 +24,7 @@ struct MediaPlayer: UIViewControllerRepresentable {
         AVPlayer(playerItem: playerItem)
     }
 
-    init(playerItem:AVPlayerItem, title: String) {
+    init(playerItem: AVPlayerItem, title: String) {
         self.playerItem = playerItem
         self.title = title
     }

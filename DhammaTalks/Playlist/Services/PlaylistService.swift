@@ -48,13 +48,14 @@ class PlaylistService: ObservableObject {
         return createResult
     }
     
+    @discardableResult
     func addTalkData(_ talkData: TalkData, toPlaylistWithID playlistID: UUID) throws -> Bool {
         try managedObjectContext.performAndWait {
             guard let playlistMO = try fetchPlaylistWithID(playlistID) else {
                 return false
             }
             let playlistItemMO = PlaylistItemMO(context: managedObjectContext)
-            playlistItemMO.order = 0
+            playlistItemMO.order = Int16(playlistMO.playlistItems?.count ?? 0)
             playlistItemMO.playlist = playlistMO
             playlistItemMO.title = talkData.title
             playlistItemMO.url = talkData.url

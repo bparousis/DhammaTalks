@@ -17,21 +17,3 @@ extension Array where Element == TalkRowViewModel {
         return randomRow.id
     }
 }
-
-extension Array where Element == PlaylistItem {
-
-    func convertToTalkRowViewModelArray(talkUserInfoService: TalkUserInfoService,
-                                        downloadManager: DownloadManager,
-                                        playlistService: PlaylistService) -> [TalkRowViewModel]
-    {
-        sorted { $0.order < $1.order }
-        .map{
-            let viewModel = TalkRowViewModel(talkData: $0.talkData,
-                                             talkUserInfoService: talkUserInfoService,
-                                             downloadManager: downloadManager,
-                                             playlistService: playlistService)
-            viewModel.dateStyle = .full
-            return viewModel
-        }
-    }
-}

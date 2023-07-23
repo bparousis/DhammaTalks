@@ -15,8 +15,14 @@ struct Playlist: Identifiable {
     let playlistItems: [PlaylistItem]
 }
 
-extension Playlist: Equatable, Hashable {
+extension Playlist: Equatable {
     static func == (lhs: Self, rhs: Self) -> Bool {
         lhs.id == rhs.id
+    }
+}
+
+extension Playlist: Hashable {
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
     }
 }

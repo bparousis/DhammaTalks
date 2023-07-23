@@ -12,13 +12,11 @@ extension PlaylistMO {
     func toDomainModel() -> Playlist {
         var playlistItemList: [PlaylistItem] = []
         if let playlistItems = playlistItems as? Set<PlaylistItemMO> {
-            let items = Array(playlistItems).sorted { $0.order > $1.order }
-            for item in items {
-                if let title = item.title, let url = item.url {
-                    
+            for playlistItem in playlistItems {
+                if let title = playlistItem.title, let url = playlistItem.url {
                     playlistItemList.append(
                         PlaylistItem(talkData: TalkData(title: title, url: url),
-                                     order: item.order)
+                                     order: playlistItem.order)
                     )
                 }
             }

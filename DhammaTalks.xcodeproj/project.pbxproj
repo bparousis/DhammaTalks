@@ -91,6 +91,7 @@
 		769E69E52749758400DEC24C /* MediaPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 769E69E42749758400DEC24C /* MediaPlayer.swift */; };
 		76AB4D45279C995200C83F8D /* DownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76AB4D44279C995200C83F8D /* DownloadManager.swift */; };
 		76BB56BC2A6332FD00E74638 /* PlaylistRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76BB56BB2A6332FD00E74638 /* PlaylistRow.swift */; };
+		76CF99F52A66167E002DD5C9 /* PlaylistRowViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76CF99F42A66167E002DD5C9 /* PlaylistRowViewModel.swift */; };
 		76D064312761BCFC00FBFEA6 /* LocalFileStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76D064302761BCFC00FBFEA6 /* LocalFileStorage.swift */; };
 		76D064332761C75F00FBFEA6 /* FileStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76D064322761C75F00FBFEA6 /* FileStorage.swift */; };
 		76D62FA12759E24D006537DE /* TestCoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76D62FA02759E24D006537DE /* TestCoreDataStack.swift */; };
@@ -222,6 +223,7 @@
 		769E69E42749758400DEC24C /* MediaPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaPlayer.swift; sourceTree = "<group>"; };
 		76AB4D44279C995200C83F8D /* DownloadManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadManager.swift; sourceTree = "<group>"; };
 		76BB56BB2A6332FD00E74638 /* PlaylistRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistRow.swift; sourceTree = "<group>"; };
+		76CF99F42A66167E002DD5C9 /* PlaylistRowViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistRowViewModel.swift; sourceTree = "<group>"; };
 		76D064302761BCFC00FBFEA6 /* LocalFileStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalFileStorage.swift; sourceTree = "<group>"; };
 		76D064322761C75F00FBFEA6 /* FileStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileStorage.swift; sourceTree = "<group>"; };
 		76D62FA02759E24D006537DE /* TestCoreDataStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestCoreDataStack.swift; sourceTree = "<group>"; };
@@ -416,11 +418,6 @@
 				769E69E2274966D300DEC24C /* TalkGroupSelectorView.swift */,
 				760B4618276317E6007ED1E0 /* FavoritesListView.swift */,
 				763717AE27B0431B007DF19A /* FavoritesListViewModel.swift */,
-				76D940B729288007003924D3 /* PlaylistSelectorView.swift */,
-				76D940B9292880C8003924D3 /* PlaylistSelectorViewModel.swift */,
-				7608945F29AA7B6600E6EC0B /* PlaylistView.swift */,
-				7608946129AA7B7400E6EC0B /* PlaylistViewModel.swift */,
-				76BB56BB2A6332FD00E74638 /* PlaylistRow.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -465,7 +462,6 @@
 				767B2C432751EEB5003643E9 /* TalkUserInfoService.swift */,
 				76D064322761C75F00FBFEA6 /* FileStorage.swift */,
 				76D064302761BCFC00FBFEA6 /* LocalFileStorage.swift */,
-				76D940BB29288175003924D3 /* PlaylistService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -493,6 +489,7 @@
 		76E064F523CA9C6C007E18C1 /* DhammaTalks */ = {
 			isa = PBXGroup;
 			children = (
+				76E474CD2A65D14B0057976F /* Playlist */,
 				76068C6627B2180C00726860 /* Settings */,
 				76172408275F2EA200757236 /* UI */,
 				76163A5B2747F90C00358DDF /* Resources */,
@@ -558,10 +555,48 @@
 				76163A5927477B6500358DDF /* DailyTalkCategory.swift */,
 				767B2C452751EEC4003643E9 /* TalkUserInfo.swift */,
 				762D0FF8278151BC00DB04FD /* FavoriteDetails.swift */,
+			);
+			path = Data;
+			sourceTree = "<group>";
+		};
+		76E474CD2A65D14B0057976F /* Playlist */ = {
+			isa = PBXGroup;
+			children = (
+				76E474D02A65D1A90057976F /* Services */,
+				76E474CF2A65D18B0057976F /* Views */,
+				76E474CE2A65D16B0057976F /* Data */,
+			);
+			path = Playlist;
+			sourceTree = "<group>";
+		};
+		76E474CE2A65D16B0057976F /* Data */ = {
+			isa = PBXGroup;
+			children = (
 				76D940BD292883D7003924D3 /* Playlist.swift */,
 				76D940BF2928841B003924D3 /* PlaylistItem.swift */,
 			);
 			path = Data;
+			sourceTree = "<group>";
+		};
+		76E474CF2A65D18B0057976F /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				76D940B729288007003924D3 /* PlaylistSelectorView.swift */,
+				76D940B9292880C8003924D3 /* PlaylistSelectorViewModel.swift */,
+				7608945F29AA7B6600E6EC0B /* PlaylistView.swift */,
+				7608946129AA7B7400E6EC0B /* PlaylistViewModel.swift */,
+				76BB56BB2A6332FD00E74638 /* PlaylistRow.swift */,
+				76CF99F42A66167E002DD5C9 /* PlaylistRowViewModel.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		76E474D02A65D1A90057976F /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				76D940BB29288175003924D3 /* PlaylistService.swift */,
+			);
+			path = Services;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -790,6 +825,7 @@
 				763C950227383D4A00632633 /* UIImage.swift in Sources */,
 				76F9F46327483F2700957810 /* Calendar.swift in Sources */,
 				765B6C7627B6144000696693 /* TalkSeriesListViewModel.swift in Sources */,
+				76CF99F52A66167E002DD5C9 /* PlaylistRowViewModel.swift in Sources */,
 				7608946029AA7B6600E6EC0B /* PlaylistView.swift in Sources */,
 				7617240A275F2EB700757236 /* CircularProgressBar.swift in Sources */,
 				76D940C22928847C003924D3 /* PlaylistMO.swift in Sources */,
