@@ -34,7 +34,7 @@ struct PlaylistSelectorView: View {
                         NavigationLink {
                             createPlaylistView(playlist: playlist)
                         } label: {
-                            PlaylistRow(playlist: playlist)
+                            PlaylistRow(viewModel: PlaylistRowViewModel(playlist: playlist))
                         }
                     }
                     .onDelete(perform: deletePlaylist)
@@ -52,6 +52,10 @@ struct PlaylistSelectorView: View {
                     EmptyView()
                 })
             }
+        }
+        .navigationTitle("Playlists")
+        .task {
+            await viewModel.fetchPlaylists()
         }
         .sheet(isPresented: $showCreatePlaylistSheet, content: {
             NavigationView {
@@ -95,10 +99,6 @@ struct PlaylistSelectorView: View {
     
     var body: some View {
         playlistSelectorView
-            .navigationTitle("Playlists")
-            .task {
-                await viewModel.fetchPlaylists()
-            }
     }
     
     private func deletePlaylist(at offsets: IndexSet) {
@@ -108,15 +108,10 @@ struct PlaylistSelectorView: View {
     
     @ViewBuilder
     private func createPlaylistView(playlist: Playlist) -> some View {
-        let items = playlist.playlistItems
-            .convertToTalkRowViewModelArray(
-                talkUserInfoService: viewModel.talkUserInfoService,
-                downloadManager: viewModel.downloadManager,
-                playlistService: viewModel.playlistService)
-        let playlistViewModel = PlaylistViewModel(title: playlist.title,
-                                          playlistItems: items,
-                                          talkUserInfoService: viewModel.talkUserInfoService,
-                                          downloadManager: viewModel.downloadManager)
+        let playlistViewModel = PlaylistViewModel(playlist: playlist,
+                                                  talkUserInfoService: viewModel.talkUserInfoService,
+                                                  downloadManager: viewModel.downloadManager,
+                                                  playlistService: viewModel.playlistService)
         PlaylistView(viewModel: playlistViewModel)
     }
 }

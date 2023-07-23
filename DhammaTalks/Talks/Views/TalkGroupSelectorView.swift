@@ -36,6 +36,13 @@ struct TalkGroupSelectorView: View {
                 AppSettings.talkGroupSelection = Self.favoritesTag
             }
     }
+    
+    private var playlistSelectorView: some View {
+        PlaylistSelectorView(viewModel: playlistViewModel)
+            .onAppear {
+                AppSettings.talkGroupSelection = Self.playlistsTag
+            }
+    }
 
     private var widthPercentage: CGFloat {
         isIpad ? 0.20 : 0.475
@@ -136,10 +143,6 @@ struct TalkGroupSelectorView: View {
             }
             .id(Self.favoritesTag)
 
-            let playlistSelectorView = PlaylistSelectorView(viewModel: playlistViewModel)
-                .onAppear {
-                    AppSettings.talkGroupSelection = Self.playlistsTag
-                }
             NavigationLink(destination: playlistSelectorView, tag: Self.playlistsTag, selection: $selection)
             {
                 makeCellView(title: "Playlists", image: "water9", width: columnWidth)

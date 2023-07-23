@@ -29,6 +29,11 @@ struct PlaylistView: View {
                     ForEach(viewModel.playlistItems) { playlistItemRow in
                         TalkRow(viewModel: playlistItemRow)
                     }
+                    .onMove { fromOffsets, toOffset in
+                    }
+                }
+                .toolbar {
+                    EditButton()
                 }
                 .toolbar {
                     ToolbarItemGroup(placement: .bottomBar) {
