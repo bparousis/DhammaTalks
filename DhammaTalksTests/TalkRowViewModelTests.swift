@@ -247,7 +247,6 @@ class TalkRowViewModelTests: XCTestCase {
     }
 
     func testDownload() throws {
-        let date = Calendar.current.date(from: DateComponents(year:2000, month: 1, day: 1))
         let talkData = TalkData(id: "1", title: "Title", url: "about:blank")
         let mockFileStorage = MockFileStorage()
         sut = TalkRowViewModel(talkData: talkData,

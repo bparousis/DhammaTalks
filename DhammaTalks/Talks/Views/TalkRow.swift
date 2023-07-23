@@ -129,12 +129,12 @@ struct TalkRow: View {
                         Button {
                             viewModel.addToPlaylist(playlist)
                             addedToPlaylist = true
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                                 self.viewModel.showPlaylistSelector = false
                                 addedToPlaylist = false
                             }
                         } label: {
-                            PlaylistRow(playlist: playlist)
+                            PlaylistRow(viewModel: PlaylistRowViewModel(playlist: playlist))
                         }
                         .foregroundColor(.primary)
                         .padding(5)
@@ -155,6 +155,10 @@ struct TalkRow: View {
                             ToolbarItemGroup(placement: .navigationBarTrailing) {
                                 Button("Create", action: {
                                     viewModel.createPlaylist(title: title, description: desc)
+                                    Task {
+                                        await viewModel.fetchPlaylists()
+                                    }
+                                    showCreatePlaylistSheet = false
                                 })
                                 .disabled(title.isEmpty)
                                 Button("Cancel", action: {
@@ -174,6 +178,8 @@ struct TalkRow: View {
                 .toolbar {
                     ToolbarItemGroup(placement: .navigationBarTrailing) {
                         Button {
+                            title = ""
+                            desc = ""
                             showCreatePlaylistSheet = true
                         } label: {
                             VStack {
