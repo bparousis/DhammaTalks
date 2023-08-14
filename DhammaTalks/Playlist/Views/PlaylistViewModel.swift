@@ -33,20 +33,22 @@ class PlaylistViewModel: ObservableObject {
         self.downloadManager = downloadManager
         self.playlistService = playlistService
         
-        self.playlistItems = playlist.playlistItems
+        self.playlistItems = playlist
+            .playlistItems
             .sorted { $0.order < $1.order }
             .map{
                 let viewModel = TalkRowViewModel(talkData: $0.talkData,
                                                  talkUserInfoService: talkUserInfoService,
                                                  downloadManager: downloadManager,
-                                                 playlistService: playlistService)
+                                                 playlistService: playlistService,
+                                                 playSubject: PassthroughSubject<String,Never>())
                 viewModel.dateStyle = .full
                 viewModel.playlist = playlist
                 return viewModel
             }
     }
 
-    func playRandomTalk() async -> String? {
-        return await playlistItems.playRandom()
+    func playRandomTalk() -> String? {
+        return playlistItems.playRandom()
     }
 }

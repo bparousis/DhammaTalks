@@ -17,6 +17,12 @@ class DailyTalkListViewModel: ObservableObject {
     private let downloadManager: DownloadManager
     private let playlistService: PlaylistService
     
+    private let playSubject = PassthroughSubject<String, Never>()
+
+    var talkRows: [TalkRowViewModel] {
+        talkSections.flatMap { $0.talkRows }
+    }
+
     enum State {
         case initial
         case loading
@@ -51,6 +57,7 @@ class DailyTalkListViewModel: ObservableObject {
     @Published var showingAlert = false
     @Published private(set) var isFetchDataFinished = false
     @Published private(set) var state: State = .initial
+    var playAtIndex: Int = 0
     private var talkDataList: [TalkData] = []
     private(set) var talkSections: [TalkSectionViewModel] = []
 
@@ -89,9 +96,9 @@ class DailyTalkListViewModel: ObservableObject {
         self.selectedYear = AppSettings.selectedTalkYear ?? calendar.currentYear
     }
     
-    func playRandomTalk() async -> String? {
+    func playRandomTalk() -> String? {
         guard let randomSection = talkSections.randomElement() else { return nil }
-        return await randomSection.talkRows.playRandom()
+        return randomSection.talkRows.playRandom()
     }
     
     private func buildTalkSectionViewModels() -> [TalkSectionViewModel] {
@@ -106,7 +113,8 @@ class DailyTalkListViewModel: ObservableObject {
             let talkRowViewModel = TalkRowViewModel(talkData: talkData,
                                                     talkUserInfoService: talkUserInfoService,
                                                     downloadManager: downloadManager,
-                                                    playlistService: playlistService)
+                                                    playlistService: playlistService,
+                                                    playSubject: playSubject)
             if currentTalkSection?.title == sectionTitle {
                 if talkRowViewModel.applyFilter(selectedFilter) {
                     currentTalkSection?.addTalkRow(talkRowViewModel)
@@ -147,5 +155,15 @@ class DailyTalkListViewModel: ObservableObject {
             self.state = .error(error)
             showingAlert = true
         }
+    }
+}
+
+extension DailyTalkListViewModel: PlayableList {
+    var playableItems: [any PlayableItem] {
+        talkRows
+    }
+    
+    var playPublisher: AnyPublisher<String, Never> {
+        playSubject.eraseToAnyPublisher()
     }
 }

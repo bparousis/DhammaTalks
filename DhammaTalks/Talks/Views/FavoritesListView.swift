@@ -15,10 +15,16 @@ import Combine
 struct FavoritesListView: View {
 
     @ObservedObject private var viewModel: FavoritesListViewModel
+    private let audioPlayer: AudioPlayer
     @State var searchText: String = ""
+    @State var showPlayer: Bool = false
 
-    init(viewModel: FavoritesListViewModel) {
+    init(viewModel: FavoritesListViewModel)
+    {
         self.viewModel = viewModel
+        self.audioPlayer = AudioPlayer {
+            viewModel.playableItems
+        }
     }
     
     @ViewBuilder
@@ -35,10 +41,8 @@ struct FavoritesListView: View {
                 .toolbar {
                     ToolbarItemGroup(placement: .bottomBar) {
                         Button {
-                            Task {
-                                if let id = await viewModel.playRandomTalk() {
-                                    proxy.scrollTo(id)
-                                }
+                            if let id = viewModel.playRandomTalk() {
+                                proxy.scrollTo(id)
                             }
                         } label: {
                             VStack {
@@ -67,6 +71,18 @@ struct FavoritesListView: View {
         }
         .task(id: searchText) {
             await viewModel.fetchFavorites(searchText: searchText)
+        }
+        .onReceive(viewModel.playPublisher) { playId in
+            if let foundIndex = viewModel.findIndexOfPlayableItemWithID(playId) {
+                viewModel.playAtIndex = foundIndex
+                self.showPlayer = true
+                Task {
+                    await audioPlayer.play(at: viewModel.playAtIndex)
+                }
+            }
+        }
+        .sheet(isPresented: $showPlayer) {
+            makeAudioPlayerView(audioPlayer: audioPlayer)
         }
         .navigationTitle("Favorites")
     }

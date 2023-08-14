@@ -15,6 +15,9 @@ class FavoritesListViewModel: ObservableObject {
     private let downloadManager: DownloadManager
     private let playlistService: PlaylistService
     
+    var playAtIndex: Int = 0
+    private let playSubject = PassthroughSubject<String, Never>()
+
     var savePublisher: AnyPublisher<TalkUserInfo, Never> {
         talkUserInfoService.savePublisher
     }
@@ -38,12 +41,23 @@ class FavoritesListViewModel: ObservableObject {
         let viewModel = TalkRowViewModel(talkData: talkData,
                                          talkUserInfoService: talkUserInfoService,
                                          downloadManager: downloadManager,
-                                         playlistService: playlistService)
+                                         playlistService: playlistService,
+                                         playSubject: playSubject)
         viewModel.dateStyle = .full
         return viewModel
     }
     
-    func playRandomTalk() async -> String? {
-        return await favorites.playRandom()
+    func playRandomTalk() -> String? {
+        return favorites.playRandom()
+    }
+}
+
+extension FavoritesListViewModel: PlayableList {
+    var playableItems: [any PlayableItem] {
+        favorites
+    }
+    
+    var playPublisher: AnyPublisher<String, Never> {
+        playSubject.eraseToAnyPublisher()
     }
 }
