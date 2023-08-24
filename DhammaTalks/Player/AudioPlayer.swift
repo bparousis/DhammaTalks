@@ -110,7 +110,9 @@ class AudioPlayer: ObservableObject {
     func skipForward() {
         guard let currentPlayerItem else { return }
         let duration = CMTimeGetSeconds(currentPlayerItem.duration)
+        guard !duration.isNaN else { return } // Happens in airplane mode with no talk data
         let playerCurrentTime = CMTimeGetSeconds(currentPlayerItem.currentTime())
+        guard !playerCurrentTime.isNaN else { return }
         let newTime = playerCurrentTime + seekDuration
         seekTo(seconds: newTime <= duration ? newTime : duration)
     }
@@ -118,7 +120,10 @@ class AudioPlayer: ObservableObject {
     func skipBackward() {
         guard let currentPlayerItem else { return }
         let playerCurrentTime = CMTimeGetSeconds(currentPlayerItem.currentTime())
-        let newTime = playerCurrentTime - seekDuration
+        var newTime = playerCurrentTime - seekDuration
+        if newTime < 0 {
+            newTime = 0
+        }
         seekTo(seconds: newTime.lowerBoundedValue())
     }
     
