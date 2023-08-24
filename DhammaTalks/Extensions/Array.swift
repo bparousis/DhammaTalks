@@ -9,11 +9,11 @@
 import Foundation
 
 extension Array where Element == TalkRowViewModel {
-    func playRandom() async -> String? {
+    func playRandom() -> String? {
         guard let randomRow = randomElement() else {
             return nil
         }
-        await randomRow.play()
+        randomRow.play()
         return randomRow.id
     }
 }

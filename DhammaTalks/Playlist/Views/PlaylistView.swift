@@ -38,10 +38,8 @@ struct PlaylistView: View {
                 .toolbar {
                     ToolbarItemGroup(placement: .bottomBar) {
                         Button {
-                            Task {
-                                if let id = await viewModel.playRandomTalk() {
-                                    proxy.scrollTo(id)
-                                }
+                            if let id = viewModel.playRandomTalk() {
+                                proxy.scrollTo(id)
                             }
                         } label: {
                             VStack {

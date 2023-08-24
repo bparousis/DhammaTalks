@@ -7,7 +7,7 @@
 //
 
 import Foundation
-
+import Combine
 
 class TalkSeriesListViewModel: ObservableObject {
 
@@ -15,6 +15,9 @@ class TalkSeriesListViewModel: ObservableObject {
     private let talkUserInfoService: TalkUserInfoService
     private let downloadManager: DownloadManager
     private let playlistService: PlaylistService
+
+    var playAtIndex: Int = 0
+    private let playSubject = PassthroughSubject<String, Never>()
 
     var title: String {
         talkSeries.title
@@ -53,7 +56,8 @@ class TalkSeriesListViewModel: ObservableObject {
                     let talkRowViewModel = TalkRowViewModel(talkData: $0,
                                                             talkUserInfoService: talkUserInfoService,
                                                             downloadManager: downloadManager,
-                                                            playlistService: playlistService)
+                                                            playlistService: playlistService,
+                                                            playSubject: playSubject)
                     talkRowViewModel.dateStyle = .full
                     return talkRowViewModel
                 }
@@ -62,5 +66,15 @@ class TalkSeriesListViewModel: ObservableObject {
             }   
         }
         self.talkSections = talkSectionViewModelList
+    }
+}
+
+extension TalkSeriesListViewModel: PlayableList {
+    var playableItems: [any PlayableItem] {
+        talkSections.flatMap { $0.talkRows }
+    }
+    
+    var playPublisher: AnyPublisher<String, Never> {
+        playSubject.eraseToAnyPublisher()
     }
 }

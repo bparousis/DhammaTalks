@@ -64,19 +64,6 @@ struct TalkRow: View {
             EmptyView()
         }
     }
-
-    @ViewBuilder
-    private func makeMediaPlayerView(item: AVPlayerItem) -> some View {
-        if isIpad {
-            MediaPlayer(playerItem: item, title: viewModel.title)
-        } else {
-            VStack {
-                swipeBar
-                MediaPlayer(playerItem: item, title: viewModel.title)
-            }
-            .padding(EdgeInsets(top: 10, leading: 0, bottom: 0, trailing: 0))
-        }
-    }
     
     var titleStatusView: some View {
         HStack(alignment: .firstTextBaseline) {
@@ -203,9 +190,7 @@ struct TalkRow: View {
 
     var body: some View {
         Button(action: {
-            Task {
-                await viewModel.play()
-            }
+            viewModel.play()
         }) {
             HStack(alignment: .center, spacing: 10) {
                 VStack(alignment: .leading, spacing: 5) {
@@ -251,12 +236,6 @@ struct TalkRow: View {
                     }
             }
             .interactiveDismissDisabled()
-        }
-        .sheet(item: $viewModel.playerItem) { item in
-            makeMediaPlayerView(item: item)
-            .onDisappear {
-                viewModel.finishedPlaying(item: item)
-            }
         }
         .sheet(isPresented: $viewModel.showPlaylistSelector) {
             playlistSelectorView
