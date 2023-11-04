@@ -17,8 +17,8 @@ struct DailyTalkQuery: Equatable {
 
 class TalkDataService: ObservableObject {
 
-    private let htmlPageFetcher: HTMLPageFetcher
-    
+    private let talkFetcher: TalkFetcher
+
     static let talkSeriesList: [TalkSeries]? = {
         if let path = Bundle.main.path(forResource: "TalkSeriesList", ofType: "json") {
             do {
@@ -31,13 +31,14 @@ class TalkDataService: ObservableObject {
         }
         return nil
     }()
-    
-    init(htmlPageFetcher: HTMLPageFetcher = HTMLPageFetcher()) {
-        self.htmlPageFetcher = htmlPageFetcher
+
+    init(talkFetcher: TalkFetcher = DhammaTalkAPI()) {
+        self.talkFetcher = talkFetcher
     }
-    
+
     func fetchYearlyTalks(query: DailyTalkQuery) async throws -> [TalkData] {
-        var results = try await htmlPageFetcher.getYearlyHTMLForCategory(query.category, year: query.year)
+        var results = await talkFetcher.fetchTalkCollection(for: query.category,
+                                                            year: query.year)
         if let searchText = query.searchText?.lowercased(), !searchText.isEmpty {
             results = results.filter { $0.title.lowercased().contains(searchText) }
         }

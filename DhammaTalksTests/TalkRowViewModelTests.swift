@@ -224,6 +224,14 @@ class TalkRowViewModelTests: XCTestCase {
         XCTAssertEqual(mockFileStorage.performedRemoveFilename, "test.mp3")
     }
     
+    func testShowTranscript() throws {
+        let talkData = TalkData(id: "1", title: "Title", url: "y2020/test.mp3")
+        sut = TalkRowViewModel(talkData: talkData, talkUserInfoService: talkUserInfoService, downloadManager: DownloadManager(urlSession: urlSession, fileStorage: MockFileStorage()))
+        XCTAssertFalse(sut.showTranscript)
+        sut.handleAction(.transcript)
+        XCTAssertTrue(sut.showTranscript)
+    }
+    
     func testNotes() async {
         let talkData = TalkData(id: "1", title: "Title", url: "about:blank")
         

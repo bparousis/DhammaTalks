@@ -11,9 +11,9 @@ import Foundation
 struct TalkSection: Identifiable, Decodable {
     let id: String
     let title: String?
-    private(set) var talks: [TalkData] = []
+    private(set) var talks: [SeriesTalkData] = []
 
-    mutating func addTalk(_ talkData: TalkData) {
+    mutating func addTalk(_ talkData: SeriesTalkData) {
         talks.append(talkData)
     }
 }

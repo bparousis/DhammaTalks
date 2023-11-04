@@ -12,15 +12,15 @@ struct LocalFileStorage: FileStorage {
 
     private enum FileType {
         case audio
-        case html
+        case json
         case misc
         
         var directory: String {
             switch self {
             case .audio:
                 return "audio"
-            case .html:
-                return "html"
+            case .json:
+                return "json"
             case .misc:
                 return "misc"
             }
@@ -29,8 +29,8 @@ struct LocalFileStorage: FileStorage {
         static func fileTypeForFilename(_ filename: String) -> FileType {
             if filename.hasSuffix(".mp3") {
                 return audio
-            } else if filename.hasSuffix(".html") || filename.hasSuffix(".htm") {
-                return html
+            } else if filename.hasSuffix(".json") {
+                return json
             } else {
                 return misc
             }

@@ -49,4 +49,13 @@ enum DailyTalkCategory: String, CaseIterable, Identifiable {
             return 2000
         }
     }
+
+    var collectionParam: String {
+        switch self {
+        case .evening:
+            return "evening"
+        case .short:
+            return "morning"
+        }
+    }
 }
