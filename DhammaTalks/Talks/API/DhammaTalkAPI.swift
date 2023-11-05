@@ -32,7 +32,7 @@ class DhammaTalkAPI: TalkFetcher {
         let url = URL(string: "https://api.dhammatalkmobile.com/list?collection=\(talkCategory.collectionParam)&year=\(year)")!
         var request = URLRequest(url: url)
         request.addValue("iOS", forHTTPHeaderField: "client")
-        request.addValue("1.4", forHTTPHeaderField: "client-version")
+        request.addValue("1.5", forHTTPHeaderField: "client-version")
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue(apiKey, forHTTPHeaderField: "x-api-key")
 
