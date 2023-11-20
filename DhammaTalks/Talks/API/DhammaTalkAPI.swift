@@ -9,8 +9,13 @@
 import Foundation
 import os.log
 
+enum TalkFetchError: Error {
+    case belowMinimumVersion(cachedResults: [TalkData])
+    case error(Error, cachedResults: [TalkData])
+}
+
 class DhammaTalkAPI: TalkFetcher {
-    
+
     private let urlSession: URLSession
     private let fileStorage: FileStorage
     private let calendar: Calendar
@@ -24,7 +29,7 @@ class DhammaTalkAPI: TalkFetcher {
         self.calendar = calendar
     }
 
-    func fetchTalkCollection(for talkCategory: DailyTalkCategory, year: Int) async -> [TalkData] {
+    func fetchTalkCollection(for talkCategory: DailyTalkCategory, year: Int) async throws -> [TalkData] {
         guard let apiKey = Bundle.main.infoDictionary?["DT_API_KEY"] as? String else {
             return await fetchCachedResults(for: talkCategory, year: year)
         }
@@ -32,18 +37,31 @@ class DhammaTalkAPI: TalkFetcher {
         let url = URL(string: "https://api.dhammatalkmobile.com/list?collection=\(talkCategory.collectionParam)&year=\(year)")!
         var request = URLRequest(url: url)
         request.addValue("iOS", forHTTPHeaderField: "client")
-        request.addValue("1.5.0", forHTTPHeaderField: "client-version")
+        request.addValue(Bundle.appVersion, forHTTPHeaderField: "client-version")
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue(apiKey, forHTTPHeaderField: "x-api-key")
 
+        var responseData: Data? = nil
         do {
-            let (data, _) = try await urlSession.data(for: request)
-            saveData(data, to: cacheFilename(talkCategory: talkCategory, year: year))
-            let talkInfoList = try JSONDecoder().decode(CollectionResponse.self, from: data)
+            (responseData, _) = try await urlSession.data(for: request)
+            guard let responseData else { return [] }
+            print(String(decoding: responseData, as: UTF8.self))
+            saveData(responseData, to: cacheFilename(talkCategory: talkCategory, year: year))
+            let talkInfoList = try JSONDecoder().decode(CollectionResponse.self, from: responseData)
+            
             return talkInfoList.body.map{ TalkData(serverTalkData: $0) }
         } catch {
+            let cachedResults = await fetchCachedResults(for: talkCategory, year: year)
+            if let responseData, let errorResponse = try? JSONDecoder().decode(CollectionErrorResponse.self, from: responseData)
+            {
+                Logger.api.error("Error response during API request with code: \(errorResponse.error.code)")
+                if errorResponse.error.code == "001" {
+                    throw TalkFetchError.belowMinimumVersion(cachedResults: cachedResults)
+                }
+                throw TalkFetchError.error(error, cachedResults: cachedResults)
+            }
             Logger.api.error("Error during API request: \(String(describing: error))")
-            return await fetchCachedResults(for: talkCategory, year: year)
+            throw TalkFetchError.error(error, cachedResults: cachedResults)
         }
     }
     

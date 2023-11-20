@@ -20,7 +20,7 @@ class DailyTalkListViewModel: ObservableObject {
         case initial
         case loading
         case loaded(sections: [TalkSectionViewModel])
-        case error(_ error: Error)
+        case error
     }
 
     let filters: [Filter] = [.downloaded, .favorited, .hasNotes]
@@ -48,6 +48,7 @@ class DailyTalkListViewModel: ObservableObject {
     }
 
     @Published var showingAlert = false
+    @Published var showingMinimumVersionAlert = false
     @Published private(set) var isFetchDataFinished = false
     @Published private(set) var state: State = .initial
     private var talkDataList: [TalkData] = []
@@ -117,24 +118,34 @@ class DailyTalkListViewModel: ObservableObject {
         }
         return talkSectionViewModelList
     }
-    
+
     @MainActor
     func fetchData(searchText: String? = nil) async {
-        
+
+        func loadTalkDataList(talkDataList: [TalkData]) {
+            self.talkDataList = talkDataList
+            self.talkSections = buildTalkSectionViewModels()
+            self.state = .loaded(sections: talkSections)
+        }
+
         self.state = .loading
         
         let query = DailyTalkQuery(category: selectedCategory,
                                    year: selectedYear,
                                    searchText: searchText)
         do {
-            self.talkDataList = try await talkDataService.fetchYearlyTalks(query: query)
-            self.talkSections = buildTalkSectionViewModels()
-            self.state = .loaded(sections: talkSections)
+            let results = try await talkDataService.fetchYearlyTalks(query: query)
+            loadTalkDataList(talkDataList: results)
+        } catch TalkFetchError.belowMinimumVersion(let cachedResults) {
+            loadTalkDataList(talkDataList: cachedResults)
+            showingMinimumVersionAlert = true
+        } catch TalkFetchError.error(_, let cachedResults) {
+            loadTalkDataList(talkDataList: cachedResults)
         } catch {
             guard !error.isCancelError else {
                 return
             }
-            self.state = .error(error)
+            self.state = .error
             showingAlert = true
         }
     }

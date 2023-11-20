@@ -12,3 +12,12 @@ struct CollectionResponse: Decodable {
     let statusCode: Int
     let body: [CollectionTalkData]
 }
+
+struct CollectionErrorResponse: Decodable {
+    let error: CollectionError
+}
+
+struct CollectionError: Decodable {
+    let code: String
+    let message: String
+}

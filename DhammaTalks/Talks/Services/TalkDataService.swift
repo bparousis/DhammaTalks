@@ -37,8 +37,8 @@ class TalkDataService: ObservableObject {
     }
 
     func fetchYearlyTalks(query: DailyTalkQuery) async throws -> [TalkData] {
-        var results = await talkFetcher.fetchTalkCollection(for: query.category,
-                                                            year: query.year)
+        var results = try await talkFetcher.fetchTalkCollection(for: query.category,
+                                                                year: query.year)
         if let searchText = query.searchText?.lowercased(), !searchText.isEmpty {
             results = results.filter { $0.title.lowercased().contains(searchText) }
         }

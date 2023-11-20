@@ -9,5 +9,5 @@
 import Foundation
 
 protocol TalkFetcher {
-    func fetchTalkCollection(for talkCategory: DailyTalkCategory, year: Int) async -> [TalkData]
+    func fetchTalkCollection(for talkCategory: DailyTalkCategory, year: Int) async throws -> [TalkData]
 }

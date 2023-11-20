@@ -58,6 +58,7 @@
 		769E69E3274966D300DEC24C /* TalkGroupSelectorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 769E69E2274966D300DEC24C /* TalkGroupSelectorView.swift */; };
 		769E69E52749758400DEC24C /* MediaPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 769E69E42749758400DEC24C /* MediaPlayer.swift */; };
 		76AB4D45279C995200C83F8D /* DownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76AB4D44279C995200C83F8D /* DownloadManager.swift */; };
+		76C378C82B014E08003A638A /* Bundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76C378C72B014E08003A638A /* Bundle.swift */; };
 		76D064312761BCFC00FBFEA6 /* LocalFileStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76D064302761BCFC00FBFEA6 /* LocalFileStorage.swift */; };
 		76D064332761C75F00FBFEA6 /* FileStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76D064322761C75F00FBFEA6 /* FileStorage.swift */; };
 		76D62FA12759E24D006537DE /* TestCoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76D62FA02759E24D006537DE /* TestCoreDataStack.swift */; };
@@ -185,6 +186,7 @@
 		769E69E2274966D300DEC24C /* TalkGroupSelectorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TalkGroupSelectorView.swift; sourceTree = "<group>"; };
 		769E69E42749758400DEC24C /* MediaPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaPlayer.swift; sourceTree = "<group>"; };
 		76AB4D44279C995200C83F8D /* DownloadManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadManager.swift; sourceTree = "<group>"; };
+		76C378C72B014E08003A638A /* Bundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bundle.swift; sourceTree = "<group>"; };
 		76D064302761BCFC00FBFEA6 /* LocalFileStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalFileStorage.swift; sourceTree = "<group>"; };
 		76D064322761C75F00FBFEA6 /* FileStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileStorage.swift; sourceTree = "<group>"; };
 		76D62FA02759E24D006537DE /* TestCoreDataStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestCoreDataStack.swift; sourceTree = "<group>"; };
@@ -382,6 +384,7 @@
 			children = (
 				763717B027B0434D007DF19A /* Array.swift */,
 				767AAC9427572F620003D9AC /* AVPlayerItem.swift */,
+				76C378C72B014E08003A638A /* Bundle.swift */,
 				76F9F46227483F2700957810 /* Calendar.swift */,
 				767AAC9227572E600003D9AC /* DateComponentsFormatter.swift */,
 				767AAC9027572D7B0003D9AC /* DateFormatter.swift */,
@@ -750,6 +753,7 @@
 				763717B127B0434D007DF19A /* Array.swift in Sources */,
 				7637DBE9276E865000D2ACEC /* CoreDataStack.swift in Sources */,
 				76E064FE23CA9C6C007E18C1 /* ContentView.swift in Sources */,
+				76C378C82B014E08003A638A /* Bundle.swift in Sources */,
 				767EEDB62744A58C0094697D /* TalkSectionHeader.swift in Sources */,
 				76068C6827B2183100726860 /* SettingsView.swift in Sources */,
 				761218D32794E5AF00D548E5 /* DependencyContainer.swift in Sources */,
@@ -960,7 +964,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 12;
 				DEVELOPMENT_ASSET_PATHS = "\"DhammaTalks/Preview Content\"";
 				DEVELOPMENT_TEAM = QF6M4CC7RV;
 				ENABLE_PREVIEWS = YES;
@@ -969,7 +973,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.5;
+				MARKETING_VERSION = 1.5.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.bparousis.DhammaTalks;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -983,7 +987,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 12;
 				DEVELOPMENT_ASSET_PATHS = "\"DhammaTalks/Preview Content\"";
 				DEVELOPMENT_TEAM = QF6M4CC7RV;
 				ENABLE_PREVIEWS = YES;
@@ -992,7 +996,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.5;
+				MARKETING_VERSION = 1.5.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.bparousis.DhammaTalks;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
