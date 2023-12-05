@@ -15,10 +15,6 @@ struct SettingsView: View {
     @State private var showMailView: Bool = false
     @State private var showMailAlert: Bool = false
     @State var result: Result<MFMailComposeResult, Error>? = nil
-    
-    private var appVersion: String {
-        Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? ""
-    }
 
     var body: some View {
         Form {
@@ -26,7 +22,7 @@ struct SettingsView: View {
                 HStack {
                     Text("Version")
                     Spacer()
-                    Text(appVersion)
+                    Text(Bundle.appVersion)
                 }
             }
             

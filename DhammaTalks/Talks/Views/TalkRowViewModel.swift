@@ -16,6 +16,7 @@ class TalkRowViewModel: NSObject, Identifiable, ObservableObject {
     enum DateStyle {
         case day
         case full
+        case noDay
     }
     
     enum Action: String, Identifiable {
@@ -26,6 +27,7 @@ class TalkRowViewModel: NSObject, Identifiable, ObservableObject {
         case addToFavorites
         case removeFromFavorites
         case notes
+        case transcript
         
         var title: String {
             switch self {
@@ -34,6 +36,7 @@ class TalkRowViewModel: NSObject, Identifiable, ObservableObject {
             case .addToFavorites: return "Add to Favorites"
             case .removeFromFavorites: return "Remove from Favorites"
             case .notes: return "Notes"
+            case .transcript: return "Transcript"
             }
         }
     }
@@ -77,6 +80,9 @@ class TalkRowViewModel: NSObject, Identifiable, ObservableObject {
         actionList.append(isDownloadAvailable ? .removeDownload : .download)
         actionList.append(favorite ? .removeFromFavorites : .addToFavorites)
         actionList.append(.notes)
+        if talkData.transcribeURL != nil {
+            actionList.append(.transcript)
+        }
         return actionList
     }
     
@@ -88,6 +94,10 @@ class TalkRowViewModel: NSObject, Identifiable, ObservableObject {
         talkData.id
     }
     
+    var transcribeURL: URL? {
+        talkData.transcribeURL
+    }
+
     var isDownloadAvailable: Bool {
         downloadManager.isDownloadAvailable(filename: talkData.filename)
     }
@@ -137,6 +147,7 @@ class TalkRowViewModel: NSObject, Identifiable, ObservableObject {
     @Published var downloadProgress: CGFloat?
     @Published var favorite = false
     @Published var showNotes = false
+    @Published var showTranscript = false
     @Published var notes: String = ""
     
     init(talkData: TalkData, talkUserInfoService: TalkUserInfoService, downloadManager: DownloadManager)
@@ -144,6 +155,7 @@ class TalkRowViewModel: NSObject, Identifiable, ObservableObject {
         self.talkData = talkData
         self.talkUserInfoService = talkUserInfoService
         self.downloadManager = downloadManager
+        self.dateStyle = talkData.showDay ? .day : .noDay
     }
     
     func saveNotes() {
@@ -159,7 +171,7 @@ class TalkRowViewModel: NSObject, Identifiable, ObservableObject {
     @MainActor
     func play() async {
 
-        guard let playItemURL = downloadManager.downloadURL(for: talkData.filename) ?? talkData.makeURL() else { return }
+        guard playerItem == nil, let playItemURL = downloadManager.downloadURL(for: talkData.filename) ?? talkData.makeURL() else { return }
 
         if let talkUserInfo = talkUserInfoService.getTalkUserInfo(for: talkData.url) {
             currentTime = talkUserInfo.currentTime
@@ -198,6 +210,11 @@ class TalkRowViewModel: NSObject, Identifiable, ObservableObject {
             Logger.talkUserInfo.error("Error saving TalkUserInfo: \(String(describing: error))")
         }
     }
+    
+    func didShowTranscript() {
+        // Toggle back to false so that it can be triggered again.
+        showTranscript = false
+    }
 
     func handleAction(_ action: Action) {
         switch action {
@@ -211,6 +228,8 @@ class TalkRowViewModel: NSObject, Identifiable, ObservableObject {
             setFavorite(to: false)
         case .notes:
             showNotes = true
+        case .transcript:
+            showTranscript = true
         }
     }
     

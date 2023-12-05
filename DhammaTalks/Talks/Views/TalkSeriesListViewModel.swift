@@ -37,7 +37,7 @@ class TalkSeriesListViewModel: ObservableObject {
         for section in talkSeries.sections {
             let sectionViewModel = TalkSectionViewModel(id: section.id, title: section.title)
             
-            var talkRows: [TalkData] = section.talks
+            var talkRows: [TalkData] = section.talks.map { .init(seriesTalkData: $0) }
             if !searchText.isEmpty {
                 talkRows = talkRows.filter { $0.title.lowercased().contains(searchTextLowerCased) }
             }

@@ -129,6 +129,12 @@ struct DailyTalkListView: View {
             .alert("Failed to load talks", isPresented: $viewModel.showingAlert) {
                 Button("OK", role: .cancel) { }
             }
+            .alert("Update Needed", isPresented: $viewModel.showingMinimumVersionAlert, actions: {
+                Link("Update", destination: URL(string: "itms-apps://itunes.apple.com/app/id1602298092")!)
+                Button("Cancel", role: .cancel) { }
+            }, message: {
+                Text("Please update your application to a newer version as we stopped supporting this version.  We're sorry for any inconvenience.")
+            })
             .task(id: DailyTalkQuery(category: viewModel.selectedCategory,
                                      year: viewModel.selectedYear,
                                      searchText:searchText)) {

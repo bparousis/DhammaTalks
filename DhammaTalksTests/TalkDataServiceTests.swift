@@ -18,27 +18,15 @@ class TalkDataServiceTests: XCTestCase {
     override func tearDownWithError() throws {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
-
-    func testError() async throws {
-        let sut = TalkDataService(htmlPageFetcher: MockHTMLPageFetcher(testCase: .error))
-        var fetchError: Error? = nil
-        do {
-            _ = try await sut.fetchYearlyTalks(query: DailyTalkQuery(category: .evening, year: 2021))
-        } catch {
-            fetchError = error
-        }
-        XCTAssertNotNil(fetchError)
-        XCTAssertEqual(fetchError as! HTMLPageFetcher.HTMLPageFetcherError, HTMLPageFetcher.HTMLPageFetcherError.failedToRetrieve)
-    }
     
     func testNoTalks() async throws {
-        let sut = TalkDataService(htmlPageFetcher: MockHTMLPageFetcher(testCase: .noTalks))
+        let sut = TalkDataService(talkFetcher: MockTalkFetcher(testCase: .noTalks))
         let result = try await sut.fetchYearlyTalks(query: DailyTalkQuery(category: .evening, year: 2021))
         XCTAssertEqual(result.count, 0)
     }
 
     func testOneMonthWithTalksWithSearch() async throws {
-        let sut = TalkDataService(htmlPageFetcher: MockHTMLPageFetcher(testCase: .oneMonth))
+        let sut = TalkDataService(talkFetcher: MockTalkFetcher(testCase: .oneMonth))
         var talkDataList = try await sut.fetchYearlyTalks(query: DailyTalkQuery(category: .evening, year: 2021))
         XCTAssertEqual(talkDataList.count, 3)
 
@@ -50,7 +38,7 @@ class TalkDataServiceTests: XCTestCase {
     }
 
     func testMultipleMonthsWithTalksWithSearch() async throws {
-        let sut = TalkDataService(htmlPageFetcher: MockHTMLPageFetcher(testCase: .multipleMonths))
+        let sut = TalkDataService(talkFetcher: MockTalkFetcher(testCase: .multipleMonths))
         var talkDataList = try await sut.fetchYearlyTalks(query: DailyTalkQuery(category: .evening, year: 2021))
         XCTAssertEqual(talkDataList.count, 10)
 
@@ -73,7 +61,7 @@ class TalkDataServiceTests: XCTestCase {
     }
 }
 
-class MockHTMLPageFetcher: HTMLPageFetcher {
+class MockTalkFetcher: TalkFetcher {
     private let testCase: TestCase
 
     init(testCase: TestCase) {
@@ -81,16 +69,13 @@ class MockHTMLPageFetcher: HTMLPageFetcher {
     }
 
     enum TestCase {
-        case error
         case noTalks
         case oneMonth
         case multipleMonths
     }
 
-    override func getYearlyHTMLForCategory(_ category: DailyTalkCategory, year: Int) async throws -> [TalkData] {
+    func fetchTalkCollection(for talkCategory: DailyTalkCategory, year: Int) async -> [TalkData] {
         switch testCase {
-        case .error:
-            throw HTMLPageFetcherError.failedToRetrieve
         case .noTalks:
             return []
         case .oneMonth:

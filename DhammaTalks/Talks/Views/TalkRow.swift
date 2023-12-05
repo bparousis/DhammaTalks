@@ -12,6 +12,8 @@ import CoreData
 import AVFoundation
 
 struct TalkRow: View {
+    @Environment(\.openURL) var openURL
+    
     @ObservedObject var viewModel: TalkRowViewModel
     @State private var showActionSheet = false
     
@@ -140,6 +142,12 @@ struct TalkRow: View {
         }
         .foregroundColor(.primary)
         .padding(5)
+        .onChange(of: viewModel.showTranscript) { showTranscript in
+            if showTranscript, let transcribeURL = viewModel.transcribeURL {
+                openURL(transcribeURL)
+            }
+            viewModel.didShowTranscript()
+        }
         .sheet(isPresented: $viewModel.showNotes) {
             NavigationView {
                 TextEditor(text: $viewModel.notes)
@@ -158,7 +166,7 @@ struct TalkRow: View {
             }
             .interactiveDismissDisabled()
         }
-        .sheet(item: $viewModel.playerItem) {  item in
+        .sheet(item: $viewModel.playerItem) { item in
             makeMediaPlayerView(item: item)
             .onDisappear {
                 viewModel.finishedPlaying(item: item)
