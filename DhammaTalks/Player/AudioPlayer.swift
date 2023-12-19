@@ -43,9 +43,16 @@ class AudioPlayer: ObservableObject {
     
     private var periodicTimeObserver: Any?
     
-    init(playableItems: @escaping () -> [any PlayableItem]) {
+    init(notificationCenter: NotificationCenter = .default,
+         audioSession: AVAudioSession = .sharedInstance(),
+         playableItems: @escaping () -> [any PlayableItem])
+    {
         self.playableItems = playableItems
         setupRemoteTransportControls()
+        notificationCenter.addObserver(self,
+                                       selector: #selector(handleInterruption),
+                                       name: AVAudioSession.interruptionNotification,
+                                       object: audioSession)
     }
     
     deinit {
@@ -232,25 +239,23 @@ class AudioPlayer: ObservableObject {
             }
             return .commandFailed
         }
-        
-        commandCenter.nextTrackCommand.isEnabled = true
-        commandCenter.nextTrackCommand.addTarget { [weak self] event in
+
+        commandCenter.skipForwardCommand.isEnabled = true
+        commandCenter.skipForwardCommand.preferredIntervals = [15]
+        commandCenter.skipForwardCommand.addTarget { [weak self] event in
             guard let self else { return .commandFailed }
-            Task {
-                await self.playNext()
-            }
+            self.skipForward()
             return .success
         }
 
-        commandCenter.previousTrackCommand.isEnabled = true
-        commandCenter.previousTrackCommand.addTarget { [weak self] event in
+        commandCenter.skipBackwardCommand.isEnabled = true
+        commandCenter.skipBackwardCommand.preferredIntervals = [15]
+        commandCenter.skipBackwardCommand.addTarget { [weak self] event in
             guard let self else { return .commandFailed }
-            Task {
-                await self.playPrevious()
-            }
+            self.skipBackward()
             return .success
         }
-        
+
         commandCenter.changePlaybackPositionCommand.addTarget { [weak self] (event) -> MPRemoteCommandHandlerStatus in
             guard let self, let changePlaybackPositionCommandEvent =
                     event as? MPChangePlaybackPositionCommandEvent else { return .commandFailed }
@@ -269,8 +274,8 @@ class AudioPlayer: ObservableObject {
         nowPlayingInfo[MPMediaItemPropertyTitle] = title
         if let image = UIImage(named: "dtLogo") {
             nowPlayingInfo[MPMediaItemPropertyArtwork] =
-                MPMediaItemArtwork(boundsSize: image.size) { size in
-                    return image
+            MPMediaItemArtwork(boundsSize: image.size) { size in
+                return image
             }
         }
         nowPlayingInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = currentPlayerItem?.currentTime().seconds
@@ -279,6 +284,30 @@ class AudioPlayer: ObservableObject {
             nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] = player.rate
         }
         MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
+    }
+
+    // MARK: Audio Interruption
+    @objc func handleInterruption(notification: Notification) {
+        guard let userInfo = notification.userInfo,
+              let typeValue = userInfo[AVAudioSessionInterruptionTypeKey] as? UInt,
+              let type = AVAudioSession.InterruptionType(rawValue: typeValue) else {
+            return
+        }
+
+        switch type {
+        case .began:
+            pause()
+        case .ended:
+            guard let optionsValue = userInfo[AVAudioSessionInterruptionOptionKey] as? UInt else { return }
+            let options = AVAudioSession.InterruptionOptions(rawValue: optionsValue)
+            if options.contains(.shouldResume) {
+                Task {
+                    await play()
+                } 
+            }
+        default:
+            break
+        }
     }
 }
 

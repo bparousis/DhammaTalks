@@ -15,7 +15,9 @@ extension PlaylistMO {
             for playlistItem in playlistItems {
                 if let title = playlistItem.title, let url = playlistItem.url {
                     playlistItemList.append(
-                        PlaylistItem(talkData: TalkData(title: title, url: url),
+                        PlaylistItem(talkData: TalkData(id: UUID().uuidString,
+                                                        title: title,
+                                                        url: url),
                                      order: playlistItem.order)
                     )
                 }
