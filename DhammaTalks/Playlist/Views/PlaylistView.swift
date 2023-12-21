@@ -14,9 +14,14 @@ struct PlaylistView: View {
 
     @ObservedObject private var viewModel: PlaylistViewModel
     @State var searchText: String = ""
+    @State var showPlayer: Bool = false
+    private let audioPlayer: AudioPlayer
 
     init(viewModel: PlaylistViewModel) {
         self.viewModel = viewModel
+        self.audioPlayer = AudioPlayer {
+            viewModel.playableItems
+        }
     }
     
     @ViewBuilder
@@ -56,7 +61,17 @@ struct PlaylistView: View {
     
     var body: some View {
         playlistView
-        .onReceive(viewModel.savePublisher) { _ in
+        .onReceive(viewModel.playPublisher) { playId in
+            if let foundIndex = viewModel.findIndexOfPlayableItemWithID(playId) {
+                viewModel.playAtIndex = foundIndex
+                self.showPlayer = true
+                Task {
+                    await audioPlayer.play(at: viewModel.playAtIndex)
+                }
+            }
+        }
+        .sheet(isPresented: $showPlayer) {
+            makeAudioPlayerView(audioPlayer: audioPlayer)
         }
         .navigationTitle(viewModel.title)
     }

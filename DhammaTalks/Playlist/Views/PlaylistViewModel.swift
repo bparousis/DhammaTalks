@@ -15,6 +15,8 @@ class PlaylistViewModel: ObservableObject {
     private let talkUserInfoService: TalkUserInfoService
     private let downloadManager: DownloadManager
     private let playlistService: PlaylistService
+    private let playSubject = PassthroughSubject<String, Never>()
+    var playAtIndex: Int = 0
     
     var title: String {
         playlist.title
@@ -27,7 +29,8 @@ class PlaylistViewModel: ObservableObject {
     init(playlist: Playlist,
          talkUserInfoService: TalkUserInfoService,
          downloadManager: DownloadManager,
-         playlistService: PlaylistService) {
+         playlistService: PlaylistService)
+    {
         self.playlist = playlist
         self.talkUserInfoService = talkUserInfoService
         self.downloadManager = downloadManager
@@ -41,7 +44,7 @@ class PlaylistViewModel: ObservableObject {
                                                  talkUserInfoService: talkUserInfoService,
                                                  downloadManager: downloadManager,
                                                  playlistService: playlistService,
-                                                 playSubject: PassthroughSubject<String,Never>())
+                                                 playSubject: playSubject)
                 viewModel.dateStyle = .full
                 viewModel.playlist = playlist
                 return viewModel
@@ -50,5 +53,15 @@ class PlaylistViewModel: ObservableObject {
 
     func playRandomTalk() -> String? {
         return playlistItems.playRandom()
+    }
+}
+
+extension PlaylistViewModel: PlayableList {
+    var playableItems: [any PlayableItem] {
+        playlistItems
+    }
+
+    var playPublisher: AnyPublisher<String, Never> {
+        playSubject.eraseToAnyPublisher()
     }
 }
