@@ -35,6 +35,10 @@ struct PlaylistView: View {
                         TalkRow(viewModel: playlistItemRow)
                     }
                     .onMove { fromOffsets, toOffset in
+                        viewModel.moveItem(fromOffsets: fromOffsets, toOffset: toOffset)
+                    }
+                    .onDelete { offsets in
+                        viewModel.deleteItems(fromOffsets: offsets)
                     }
                 }
                 .toolbar {
@@ -69,6 +73,12 @@ struct PlaylistView: View {
                     await audioPlayer.play(at: viewModel.playAtIndex)
                 }
             }
+        }
+        .task {
+            viewModel.searchPlaylistItems(searchText: searchText)
+        }
+        .task(id: searchText) {
+            viewModel.searchPlaylistItems(searchText: searchText)
         }
         .sheet(isPresented: $showPlayer) {
             makeAudioPlayerView(audioPlayer: audioPlayer)

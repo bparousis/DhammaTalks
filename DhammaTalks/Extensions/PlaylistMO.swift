@@ -10,19 +10,19 @@ import Foundation
 
 extension PlaylistMO {
     func toDomainModel() -> Playlist {
-        var playlistItemList: [PlaylistItem] = []
-        if let playlistItems = playlistItems as? Set<PlaylistItemMO> {
-            for playlistItem in playlistItems {
-                if let title = playlistItem.title, let url = playlistItem.url {
-                    playlistItemList.append(
-                        PlaylistItem(talkData: TalkData(id: UUID().uuidString,
-                                                        title: title,
-                                                        url: url),
-                                     order: playlistItem.order)
+        var playlistItemList: [TalkData] = []
+        if let playlistItems = playlistItems as? NSOrderedSet {
+            for item in playlistItems {
+                if let playlistItem = item as? PlaylistItemMO,
+                   let title = playlistItem.title, let url = playlistItem.url {
+                    playlistItemList.append(TalkData(id: UUID().uuidString,
+                                                     title: title,
+                                                     url: url)
                     )
                 }
             }
         }
+        
         return Playlist(id: id!,
                         title: title ?? "",
                         desc: desc,

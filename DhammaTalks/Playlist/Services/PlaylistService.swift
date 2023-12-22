@@ -55,12 +55,45 @@ class PlaylistService: ObservableObject {
                 return false
             }
             let playlistItemMO = PlaylistItemMO(context: managedObjectContext)
-            playlistItemMO.order = Int16(playlistMO.playlistItems?.count ?? 0)
             playlistItemMO.playlist = playlistMO
             playlistItemMO.title = talkData.title
             playlistItemMO.url = talkData.url
             try managedObjectContext.save()
             return true
+        }
+    }
+    
+    func moveItem(fromOffsets: IndexSet, toOffset: Int, playlistID: UUID) throws {
+        try managedObjectContext.performAndWait {
+            guard let playlistMO = try fetchPlaylistWithID(playlistID) else {
+                return
+            }
+
+            var playlistItems = playlistMO.playlistItems?.array
+            playlistItems?.move(fromOffsets: fromOffsets, toOffset: toOffset)
+            if let playlistItems {
+                playlistMO.playlistItems = NSOrderedSet(array: playlistItems)
+                if managedObjectContext.hasChanges {
+                    try managedObjectContext.save()
+                }
+            }
+        }
+    }
+    
+    func deleteItems(fromOffsets: IndexSet, playlistID: UUID) throws {
+        try managedObjectContext.performAndWait {
+            guard let playlistMO = try fetchPlaylistWithID(playlistID) else {
+                return
+            }
+
+            var playlistItems = playlistMO.playlistItems?.array
+            playlistItems?.remove(atOffsets: fromOffsets)
+            if let playlistItems {
+                playlistMO.playlistItems = NSOrderedSet(array: playlistItems)
+                if managedObjectContext.hasChanges {
+                    try managedObjectContext.save()
+                }
+            }
         }
     }
     

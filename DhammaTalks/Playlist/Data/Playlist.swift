@@ -12,7 +12,7 @@ struct Playlist: Identifiable {
     let id: UUID
     let title: String
     let desc: String?
-    let playlistItems: [PlaylistItem]
+    let playlistItems: [TalkData]
 }
 
 extension Playlist: Equatable {

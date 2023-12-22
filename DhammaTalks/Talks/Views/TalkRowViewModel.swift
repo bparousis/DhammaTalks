@@ -29,7 +29,6 @@ class TalkRowViewModel: NSObject, Identifiable, ObservableObject {
         case notes
         case transcript
         case addToPlaylist
-        case removeFromPlaylist
         
         var title: String {
             switch self {
@@ -40,7 +39,6 @@ class TalkRowViewModel: NSObject, Identifiable, ObservableObject {
             case .notes: return "Notes"
             case .transcript: return "Transcript"
             case .addToPlaylist: return "Add to Playlist"
-            case .removeFromPlaylist: return "Remove from Playlist"
             }
         }
     }
@@ -86,7 +84,9 @@ class TalkRowViewModel: NSObject, Identifiable, ObservableObject {
     var actions: [Action] {
         var actionList: [Action] = []
         actionList.append(favorite ? .removeFromFavorites : .addToFavorites)
-        actionList.append(isInPlaylist ? .removeFromPlaylist : .addToPlaylist)
+        if isInPlaylist == false {
+            actionList.append(.addToPlaylist)
+        }
         actionList.append(isDownloadAvailable ? .removeDownload : .download)
         
         actionList.append(.notes)
@@ -248,12 +248,9 @@ class TalkRowViewModel: NSObject, Identifiable, ObservableObject {
             showTranscript = true
         case .addToPlaylist:
             showPlaylistSelector = true
-        case .removeFromPlaylist:
-            //TODO: Implement
-            break
         }
     }
-    
+
     func fetchTalkInfo() {
         if let talkUserInfo = talkUserInfoService.getTalkUserInfo(for: talkData.url) {
             currentTime = talkUserInfo.currentTime

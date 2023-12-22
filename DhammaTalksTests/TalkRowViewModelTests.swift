@@ -274,7 +274,11 @@ class TalkRowViewModelTests: XCTestCase {
     
     func testShowTranscript() throws {
         let talkData = TalkData(id: "1", title: "Title", url: "y2020/test.mp3")
-        sut = TalkRowViewModel(talkData: talkData, talkUserInfoService: talkUserInfoService, downloadManager: DownloadManager(urlSession: urlSession, fileStorage: MockFileStorage()))
+        sut = TalkRowViewModel(talkData: talkData,
+                               talkUserInfoService: talkUserInfoService,
+                               downloadManager: DownloadManager(urlSession: urlSession, fileStorage: MockFileStorage()),
+                               playlistService: playlistService,
+                               playSubject: PassthroughSubject<String,Never>())
         XCTAssertFalse(sut.showTranscript)
         sut.handleAction(.transcript)
         XCTAssertTrue(sut.showTranscript)
