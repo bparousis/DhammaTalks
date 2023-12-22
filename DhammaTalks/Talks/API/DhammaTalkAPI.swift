@@ -45,7 +45,6 @@ class DhammaTalkAPI: TalkFetcher {
         do {
             (responseData, _) = try await urlSession.data(for: request)
             guard let responseData else { return [] }
-            print(String(decoding: responseData, as: UTF8.self))
             saveData(responseData, to: cacheFilename(talkCategory: talkCategory, year: year))
             let talkInfoList = try JSONDecoder().decode(CollectionResponse.self, from: responseData)
             

@@ -15,8 +15,14 @@ struct TalkRow: View {
     @Environment(\.openURL) var openURL
     
     @ObservedObject var viewModel: TalkRowViewModel
+
     @State private var showActionSheet = false
-    
+    @State private var selectedPlaylist: Playlist? = nil
+    @State private var showCreatePlaylistSheet = false
+    @State private var title: String = ""
+    @State private var desc: String = ""
+    @State private var addedToPlaylist = false
+
     @ViewBuilder
     private var actionButton: some View {
         let buttonSize: CGFloat = 25
@@ -56,19 +62,6 @@ struct TalkRow: View {
             }
         case .unplayed:
             EmptyView()
-        }
-    }
-
-    @ViewBuilder
-    private func makeMediaPlayerView(item: AVPlayerItem) -> some View {
-        if isIpad {
-            MediaPlayer(playerItem: item, title: viewModel.title)
-        } else {
-            VStack {
-                swipeBar
-                MediaPlayer(playerItem: item, title: viewModel.title)
-            }
-            .padding(EdgeInsets(top: 10, leading: 0, bottom: 0, trailing: 0))
         }
     }
     
@@ -114,12 +107,90 @@ struct TalkRow: View {
                 .foregroundColor(.secondary)
         }
     }
+    
+    private var playlistSelectorView: some View {
+        NavigationView {
+            if !addedToPlaylist {
+                List {
+                    ForEach(viewModel.playlists, id: \.self) { playlist in
+                        Button {
+                            viewModel.addToPlaylist(playlist)
+                            addedToPlaylist = true
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                                self.viewModel.showPlaylistSelector = false
+                                addedToPlaylist = false
+                            }
+                        } label: {
+                            PlaylistRow(viewModel: PlaylistRowViewModel(playlist: playlist))
+                        }
+                        .foregroundColor(.primary)
+                        .padding(5)
+                    }
+                }
+                .task {
+                    await viewModel.fetchPlaylists()
+                }
+                .sheet(isPresented: $showCreatePlaylistSheet, content: {
+                    NavigationView {
+                        Form {
+                            Section("New Playlist") {
+                                TextField("Title", text: $title)
+                                TextField("Description", text: $desc)
+                            }
+                        }
+                        .toolbar {
+                            ToolbarItemGroup(placement: .navigationBarTrailing) {
+                                Button("Create", action: {
+                                    viewModel.createPlaylist(title: title, description: desc)
+                                    Task {
+                                        await viewModel.fetchPlaylists()
+                                    }
+                                    showCreatePlaylistSheet = false
+                                })
+                                .disabled(title.isEmpty)
+                                Button("Cancel", action: {
+                                    showCreatePlaylistSheet = false
+                                })
+                            }
+                        }
+                    }
+                })
+                .toolbar {
+                    ToolbarItemGroup(placement: .navigationBarTrailing) {
+                        Button("Cancel") {
+                            viewModel.showPlaylistSelector = false
+                        }
+                    }
+                }
+                .toolbar {
+                    ToolbarItemGroup(placement: .navigationBarTrailing) {
+                        Button {
+                            title = ""
+                            desc = ""
+                            showCreatePlaylistSheet = true
+                        } label: {
+                            VStack {
+                                Image(systemName: "plus")
+                            }
+                        }
+                    }
+                }
+                .navigationTitle("Playlists")
+            } else {
+                VStack(spacing: 10) {
+                    Text("Successfully added to playlist")
+                        .font(.headline)
+                    Image(systemName: "checkmark.circle")
+                        .foregroundColor(.green)
+                        .font(.system(size: 100))
+                }
+            }
+        }
+    }
 
     var body: some View {
         Button(action: {
-            Task {
-                await viewModel.play()
-            }
+            viewModel.play()
         }) {
             HStack(alignment: .center, spacing: 10) {
                 VStack(alignment: .leading, spacing: 5) {
@@ -166,11 +237,8 @@ struct TalkRow: View {
             }
             .interactiveDismissDisabled()
         }
-        .sheet(item: $viewModel.playerItem) { item in
-            makeMediaPlayerView(item: item)
-            .onDisappear {
-                viewModel.finishedPlaying(item: item)
-            }
+        .sheet(isPresented: $viewModel.showPlaylistSelector) {
+            playlistSelectorView
         }
         .onAppear {
             viewModel.fetchTalkInfo()

@@ -18,5 +18,18 @@ extension View {
         Color.secondary.ignoresSafeArea()
             .cornerRadius(8.0)
             .frame(width: 100, height: 5, alignment: .center)
+            .padding(EdgeInsets(top: 10, leading: 0, bottom: 0, trailing: 0))
+    }
+    
+    @ViewBuilder
+    func makeAudioPlayerView(audioPlayer: AudioPlayer) -> some View {
+        if isIpad {
+            AudioPlayerView(audioPlayer: audioPlayer)
+        } else {
+            VStack {
+                swipeBar
+                AudioPlayerView(audioPlayer: audioPlayer)
+            }
+        }
     }
 }

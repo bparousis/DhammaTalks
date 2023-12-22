@@ -1,26 +1,23 @@
 //
-//  FavoritesListView.swift
+//  PlaylistView.swift
 //  DhammaTalks
 //
-//  Created by Bill Parousis on 2021-12-10.
-//  Copyright © 2021 Bill Parousis. All rights reserved.
+//  Created by Bill Parousis on 2023-02-25.
+//  Copyright © 2023 Bill Parousis. All rights reserved.
 //
-
-import Foundation
 
 import SwiftUI
 import CoreData
 import Combine
 
-struct FavoritesListView: View {
+struct PlaylistView: View {
 
-    @ObservedObject private var viewModel: FavoritesListViewModel
-    private let audioPlayer: AudioPlayer
+    @ObservedObject private var viewModel: PlaylistViewModel
     @State var searchText: String = ""
     @State var showPlayer: Bool = false
+    private let audioPlayer: AudioPlayer
 
-    init(viewModel: FavoritesListViewModel)
-    {
+    init(viewModel: PlaylistViewModel) {
         self.viewModel = viewModel
         self.audioPlayer = AudioPlayer {
             viewModel.playableItems
@@ -28,15 +25,24 @@ struct FavoritesListView: View {
     }
     
     @ViewBuilder
-    private var favoritesListView: some View {
-        if viewModel.favorites.isEmpty && searchText.isEmpty {
-            Text("No favorites")
+    private var playlistView: some View {
+        if viewModel.playlistItems.isEmpty && searchText.isEmpty {
+            Text("Playlist is empty")
         } else {
             ScrollViewReader { proxy in
                 List {
-                    ForEach(viewModel.favorites) { favoriteRow in
-                        TalkRow(viewModel: favoriteRow)
+                    ForEach(viewModel.playlistItems) { playlistItemRow in
+                        TalkRow(viewModel: playlistItemRow)
                     }
+                    .onMove { fromOffsets, toOffset in
+                        viewModel.moveItem(fromOffsets: fromOffsets, toOffset: toOffset)
+                    }
+                    .onDelete { offsets in
+                        viewModel.deleteItems(fromOffsets: offsets)
+                    }
+                }
+                .toolbar {
+                    EditButton()
                 }
                 .toolbar {
                     ToolbarItemGroup(placement: .bottomBar) {
@@ -58,20 +64,7 @@ struct FavoritesListView: View {
     }
     
     var body: some View {
-        favoritesListView
-        .onReceive(viewModel.savePublisher) { output in
-            if !output.isFavorite {
-                Task {
-                    await viewModel.fetchFavorites(searchText: searchText)
-                }
-            }
-        }
-        .task {
-            await viewModel.fetchFavorites(searchText: searchText)
-        }
-        .task(id: searchText) {
-            await viewModel.fetchFavorites(searchText: searchText)
-        }
+        playlistView
         .onReceive(viewModel.playPublisher) { playId in
             if let foundIndex = viewModel.findIndexOfPlayableItemWithID(playId) {
                 viewModel.playAtIndex = foundIndex
@@ -81,9 +74,15 @@ struct FavoritesListView: View {
                 }
             }
         }
+        .task {
+            viewModel.searchPlaylistItems(searchText: searchText)
+        }
+        .task(id: searchText) {
+            viewModel.searchPlaylistItems(searchText: searchText)
+        }
         .sheet(isPresented: $showPlayer) {
             makeAudioPlayerView(audioPlayer: audioPlayer)
         }
-        .navigationTitle("Favorites")
+        .navigationTitle(viewModel.title)
     }
 }

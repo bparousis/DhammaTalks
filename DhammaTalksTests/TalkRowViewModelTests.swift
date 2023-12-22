@@ -19,6 +19,7 @@ class TalkRowViewModelTests: XCTestCase {
     var sut: TalkRowViewModel!
     var context: NSManagedObjectContext!
     var talkUserInfoService: TalkUserInfoService!
+    var playlistService: PlaylistService!
     var urlSession: URLSession!
     fileprivate var fileStorage: MockFileStorage!
     var downloadManager: DownloadManager!
@@ -39,6 +40,7 @@ class TalkRowViewModelTests: XCTestCase {
         // Put setup code here. This method is called before the invocation of each test method in the class.
         context = TestCoreDataStack().persistentContainer.viewContext
         talkUserInfoService = TalkUserInfoService(managedObjectContext: context)
+        playlistService = PlaylistService(managedObjectContext: context)
     }
 
     override func tearDownWithError() throws {
@@ -47,48 +49,28 @@ class TalkRowViewModelTests: XCTestCase {
     
     func testTitleAndDateLabels() {
         let talkData = TalkData(id: "1", title: "Title", url: "about:blank")
-        sut = TalkRowViewModel(talkData: talkData, talkUserInfoService: talkUserInfoService, downloadManager: downloadManager)
+        sut = TalkRowViewModel(talkData: talkData,
+                               talkUserInfoService: talkUserInfoService,
+                               downloadManager: downloadManager,
+                               playlistService: playlistService,
+                               playSubject: PassthroughSubject<String,Never>())
         XCTAssertEqual(sut.title, "Title")
         XCTAssertNil(sut.formattedDate)
     }
-    
-    func testPlayWithTalkUserInfo() async {
-        let talkData = TalkData(id: "1", title: "Title", url: "about:blank")
-        
-        self.context.performAndWait {
-            let userInfo = TalkUserInfoMO(context: self.context)
-            userInfo.url = "about:blank"
-            userInfo.totalTimeScale = 1000000000
-            userInfo.totalTimeValue = 14193277562
-            userInfo.currentTimeScale = 1000000000
-            userInfo.currentTimeValue = 2193277562
-            try? self.context.save()
-        }
-        
-        sut = TalkRowViewModel(talkData: talkData, talkUserInfoService: talkUserInfoService, downloadManager: downloadManager)
-        XCTAssertEqual(sut.state, .unplayed)
-        XCTAssertNil(sut.playerItem)
-        await sut.play()
-        XCTAssertEqual(sut.state, .inProgress)
-        XCTAssertNotNil(sut.playerItem)
-        
-        // Test that seek was performed.
-        XCTAssertEqual(sut.playerItem!.currentTime().value, 2193277562)
-        XCTAssertEqual(sut.playerItem!.currentTime().timescale, 1000000000)
-        XCTAssertEqual(sut.currentTimeString, "00:02")
-        XCTAssertEqual(sut.timeRemainingString, "-00:12")
-    }
-    
-    func testPlayWithoutTalkUserInfo() async {
-        
-        let talkData = TalkData(id: "1", title: "Title", url: "about:blank")
-        
-        sut = TalkRowViewModel(talkData: talkData, talkUserInfoService: talkUserInfoService, downloadManager: downloadManager)
-        XCTAssertNil(sut.playerItem)
-        await sut.play()
-        XCTAssertNotNil(sut.playerItem)
 
-        XCTAssertEqual(sut.playerItem!.currentTime().value, 0)
+    func testWithoutTalkUserInfo() async {
+        
+        let talkData = TalkData(id: "1", title: "Title", url: "about:blank")
+        let playSubject = PassthroughSubject<String,Never>()
+        
+        sut = TalkRowViewModel(talkData: talkData,
+                               talkUserInfoService: talkUserInfoService,
+                               downloadManager: downloadManager,
+                               playlistService: playlistService,
+                               playSubject: playSubject)
+        sut.fetchTalkInfo()
+        XCTAssertNil(sut.currentTimeString)
+        XCTAssertNil(sut.timeRemainingString)
     }
     
     func testFinishedPlayingUpdatesUserInfo() async {
@@ -104,8 +86,11 @@ class TalkRowViewModelTests: XCTestCase {
             try? self.context.save()
         }
 
-        sut = TalkRowViewModel(talkData: talkData, talkUserInfoService: talkUserInfoService, downloadManager: downloadManager)
-        await sut.play()
+        sut = TalkRowViewModel(talkData: talkData,
+                               talkUserInfoService: talkUserInfoService,
+                               downloadManager: downloadManager,
+                               playlistService: playlistService,
+                               playSubject: PassthroughSubject<String,Never>())
         
         let beforeFinished = talkUserInfoService.getTalkUserInfo(for: "about:blank")
         XCTAssertNotNil(beforeFinished)
@@ -121,11 +106,35 @@ class TalkRowViewModelTests: XCTestCase {
         XCTAssertEqual(afterFinished?.currentTime, cmTime)
     }
     
+    func testPlay() {
+        let talkData = TalkData(id: "1", title: "Title", url: "about:blank")
+        let playSubject = PassthroughSubject<String,Never>()
+        
+        sut = TalkRowViewModel(talkData: talkData,
+                               talkUserInfoService: talkUserInfoService,
+                               downloadManager: downloadManager,
+                               playlistService: playlistService,
+                               playSubject: playSubject)
+        
+        let ex = XCTestExpectation()
+        let cancellable = playSubject
+            .sink {
+                XCTAssertEqual($0, "1")
+                ex.fulfill()
+            }
+        sut.play()
+        wait(for: [ex], timeout: 1.0)
+        cancellable.cancel()
+    }
+    
     func testFinishedPlayingAddsUserInfo() async {
         let talkData = TalkData(id: "1", title: "Title", url: "about:blank")
         
-        sut = TalkRowViewModel(talkData: talkData, talkUserInfoService: talkUserInfoService, downloadManager: downloadManager)
-        await sut.play()
+        sut = TalkRowViewModel(talkData: talkData,
+                               talkUserInfoService: talkUserInfoService,
+                               downloadManager: downloadManager,
+                               playlistService: playlistService,
+                               playSubject: PassthroughSubject<String,Never>())
         
         let beforeFinished = talkUserInfoService.getTalkUserInfo(for: "about:blank")
         XCTAssertNil(beforeFinished)
@@ -153,13 +162,37 @@ class TalkRowViewModelTests: XCTestCase {
             try? self.context.save()
         }
         
-        sut = TalkRowViewModel(talkData: talkData, talkUserInfoService: talkUserInfoService, downloadManager: downloadManager)
+        sut = TalkRowViewModel(talkData: talkData,
+                               talkUserInfoService: talkUserInfoService,
+                               downloadManager: downloadManager,
+                               playlistService: playlistService,
+                               playSubject: PassthroughSubject<String,Never>())
         
         sut.fetchTalkInfo()
         XCTAssertEqual(sut.currentTimeInSeconds, 8.495278262)
         XCTAssertEqual(sut.totalTimeInSeconds, 154.433577362)
         XCTAssertEqual(sut.currentTimeString, "00:08")
         XCTAssertEqual(sut.timeRemainingString, "-02:25")
+    }
+    
+    func testAddToPlaylist() async {
+        let talkData = TalkData(id: "1", title: "Title", url: "about:blank")
+        
+        self.context.performAndWait {
+            let userInfo = TalkUserInfoMO(context: self.context)
+            userInfo.url = "about:blank"
+            try? self.context.save()
+        }
+        
+        sut = TalkRowViewModel(talkData: talkData,
+                               talkUserInfoService: talkUserInfoService,
+                               downloadManager: downloadManager,
+                               playlistService: playlistService,
+                               playSubject: PassthroughSubject<String,Never>())
+        sut.fetchTalkInfo()
+        XCTAssertFalse(sut.showPlaylistSelector)
+        sut.handleAction(.addToPlaylist)
+        XCTAssertTrue(sut.showPlaylistSelector)
     }
     
     func testAddToFavorites() async {
@@ -171,7 +204,11 @@ class TalkRowViewModelTests: XCTestCase {
             try? self.context.save()
         }
         
-        sut = TalkRowViewModel(talkData: talkData, talkUserInfoService: talkUserInfoService, downloadManager: downloadManager)
+        sut = TalkRowViewModel(talkData: talkData,
+                               talkUserInfoService: talkUserInfoService,
+                               downloadManager: downloadManager,
+                               playlistService: playlistService,
+                               playSubject: PassthroughSubject<String,Never>())
         sut.fetchTalkInfo()
         XCTAssertFalse(sut.favorite)
         sut.handleAction(.addToFavorites)
@@ -193,7 +230,11 @@ class TalkRowViewModelTests: XCTestCase {
             try? self.context.save()
         }
         
-        sut = TalkRowViewModel(talkData: talkData, talkUserInfoService: talkUserInfoService, downloadManager: downloadManager)
+        sut = TalkRowViewModel(talkData: talkData,
+                               talkUserInfoService: talkUserInfoService,
+                               downloadManager: downloadManager,
+                               playlistService: playlistService,
+                               playSubject: PassthroughSubject<String,Never>())
         sut.fetchTalkInfo()
         XCTAssertTrue(sut.favorite)
         sut.handleAction(.removeFromFavorites)
@@ -202,10 +243,13 @@ class TalkRowViewModelTests: XCTestCase {
     }
 
     func testDownload() throws {
-        let date = Calendar.current.date(from: DateComponents(year:2000, month: 1, day: 1))
         let talkData = TalkData(id: "1", title: "Title", url: "about:blank")
         let mockFileStorage = MockFileStorage()
-        sut = TalkRowViewModel(talkData: talkData, talkUserInfoService: talkUserInfoService, downloadManager: DownloadManager(urlSession: urlSession, fileStorage: mockFileStorage))
+        sut = TalkRowViewModel(talkData: talkData,
+                               talkUserInfoService: talkUserInfoService,
+                               downloadManager: DownloadManager(urlSession: urlSession, fileStorage: mockFileStorage),
+                               playlistService: playlistService,
+                               playSubject: PassthroughSubject<String,Never>())
         XCTAssertNil(mockFileStorage.saveURL)
         let downloadProgress = sut.$downloadProgress
             .collect(2)
@@ -218,7 +262,11 @@ class TalkRowViewModelTests: XCTestCase {
     func testRemoveDownload() throws {
         let talkData = TalkData(id: "1", title: "Title", url: "y2020/test.mp3")
         let mockFileStorage = MockFileStorage()
-        sut = TalkRowViewModel(talkData: talkData, talkUserInfoService: talkUserInfoService, downloadManager: DownloadManager(urlSession: urlSession, fileStorage: mockFileStorage))
+        sut = TalkRowViewModel(talkData: talkData,
+                               talkUserInfoService: talkUserInfoService,
+                               downloadManager: DownloadManager(urlSession: urlSession, fileStorage: mockFileStorage),
+                               playlistService: playlistService,
+                               playSubject: PassthroughSubject<String,Never>())
         XCTAssertNil(mockFileStorage.performedRemoveFilename)
         sut.handleAction(.removeDownload)
         XCTAssertEqual(mockFileStorage.performedRemoveFilename, "test.mp3")
@@ -226,7 +274,11 @@ class TalkRowViewModelTests: XCTestCase {
     
     func testShowTranscript() throws {
         let talkData = TalkData(id: "1", title: "Title", url: "y2020/test.mp3")
-        sut = TalkRowViewModel(talkData: talkData, talkUserInfoService: talkUserInfoService, downloadManager: DownloadManager(urlSession: urlSession, fileStorage: MockFileStorage()))
+        sut = TalkRowViewModel(talkData: talkData,
+                               talkUserInfoService: talkUserInfoService,
+                               downloadManager: DownloadManager(urlSession: urlSession, fileStorage: MockFileStorage()),
+                               playlistService: playlistService,
+                               playSubject: PassthroughSubject<String,Never>())
         XCTAssertFalse(sut.showTranscript)
         sut.handleAction(.transcript)
         XCTAssertTrue(sut.showTranscript)
@@ -242,7 +294,11 @@ class TalkRowViewModelTests: XCTestCase {
             try? self.context.save()
         }
         
-        sut = TalkRowViewModel(talkData: talkData, talkUserInfoService: talkUserInfoService, downloadManager: downloadManager)
+        sut = TalkRowViewModel(talkData: talkData,
+                               talkUserInfoService: talkUserInfoService,
+                               downloadManager: downloadManager,
+                               playlistService: playlistService,
+                               playSubject: PassthroughSubject<String,Never>())
         XCTAssertTrue(sut.notes.isEmpty)
         sut.fetchTalkInfo()
         XCTAssertEqual(sut.notes, "Test Notes")
@@ -256,7 +312,11 @@ class TalkRowViewModelTests: XCTestCase {
     func testHasNotesFilter() {
         let talkData = TalkData(id: "1", title: "Title", url: "about:blank")
 
-        sut = TalkRowViewModel(talkData: talkData, talkUserInfoService: talkUserInfoService, downloadManager: downloadManager)
+        sut = TalkRowViewModel(talkData: talkData,
+                               talkUserInfoService: talkUserInfoService,
+                               downloadManager: downloadManager,
+                               playlistService: playlistService,
+                               playSubject: PassthroughSubject<String,Never>())
 
         XCTAssertFalse(sut.applyFilter(.hasNotes))
 
@@ -267,7 +327,11 @@ class TalkRowViewModelTests: XCTestCase {
             try? self.context.save()
         }
         
-        sut = TalkRowViewModel(talkData: talkData, talkUserInfoService: talkUserInfoService, downloadManager: downloadManager)
+        sut = TalkRowViewModel(talkData: talkData,
+                               talkUserInfoService: talkUserInfoService,
+                               downloadManager: downloadManager,
+                               playlistService: playlistService,
+                               playSubject: PassthroughSubject<String,Never>())
 
         XCTAssertTrue(sut.applyFilter(.hasNotes))
     }
@@ -276,7 +340,11 @@ class TalkRowViewModelTests: XCTestCase {
         let talkData = TalkData(id: "1", title: "Title", url: "about:blank")
         fileStorage.exists = false
 
-        sut = TalkRowViewModel(talkData: talkData, talkUserInfoService: talkUserInfoService, downloadManager: downloadManager)
+        sut = TalkRowViewModel(talkData: talkData,
+                               talkUserInfoService: talkUserInfoService,
+                               downloadManager: downloadManager,
+                               playlistService: playlistService,
+                               playSubject: PassthroughSubject<String,Never>())
 
         XCTAssertFalse(sut.applyFilter(.downloaded))
         
@@ -296,7 +364,9 @@ class TalkRowViewModelTests: XCTestCase {
         
         sut = TalkRowViewModel(talkData: talkData,
                                talkUserInfoService: talkUserInfoService,
-                               downloadManager: downloadManager)
+                               downloadManager: downloadManager,
+                               playlistService: playlistService,
+                               playSubject: PassthroughSubject<String,Never>())
         XCTAssertFalse(sut.applyFilter(.favorited))
         sut.handleAction(.addToFavorites)
         XCTAssertTrue(sut.applyFilter(.favorited))

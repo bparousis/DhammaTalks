@@ -28,6 +28,7 @@ class TalkRowViewModel: NSObject, Identifiable, ObservableObject {
         case removeFromFavorites
         case notes
         case transcript
+        case addToPlaylist
         
         var title: String {
             switch self {
@@ -37,6 +38,7 @@ class TalkRowViewModel: NSObject, Identifiable, ObservableObject {
             case .removeFromFavorites: return "Remove from Favorites"
             case .notes: return "Notes"
             case .transcript: return "Transcript"
+            case .addToPlaylist: return "Add to Playlist"
             }
         }
     }
@@ -50,6 +52,10 @@ class TalkRowViewModel: NSObject, Identifiable, ObservableObject {
     private let talkData: TalkData
     private let talkUserInfoService: TalkUserInfoService
     private let downloadManager: DownloadManager
+    private let playlistService: PlaylistService
+    private let playSubject: any Subject<String, Never>
+    var playlist: Playlist?
+
     private static let PLAYED_TIME_BUFFER: TimeInterval = 10
     var dateStyle: DateStyle = .day
     private var downloadJob: DownloadJob? {
@@ -77,17 +83,17 @@ class TalkRowViewModel: NSObject, Identifiable, ObservableObject {
     
     var actions: [Action] {
         var actionList: [Action] = []
-        actionList.append(isDownloadAvailable ? .removeDownload : .download)
         actionList.append(favorite ? .removeFromFavorites : .addToFavorites)
+        if isInPlaylist == false {
+            actionList.append(.addToPlaylist)
+        }
+        actionList.append(isDownloadAvailable ? .removeDownload : .download)
+        
         actionList.append(.notes)
         if talkData.transcribeURL != nil {
             actionList.append(.transcript)
         }
         return actionList
-    }
-    
-    var title: String {
-        talkData.title
     }
     
     var id: String {
@@ -100,6 +106,10 @@ class TalkRowViewModel: NSObject, Identifiable, ObservableObject {
 
     var isDownloadAvailable: Bool {
         downloadManager.isDownloadAvailable(filename: talkData.filename)
+    }
+    
+    var isInPlaylist: Bool {
+        playlist != nil
     }
     
     var formattedDate: String? {
@@ -136,26 +146,33 @@ class TalkRowViewModel: NSObject, Identifiable, ObservableObject {
     }
     
     var timeRemainingString: String? {
-        guard let timeRemaining = DateComponentsFormatter.hmsFormatter.string(from: totalTimeInSeconds - currentTimeInSeconds) else {
+        guard currentTimeInSeconds > 0, totalTimeInSeconds > 0, let timeRemaining = DateComponentsFormatter.hmsFormatter.string(from: totalTimeInSeconds - currentTimeInSeconds) else {
             return nil
         }
         return "-\(timeRemaining)"
     }
 
-    @Published var playerItem: AVPlayerItem?
     @Published var state: TalkState = .unplayed
     @Published var downloadProgress: CGFloat?
     @Published var favorite = false
     @Published var showNotes = false
     @Published var showTranscript = false
+    @Published var showPlaylistSelector = false
     @Published var notes: String = ""
+    @Published var playlists: [Playlist] = []
     
-    init(talkData: TalkData, talkUserInfoService: TalkUserInfoService, downloadManager: DownloadManager)
+    init(talkData: TalkData,
+         talkUserInfoService: TalkUserInfoService,
+         downloadManager: DownloadManager,
+         playlistService: PlaylistService,
+         playSubject: any Subject<String, Never>)
     {
         self.talkData = talkData
         self.talkUserInfoService = talkUserInfoService
         self.downloadManager = downloadManager
         self.dateStyle = talkData.showDay ? .day : .noDay
+        self.playlistService = playlistService
+        self.playSubject = playSubject
     }
     
     func saveNotes() {
@@ -167,37 +184,36 @@ class TalkRowViewModel: NSObject, Identifiable, ObservableObject {
             Logger.talkUserInfo.error("Error saving TalkUserInfo: \(String(describing: error))")
         }
     }
-
+    
     @MainActor
-    func play() async {
+    func fetchPlaylists() async {
+        playlists = await playlistService.fetchPlaylists()
+    }
 
-        guard playerItem == nil, let playItemURL = downloadManager.downloadURL(for: talkData.filename) ?? talkData.makeURL() else { return }
-
-        if let talkUserInfo = talkUserInfoService.getTalkUserInfo(for: talkData.url) {
-            currentTime = talkUserInfo.currentTime
-            totalTime = talkUserInfo.totalTime
-        }
-        
-        let playerItem = AVPlayerItem(url: playItemURL)
-        if var currentTime = currentTime, currentTimeInSeconds > 0 {
-            if state == .played {
-                // If it's played then start it from the beginning again.
-                currentTime = CMTime(seconds: 0, preferredTimescale: currentTime.timescale)
-                self.currentTime = currentTime
-            }
-            await playerItem.seek(to: currentTime)
-        }
-        self.playerItem = playerItem
+    func addToPlaylist(_ playlist: Playlist) {
+        _ = try? playlistService.addTalkData(talkData, toPlaylistWithID: playlist.id)
     }
     
+    func createPlaylist(title: String, description: String?) {
+        do {
+            let playlist = Playlist(id: UUID(),
+                                    title: title,
+                                    desc: description,
+                                    playlistItems: [])
+            try playlistService.createPlaylist(playlist)
+        } catch {
+            Logger.playlist.error("Error saving Playlist: \(String(describing: error))")
+        }
+    }
+
+    func play() {        
+        playSubject.send(id)
+    }
+
     func finishedPlaying(item: AVPlayerItem) {
         
         // playerItem can only be associated with a single AVPlayer.  So when we're finished playing we
         // need to set it to nil.  A new instance will be created the next time the talk is played.
-        defer {
-            playerItem = nil
-        }
-
         currentTime = item.currentTime()
         totalTime = item.duration
 
@@ -230,9 +246,11 @@ class TalkRowViewModel: NSObject, Identifiable, ObservableObject {
             showNotes = true
         case .transcript:
             showTranscript = true
+        case .addToPlaylist:
+            showPlaylistSelector = true
         }
     }
-    
+
     func fetchTalkInfo() {
         if let talkUserInfo = talkUserInfoService.getTalkUserInfo(for: talkData.url) {
             currentTime = talkUserInfo.currentTime
@@ -261,7 +279,9 @@ class TalkRowViewModel: NSObject, Identifiable, ObservableObject {
             return talkUserInfo.isFavorite
         }
     }
-    
+
+    // MARK: Private
+
     private func fetchOrCreateTalkUserInfo(for url: String) -> TalkUserInfo {
         if let talkUserInfo = talkUserInfoService.getTalkUserInfo(for: talkData.url) {
             return talkUserInfo
@@ -295,6 +315,54 @@ class TalkRowViewModel: NSObject, Identifiable, ObservableObject {
             state = currentTimeInSeconds >= (totalTimeInSeconds - Self.PLAYED_TIME_BUFFER) ? .played : .inProgress
         } else {
             state = .unplayed
+        }
+    }
+}
+
+extension TalkRowViewModel: PlayableItem {
+
+    var title: String {
+        talkData.title
+    }
+
+    func loadPlayerItem() async -> AVPlayerItem? {
+        guard let playItemURL = downloadManager.downloadURL(for: talkData.filename) ?? talkData.makeURL() else {
+            return nil
+        }
+
+        if let talkUserInfo = talkUserInfoService.getTalkUserInfo(for: talkData.url) {
+            currentTime = talkUserInfo.currentTime
+            totalTime = talkUserInfo.totalTime
+        }
+        
+        let playerItem = AVPlayerItem(url: playItemURL)
+        if var currentTime = currentTime, currentTimeInSeconds > 0 {
+            if state == .played {
+                // If it's played then start it from the beginning again.
+                currentTime = CMTime(seconds: 0, preferredTimescale: currentTime.timescale)
+                self.currentTime = currentTime
+            }
+            await playerItem.seek(to: currentTime)
+        }
+        return playerItem
+    }
+    
+    func finishedPlaying(at time: CMTime, withTotal totalTime: CMTime) {
+        // At least one second should have been played before we bother
+        // recording the current time.
+        guard time.seconds > 1 else {
+            return
+        }
+        self.currentTime = time
+        self.totalTime = totalTime
+
+        do {
+            var talkUserInfo = fetchOrCreateTalkUserInfo(for: talkData.url)
+            talkUserInfo.currentTime = time
+            talkUserInfo.totalTime = totalTime
+            try talkUserInfoService.save(talkUserInfo: talkUserInfo)
+        } catch {
+            Logger.talkUserInfo.error("Error saving TalkUserInfo: \(String(describing: error))")
         }
     }
 }

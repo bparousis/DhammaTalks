@@ -12,10 +12,18 @@ import SwiftUI
 struct TalkSeriesListView: View {
 
     @ObservedObject private var viewModel: TalkSeriesListViewModel
+
+    private let audioPlayer: AudioPlayer
+
     @State private var searchText: String = ""
+    @State private var showPlayer = false
     
-    init(viewModel: TalkSeriesListViewModel) {
+    init(viewModel: TalkSeriesListViewModel)
+    {
         self.viewModel = viewModel
+        self.audioPlayer = AudioPlayer {
+            viewModel.playableItems
+        }
     }
     
     var body: some View {
@@ -35,6 +43,18 @@ struct TalkSeriesListView: View {
         .searchable(text: $searchText)
         .task {
             viewModel.fetchData()
+        }
+        .onReceive(viewModel.playPublisher) { playId in
+            if let foundIndex = viewModel.findIndexOfPlayableItemWithID(playId) {
+                viewModel.playAtIndex = foundIndex
+                self.showPlayer = true
+                Task {
+                    await audioPlayer.play(at: viewModel.playAtIndex)
+                }
+            }
+        }
+        .sheet(isPresented: $showPlayer) {
+            makeAudioPlayerView(audioPlayer: audioPlayer)
         }
         .task(id: searchText) {
             viewModel.fetchData(searchText: searchText)

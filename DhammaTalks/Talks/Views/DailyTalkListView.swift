@@ -10,13 +10,20 @@ import SwiftUI
 
 struct DailyTalkListView: View {
     
+    private let audioPlayer: AudioPlayer
+
     @ObservedObject private var viewModel: DailyTalkListViewModel
     
     @State private var searchText = ""
     @State private var showFilterSheet = false
+    @State private var showPlayer = false
 
-    init(viewModel: DailyTalkListViewModel) {
+    init(viewModel: DailyTalkListViewModel)
+    {
         self.viewModel = viewModel
+        self.audioPlayer = AudioPlayer {
+            viewModel.playableItems
+        }
     }
     
     private var datePickerView: some View {
@@ -53,10 +60,8 @@ struct DailyTalkListView: View {
     
     private func randomPlayButton(proxy: ScrollViewProxy) -> some View {
         Button {
-            Task {
-                if let id = await viewModel.playRandomTalk() {
-                    proxy.scrollTo(id)
-                }
+            if let id = viewModel.playRandomTalk() {
+                proxy.scrollTo(id)
             }
         } label: {
             VStack {
@@ -108,6 +113,18 @@ struct DailyTalkListView: View {
                 if viewModel.isRefreshable {
                     await viewModel.fetchData()
                 }
+            }
+            .onReceive(viewModel.playPublisher) { playId in
+                if let foundIndex = viewModel.findIndexOfPlayableItemWithID(playId) {
+                    viewModel.playAtIndex = foundIndex
+                    self.showPlayer = true
+                    Task {
+                        await audioPlayer.play(at: viewModel.playAtIndex)
+                    }
+                }
+            }
+            .sheet(isPresented: $showPlayer) {
+                makeAudioPlayerView(audioPlayer: audioPlayer)
             }
             .toolbar {
                 ToolbarItemGroup(placement: .bottomBar) {

@@ -41,7 +41,7 @@ class DhammaTalkAPITests: XCTestCase {
         sut = DhammaTalkAPI(urlSession: urlSession, fileStorage: fileStorage)
 
         XCTAssertFalse(fileStorage.didSaveData)
-        let talkDataList = await sut.fetchTalkCollection(for: .evening, year: 2010)
+        let talkDataList = try await sut.fetchTalkCollection(for: .evening, year: 2010)
         XCTAssertEqual(talkDataList.count, 5)
         XCTAssertTrue(fileStorage.didSaveData)
     }
@@ -55,8 +55,22 @@ class DhammaTalkAPITests: XCTestCase {
         let fileStorage = MockFileStorage()
         sut = DhammaTalkAPI(urlSession: urlSession, fileStorage: fileStorage)
 
-        let talkDataList = await sut.fetchTalkCollection(for: .evening, year: 2010)
-        XCTAssertEqual(talkDataList.count, 0)
+        let expectation = expectation(description: "Throws error")        
+        do {
+            _ = try await sut.fetchTalkCollection(for: .evening, year: 2010)
+        } catch {
+            if let fetchError = error as? TalkFetchError {
+                switch fetchError {
+                case .error:
+                    expectation.fulfill()
+                case .belowMinimumVersion:
+                    XCTFail("Expected .error")
+                }
+            } else {
+                XCTFail("Expected TalkFetchError")
+            }
+        }
+        await fulfillment(of: [expectation])
     }
 }
 
