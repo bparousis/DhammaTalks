@@ -41,7 +41,7 @@ class DhammaTalkAPITests: XCTestCase {
         sut = DhammaTalkAPI(urlSession: urlSession, fileStorage: fileStorage)
 
         XCTAssertFalse(fileStorage.didSaveData)
-        let talkDataList = await sut.fetchTalkCollection(for: .evening, year: 2010)
+        let talkDataList = try! await sut.fetchTalkCollection(for: .evening, year: 2010)
         XCTAssertEqual(talkDataList.count, 5)
         XCTAssertTrue(fileStorage.didSaveData)
     }
@@ -55,8 +55,10 @@ class DhammaTalkAPITests: XCTestCase {
         let fileStorage = MockFileStorage()
         sut = DhammaTalkAPI(urlSession: urlSession, fileStorage: fileStorage)
 
-        let talkDataList = await sut.fetchTalkCollection(for: .evening, year: 2010)
-        XCTAssertEqual(talkDataList.count, 0)
+        do {
+            _ = try await sut.fetchTalkCollection(for: .evening, year: 2010)
+            XCTFail("Excepted error to be thrown")
+        } catch {}
     }
 }
 

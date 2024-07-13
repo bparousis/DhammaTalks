@@ -17,11 +17,13 @@ struct DhammaTalksApp: App {
     private let talkUserInfoService: TalkUserInfoService
     private let talkDataService: TalkDataService
     private let downloadManager: DownloadManager
+    private let playlistService: PlaylistService
     
     init() {
         self.talkUserInfoService = TalkUserInfoService(managedObjectContext: CoreDataStack.viewContext)
         self.talkDataService = TalkDataService()
         self.downloadManager = DownloadManager()
+        self.playlistService = PlaylistService(managedObjectContext: CoreDataStack.viewContext)
     }
 
     var body: some Scene {
@@ -30,6 +32,7 @@ struct DhammaTalksApp: App {
                 .environmentObject(talkUserInfoService)
                 .environmentObject(talkDataService)
                 .environmentObject(downloadManager)
+                .environmentObject(playlistService)
         }
     }
 }

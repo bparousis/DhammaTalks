@@ -15,6 +15,7 @@ class DailyTalkListViewModel: ObservableObject {
     private let talkDataService: TalkDataService
     let talkUserInfoService: TalkUserInfoService
     private let downloadManager: DownloadManager
+    private let playlistService: PlaylistService
     
     enum State {
         case initial
@@ -74,10 +75,16 @@ class DailyTalkListViewModel: ObservableObject {
         selectedFilter.title
     }
 
-    init(talkDataService: TalkDataService, talkUserInfoService: TalkUserInfoService, downloadManager: DownloadManager, calendar: Calendar = .current) {
+    init(talkDataService: TalkDataService,
+         talkUserInfoService: TalkUserInfoService,
+         downloadManager: DownloadManager,
+         playlistService: PlaylistService,
+         calendar: Calendar = .current)
+    {
         self.talkDataService = talkDataService
         self.talkUserInfoService = talkUserInfoService
         self.downloadManager = downloadManager
+        self.playlistService = playlistService
         self.calendar = calendar
         self.selectedCategory = AppSettings.selectedTalkCategory ?? .evening
         self.selectedYear = AppSettings.selectedTalkYear ?? calendar.currentYear
@@ -97,7 +104,10 @@ class DailyTalkListViewModel: ObservableObject {
             }
 
             let sectionTitle = DateFormatter.talkSectionDateFormatter.string(from: date)
-            let talkRowViewModel = TalkRowViewModel(talkData: talkData, talkUserInfoService: talkUserInfoService, downloadManager: downloadManager)
+            let talkRowViewModel = TalkRowViewModel(talkData: talkData,
+                                                    talkUserInfoService: talkUserInfoService,
+                                                    downloadManager: downloadManager,
+                                                    playlistService: playlistService)
             if currentTalkSection?.title == sectionTitle {
                 if talkRowViewModel.applyFilter(selectedFilter) {
                     currentTalkSection?.addTalkRow(talkRowViewModel)
