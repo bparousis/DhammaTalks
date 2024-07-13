@@ -18,6 +18,7 @@ struct PlaylistSelectorView: View {
     @State private var title: String = ""
     @State private var desc: String = ""
     @State private var deleteOffsets: IndexSet?
+    @State private var showSortSheet = false
 
     init(viewModel: PlaylistSelectorViewModel) {
         self.viewModel = viewModel
@@ -38,6 +39,30 @@ struct PlaylistSelectorView: View {
                         }
                     }
                     .onDelete(perform: deletePlaylist)
+                }
+                .toolbar {
+                    ToolbarItemGroup(placement: .bottomBar) {
+                        Button {
+                            Task {
+                                showSortSheet = true
+                            }
+                        } label: {
+                            VStack {
+                                Image(systemName: "arrow.up.arrow.down.circle")
+                                Text("Sort")
+                            }
+                        }
+                        .confirmationDialog(Text("Sort By"), isPresented: $showSortSheet) {
+                            ForEach(viewModel.sortList) { sort in
+                                Button(sort.title) {
+                                    viewModel.selectedSort = sort
+                                    Task {
+                                        await viewModel.fetchPlaylists()
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
                 .alert("Delete Playlist?", isPresented: $presentDeleteAlert, actions: {
                     Button("Delete", action: {

@@ -30,6 +30,10 @@ struct PlaylistView: View {
                         TalkRow(viewModel: playlistItemRow)
                     }
                     .onMove { fromOffsets, toOffset in
+                        viewModel.moveItem(fromOffsets: fromOffsets, toOffset: toOffset)
+                    }
+                    .onDelete { offsets in
+                        viewModel.deleteItems(fromOffsets: offsets)
                     }
                 }
                 .toolbar {
@@ -59,6 +63,12 @@ struct PlaylistView: View {
     var body: some View {
         playlistView
         .onReceive(viewModel.savePublisher) { _ in
+        }
+        .task {
+            viewModel.searchPlaylistItems(searchText: searchText)
+        }
+        .task(id: searchText) {
+            viewModel.searchPlaylistItems(searchText: searchText)
         }
         .navigationTitle(viewModel.title)
     }

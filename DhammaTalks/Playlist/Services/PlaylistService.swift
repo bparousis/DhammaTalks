@@ -20,9 +20,10 @@ class PlaylistService: ObservableObject {
     }
 
     @MainActor
-    func fetchPlaylists() async -> [Playlist] {
+    func fetchPlaylists(sort: Sort = .createdDate) async -> [Playlist] {
         await self.managedObjectContext.perform {
             let playlistFetch = NSFetchRequest<PlaylistMO>(entityName: "PlaylistMO")
+            playlistFetch.sortDescriptors = [sort.sortDescriptor]
             guard let results = try? self.managedObjectContext.fetch(playlistFetch) else {
                 return []
             }
@@ -42,6 +43,8 @@ class PlaylistService: ObservableObject {
             playlistMO.id = playlist.id
             playlistMO.title = playlist.title
             playlistMO.desc = playlist.desc
+            playlistMO.createdDate = playlist.createdDate
+            playlistMO.lastModifiedDate = playlist.lastModifiedDate
             try managedObjectContext.save()
             createResult = true
         }
@@ -54,8 +57,8 @@ class PlaylistService: ObservableObject {
             guard let playlistMO = try fetchPlaylistWithID(playlistID) else {
                 return false
             }
+            playlistMO.lastModifiedDate = Date()
             let playlistItemMO = PlaylistItemMO(context: managedObjectContext)
-            playlistItemMO.order = Int16(playlistMO.playlistItems?.count ?? 0)
             playlistItemMO.playlist = playlistMO
             playlistItemMO.title = talkData.title
             playlistItemMO.url = talkData.url
@@ -63,7 +66,41 @@ class PlaylistService: ObservableObject {
             return true
         }
     }
-    
+
+    func moveItem(fromOffsets: IndexSet, toOffset: Int, playlistID: UUID) throws {
+        try managedObjectContext.performAndWait {
+            guard let playlistMO = try fetchPlaylistWithID(playlistID) else {
+                return
+            }
+
+            var playlistItems = playlistMO.playlistItems?.array
+            playlistItems?.move(fromOffsets: fromOffsets, toOffset: toOffset)
+            if let playlistItems {
+                playlistMO.playlistItems = NSOrderedSet(array: playlistItems)
+                if managedObjectContext.hasChanges {
+                    try managedObjectContext.save()
+                }
+            }
+        }
+    }
+
+    func deleteItems(fromOffsets: IndexSet, playlistID: UUID) throws {
+        try managedObjectContext.performAndWait {
+            guard let playlistMO = try fetchPlaylistWithID(playlistID) else {
+                return
+            }
+
+            var playlistItems = playlistMO.playlistItems?.array
+            playlistItems?.remove(atOffsets: fromOffsets)
+            if let playlistItems {
+                playlistMO.playlistItems = NSOrderedSet(array: playlistItems)
+                if managedObjectContext.hasChanges {
+                    try managedObjectContext.save()
+                }
+            }
+        }
+    }
+
     func deletePlaylist(id: UUID) throws {
         if let playlistToDelete = try fetchPlaylistWithID(id, includesPropertyValues: false) {
             managedObjectContext.delete(playlistToDelete)

@@ -191,11 +191,8 @@ struct TalkRow: View {
                 .navigationTitle("Playlists")
             } else {
                 VStack(spacing: 10) {
-                    Text("Successfully added to playlist")
+                    Text("Saved to playlist")
                         .font(.headline)
-                    Image(systemName: "checkmark.circle")
-                        .foregroundColor(.green)
-                        .font(.system(size: 100))
                 }
             }
         }

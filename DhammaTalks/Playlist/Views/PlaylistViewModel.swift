@@ -9,6 +9,15 @@
 import Foundation
 import Combine
 
+import os.log
+
+enum SortType {
+    case name
+    case createdData
+    case lastModifiedDate
+    
+}
+
 class PlaylistViewModel: ObservableObject {
     @Published var playlistItems: [TalkRowViewModel] = []
     private let playlist: Playlist
@@ -32,11 +41,17 @@ class PlaylistViewModel: ObservableObject {
         self.talkUserInfoService = talkUserInfoService
         self.downloadManager = downloadManager
         self.playlistService = playlistService
-        
-        self.playlistItems = playlist.playlistItems
-            .sorted { $0.order < $1.order }
-            .map{
-                let viewModel = TalkRowViewModel(talkData: $0.talkData,
+    }
+    
+    public func loadPlaylistItems() {
+        self.playlistItems = fetchPlaylistItems()
+    }
+
+    private func fetchPlaylistItems() -> [TalkRowViewModel] {
+        playlist
+            .playlistItems
+            .map {
+                let viewModel = TalkRowViewModel(talkData: $0,
                                                  talkUserInfoService: talkUserInfoService,
                                                  downloadManager: downloadManager,
                                                  playlistService: playlistService)
@@ -48,5 +63,34 @@ class PlaylistViewModel: ObservableObject {
 
     func playRandomTalk() async -> String? {
         return await playlistItems.playRandom()
+    }
+
+    func moveItem(fromOffsets: IndexSet, toOffset: Int) {
+        do {
+            try playlistService.moveItem(fromOffsets: fromOffsets, toOffset: toOffset, playlistID: playlist.id)
+            playlistItems.move(fromOffsets: fromOffsets, toOffset: toOffset)
+        } catch {
+            Logger.playlist.error("Error moving playlist item: \(String(describing: error))")
+        }
+    }
+
+    func deleteItems(fromOffsets: IndexSet) {
+        do {
+            try playlistService.deleteItems(fromOffsets: fromOffsets, playlistID: playlist.id)
+            playlistItems.remove(atOffsets: fromOffsets)
+        } catch {
+            Logger.playlist.error("Error deleting playlist item: \(String(describing: error))")
+        }
+    }
+
+    func searchPlaylistItems(searchText: String) {
+        let formattedSearchText = searchText.lowercased().trimmingCharacters(in: .whitespacesAndNewlines)
+        var searchedItems = fetchPlaylistItems()
+        if !formattedSearchText.isEmpty {
+            searchedItems = searchedItems.filter {
+                $0.title.lowercased().contains(formattedSearchText)
+            }
+        }
+        playlistItems = searchedItems
     }
 }
