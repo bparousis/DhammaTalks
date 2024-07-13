@@ -276,7 +276,7 @@ class TalkRowViewModelTests: XCTestCase {
     
     func testShowTranscript() throws {
         let talkData = TalkData(id: "1", title: "Title", url: "y2020/test.mp3")
-        sut = TalkRowViewModel(talkData: talkData, talkUserInfoService: talkUserInfoService, downloadManager: DownloadManager(urlSession: urlSession, fileStorage: MockFileStorage()))
+        sut = TalkRowViewModel(talkData: talkData, talkUserInfoService: talkUserInfoService, downloadManager: DownloadManager(urlSession: urlSession, fileStorage: MockFileStorage()), playlistService: playlistService)
         XCTAssertFalse(sut.showTranscript)
         sut.handleAction(.transcript)
         XCTAssertTrue(sut.showTranscript)
@@ -363,6 +363,20 @@ class TalkRowViewModelTests: XCTestCase {
         XCTAssertFalse(sut.applyFilter(.favorited))
         sut.handleAction(.addToFavorites)
         XCTAssertTrue(sut.applyFilter(.favorited))
+    }
+    
+    func testPlaylistAction() {
+        let talkData = TalkData(id: "1", title: "Title", url: "about:blank")
+
+        sut = TalkRowViewModel(talkData: talkData,
+                               talkUserInfoService: talkUserInfoService,
+                               downloadManager: downloadManager,
+                               playlistService: playlistService)
+        XCTAssertFalse(sut.isInPlaylist)
+        XCTAssertTrue(sut.actions.contains(.addToPlaylist))
+        sut.playlist = Playlist(id: UUID(), title: "Playlist", desc: nil, createdDate: Date(), lastModifiedDate: Date(), playlistItems: [talkData])
+        XCTAssertTrue(sut.isInPlaylist)
+        XCTAssertFalse(sut.actions.contains(.addToPlaylist))
     }
 }
 
