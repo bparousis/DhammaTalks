@@ -218,8 +218,12 @@ struct TalkRow: View {
         }
         .confirmationDialog(Text(viewModel.title), isPresented: $showActionSheet) {
             ForEach(viewModel.actions) { action in
-                Button(action.title) {
-                    viewModel.handleAction(action)
+                if action == .share, let talkURL = viewModel.talkURL {
+                    ShareLink(item: talkURL)
+                } else {
+                    Button(action.title) {
+                        viewModel.handleAction(action)
+                    }
                 }
             }
         }
