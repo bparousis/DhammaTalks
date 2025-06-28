@@ -19,7 +19,7 @@ class TalkRowViewModel: NSObject, Identifiable, ObservableObject {
         case noDay
     }
     
-    enum Action: String, Identifiable {
+    enum Action: String, Identifiable, Equatable {
         var id: RawValue { rawValue }
         
         case download
@@ -29,6 +29,7 @@ class TalkRowViewModel: NSObject, Identifiable, ObservableObject {
         case notes
         case transcript
         case addToPlaylist
+        case share
         
         var title: String {
             switch self {
@@ -39,6 +40,7 @@ class TalkRowViewModel: NSObject, Identifiable, ObservableObject {
             case .notes: return "Notes"
             case .transcript: return "Transcript"
             case .addToPlaylist: return "Add to Playlist"
+            case .share: return "Share"
             }
         }
     }
@@ -80,6 +82,10 @@ class TalkRowViewModel: NSObject, Identifiable, ObservableObject {
         }
     }
     
+    public var talkURL: URL? {
+        talkData.makeURL()
+    }
+
     var actions: [Action] {
         var actionList: [Action] = []
         actionList.append(favorite ? .removeFromFavorites : .addToFavorites)
@@ -92,11 +98,12 @@ class TalkRowViewModel: NSObject, Identifiable, ObservableObject {
         if talkData.transcribeURL != nil {
             actionList.append(.transcript)
         }
+        actionList.append(.share)
         return actionList
     }
     
     var title: String {
-        talkData.title
+        talkData.title.replacingOccurrences(of: "&amp;", with: "&")
     }
     
     var id: String {
@@ -275,6 +282,8 @@ class TalkRowViewModel: NSObject, Identifiable, ObservableObject {
             showTranscript = true
         case .addToPlaylist:
             showPlaylistSelector = true
+            break
+        case .share:
             break
         }
     }
