@@ -28,6 +28,10 @@
 		762577F02AED938500E370CE /* DhammaTalkAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 762577EF2AED938500E370CE /* DhammaTalkAPI.swift */; };
 		762577F32AEDE5DA00E370CE /* CollectionTalkData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 762577F22AEDE5DA00E370CE /* CollectionTalkData.swift */; };
 		762577F52AEDE8A700E370CE /* CollectionResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 762577F42AEDE8A700E370CE /* CollectionResponse.swift */; };
+		7629CF6D2E105D3900B63776 /* AudioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7629CF6C2E105D3600B63776 /* AudioPlayer.swift */; };
+		7629CF6F2E105EB300B63776 /* AudioPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7629CF6E2E105EB100B63776 /* AudioPlayerView.swift */; };
+		7629CF712E105EE500B63776 /* PlayableItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7629CF702E105EE500B63776 /* PlayableItem.swift */; };
+		7629CF732E105F0400B63776 /* PlayableList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7629CF722E105F0400B63776 /* PlayableList.swift */; };
 		762D0FF9278151BC00DB04FD /* FavoriteDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 762D0FF8278151BC00DB04FD /* FavoriteDetails.swift */; };
 		763717AF27B0431B007DF19A /* FavoritesListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 763717AE27B0431B007DF19A /* FavoritesListViewModel.swift */; };
 		763717B127B0434D007DF19A /* Array.swift in Sources */ = {isa = PBXBuildFile; fileRef = 763717B027B0434D007DF19A /* Array.swift */; };
@@ -166,6 +170,10 @@
 		762577EF2AED938500E370CE /* DhammaTalkAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DhammaTalkAPI.swift; sourceTree = "<group>"; };
 		762577F22AEDE5DA00E370CE /* CollectionTalkData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionTalkData.swift; sourceTree = "<group>"; };
 		762577F42AEDE8A700E370CE /* CollectionResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionResponse.swift; sourceTree = "<group>"; };
+		7629CF6C2E105D3600B63776 /* AudioPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayer.swift; sourceTree = "<group>"; };
+		7629CF6E2E105EB100B63776 /* AudioPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayerView.swift; sourceTree = "<group>"; };
+		7629CF702E105EE500B63776 /* PlayableItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayableItem.swift; sourceTree = "<group>"; };
+		7629CF722E105F0400B63776 /* PlayableList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayableList.swift; sourceTree = "<group>"; };
 		762D0FF8278151BC00DB04FD /* FavoriteDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteDetails.swift; sourceTree = "<group>"; };
 		763717AE27B0431B007DF19A /* FavoritesListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesListViewModel.swift; sourceTree = "<group>"; };
 		763717B027B0434D007DF19A /* Array.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Array.swift; sourceTree = "<group>"; };
@@ -399,6 +407,17 @@
 			path = API;
 			sourceTree = "<group>";
 		};
+		7629CF6B2E105D2900B63776 /* Player */ = {
+			isa = PBXGroup;
+			children = (
+				7629CF702E105EE500B63776 /* PlayableItem.swift */,
+				7629CF722E105F0400B63776 /* PlayableList.swift */,
+				7629CF6E2E105EB100B63776 /* AudioPlayerView.swift */,
+				7629CF6C2E105D3600B63776 /* AudioPlayer.swift */,
+			);
+			path = Player;
+			sourceTree = "<group>";
+		};
 		763C950027383D2B00632633 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
@@ -505,6 +524,7 @@
 		76E064F523CA9C6C007E18C1 /* DhammaTalks */ = {
 			isa = PBXGroup;
 			children = (
+				7629CF6B2E105D2900B63776 /* Player */,
 				76E474CD2A65D14B0057976F /* Playlist */,
 				76068C6627B2180C00726860 /* Settings */,
 				76172408275F2EA200757236 /* UI */,
@@ -802,8 +822,10 @@
 				76E064F723CA9C6C007E18C1 /* AppDelegate.swift in Sources */,
 				766CA1E523E6600400A8E770 /* TalkSection.swift in Sources */,
 				76BB56BC2A6332FD00E74638 /* PlaylistRow.swift in Sources */,
+				7629CF6D2E105D3900B63776 /* AudioPlayer.swift in Sources */,
 				767B41B92C3F8025002AB4AB /* Sort.swift in Sources */,
 				76E0653223CAB9EB007E18C1 /* AudioFileNameParser.swift in Sources */,
+				7629CF712E105EE500B63776 /* PlayableItem.swift in Sources */,
 				76D940B829288007003924D3 /* PlaylistSelectorView.swift in Sources */,
 				763717AF27B0431B007DF19A /* FavoritesListViewModel.swift in Sources */,
 				76AB4D45279C995200C83F8D /* DownloadManager.swift in Sources */,
@@ -839,6 +861,7 @@
 				76D940BE292883D7003924D3 /* Playlist.swift in Sources */,
 				76F9F46127483C3600957810 /* DailyTalkListViewModel.swift in Sources */,
 				76D064312761BCFC00FBFEA6 /* LocalFileStorage.swift in Sources */,
+				7629CF6F2E105EB300B63776 /* AudioPlayerView.swift in Sources */,
 				76068C6A27B2184100726860 /* MailView.swift in Sources */,
 				7637DBE7276E862800D2ACEC /* DhammaTalksApp.swift in Sources */,
 				763C950427386ECC00632633 /* DailyTalkListView.swift in Sources */,
@@ -848,6 +871,7 @@
 				76F9F46327483F2700957810 /* Calendar.swift in Sources */,
 				765B6C7627B6144000696693 /* TalkSeriesListViewModel.swift in Sources */,
 				76CF99F52A66167E002DD5C9 /* PlaylistRowViewModel.swift in Sources */,
+				7629CF732E105F0400B63776 /* PlayableList.swift in Sources */,
 				7608946029AA7B6600E6EC0B /* PlaylistView.swift in Sources */,
 				7617240A275F2EB700757236 /* CircularProgressBar.swift in Sources */,
 				76D940C22928847C003924D3 /* PlaylistMO.swift in Sources */,

@@ -355,3 +355,52 @@ class TalkRowViewModel: NSObject, Identifiable, ObservableObject {
         }
     }
 }
+
+extension TalkRowViewModel: PlayableItem {
+    
+    func loadPlayerItem() async -> AVPlayerItem? {
+        if let playerItem {
+            return playerItem
+        }
+
+        guard let playItemURL = downloadManager.downloadURL(for: talkData.filename) ?? talkData.makeURL() else {
+            return nil
+        }
+
+        if let talkUserInfo = talkUserInfoService.getTalkUserInfo(for: talkData.url) {
+            currentTime = talkUserInfo.currentTime
+            totalTime = talkUserInfo.totalTime
+        }
+
+        self.playerItem = AVPlayerItem(url: playItemURL)
+        if var currentTime = currentTime, currentTimeInSeconds > 0 {
+            if state == .played {
+                // If it's played then start it from the beginning again.
+                currentTime = CMTime(seconds: 0, preferredTimescale: currentTime.timescale)
+                self.currentTime = currentTime
+            }
+            await playerItem?.seek(to: currentTime)
+        }
+        return self.playerItem
+    }
+
+    func finishedPlaying(at time: CMTime, withTotal totalDuration: CMTime) {
+        // playerItem can only be associated with a single AVPlayer.  So when we're finished playing we
+        // need to set it to nil.  A new instance will be created the next time the talk is played.
+        defer {
+            playerItem = nil
+        }
+
+        currentTime = time
+        totalTime = totalDuration
+
+        do {
+            var talkUserInfo = fetchOrCreateTalkUserInfo(for: talkData.url)
+            talkUserInfo.currentTime = time
+            talkUserInfo.totalTime = totalDuration
+            try talkUserInfoService.save(talkUserInfo: talkUserInfo)
+        } catch {
+            Logger.talkUserInfo.error("Error saving TalkUserInfo: \(String(describing: error))")
+        }
+    }
+}
