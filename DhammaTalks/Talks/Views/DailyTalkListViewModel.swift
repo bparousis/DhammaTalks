@@ -75,6 +75,10 @@ class DailyTalkListViewModel: ObservableObject {
         selectedFilter.title
     }
 
+    var flatPlayableItems: [TalkRowViewModel] {
+        talkSections.flatMap(\.talkRows)
+    }
+
     init(talkDataService: TalkDataService,
          talkUserInfoService: TalkUserInfoService,
          downloadManager: DownloadManager,
@@ -90,9 +94,10 @@ class DailyTalkListViewModel: ObservableObject {
         self.selectedYear = AppSettings.selectedTalkYear ?? calendar.currentYear
     }
     
-    func playRandomTalk() async -> String? {
-        guard let randomSection = talkSections.randomElement() else { return nil }
-        return await randomSection.talkRows.playRandom()
+    func playRandomTalk() -> (id: String, index: Int)? {
+        let flat = flatPlayableItems
+        guard let index = flat.indices.randomElement() else { return nil }
+        return (flat[index].id, index)
     }
     
     private func buildTalkSectionViewModels() -> [TalkSectionViewModel] {

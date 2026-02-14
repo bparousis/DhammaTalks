@@ -14,11 +14,20 @@ struct PlaylistView: View {
 
     @ObservedObject private var viewModel: PlaylistViewModel
     @State var searchText: String = ""
+    @State private var playbackSession: PlaybackSession?
 
     init(viewModel: PlaylistViewModel) {
         self.viewModel = viewModel
     }
-    
+
+    private func startPlayback(items: [any PlayableItem], index: Int) {
+        let player = AudioPlayer(playableItems: { items })
+        playbackSession = PlaybackSession(player: player)
+        Task {
+            await player.play(at: index)
+        }
+    }
+
     @ViewBuilder
     private var playlistView: some View {
         if viewModel.playlistItems.isEmpty && searchText.isEmpty {
@@ -27,7 +36,10 @@ struct PlaylistView: View {
             ScrollViewReader { proxy in
                 List {
                     ForEach(viewModel.playlistItems) { playlistItemRow in
-                        TalkRow(viewModel: playlistItemRow)
+                        TalkRow(viewModel: playlistItemRow) { tapped in
+                            guard let index = viewModel.playlistItems.firstIndex(where: { $0.id == tapped.id }) else { return }
+                            startPlayback(items: viewModel.flatPlayableItems, index: index)
+                        }
                     }
                     .onMove { fromOffsets, toOffset in
                         viewModel.moveItem(fromOffsets: fromOffsets, toOffset: toOffset)
@@ -42,10 +54,9 @@ struct PlaylistView: View {
                 .toolbar {
                     ToolbarItemGroup(placement: .bottomBar) {
                         Button {
-                            Task {
-                                if let id = await viewModel.playRandomTalk() {
-                                    proxy.scrollTo(id)
-                                }
+                            if let (id, index) = viewModel.playRandomTalk() {
+                                startPlayback(items: viewModel.flatPlayableItems, index: index)
+                                proxy.scrollTo(id)
                             }
                         } label: {
                             VStack {
@@ -69,6 +80,13 @@ struct PlaylistView: View {
         }
         .task(id: searchText) {
             viewModel.searchPlaylistItems(searchText: searchText)
+        }
+        .sheet(item: $playbackSession) { session in
+            AudioPlayerView(audioPlayer: session.player)
+                .onDisappear {
+                    session.player.finishPlaying()
+                    playbackSession = nil
+                }
         }
         .navigationTitle(viewModel.title)
     }

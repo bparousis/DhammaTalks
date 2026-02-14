@@ -9,14 +9,23 @@
 import SwiftUI
 
 struct DailyTalkListView: View {
-    
+
     @ObservedObject private var viewModel: DailyTalkListViewModel
-    
+
     @State private var searchText = ""
     @State private var showFilterSheet = false
+    @State private var playbackSession: PlaybackSession?
 
     init(viewModel: DailyTalkListViewModel) {
         self.viewModel = viewModel
+    }
+
+    private func startPlayback(items: [any PlayableItem], index: Int) {
+        let player = AudioPlayer(playableItems: { items })
+        playbackSession = PlaybackSession(player: player)
+        Task {
+            await player.play(at: index)
+        }
     }
     
     private var datePickerView: some View {
@@ -53,10 +62,9 @@ struct DailyTalkListView: View {
     
     private func randomPlayButton(proxy: ScrollViewProxy) -> some View {
         Button {
-            Task {
-                if let id = await viewModel.playRandomTalk() {
-                    proxy.scrollTo(id)
-                }
+            if let (id, index) = viewModel.playRandomTalk() {
+                startPlayback(items: viewModel.flatPlayableItems, index: index)
+                proxy.scrollTo(id)
             }
         } label: {
             VStack {
@@ -72,11 +80,15 @@ struct DailyTalkListView: View {
             Text(viewModel.selectedFilter.emptyListText)
                 .frame(maxWidth: .infinity, alignment: .center)
         } else {
+            let flatItems = talkSections.flatMap(\.talkRows)
             ForEach(talkSections) { talkSection in
                 Section(header: TalkSectionHeader(title: talkSection.title,
                                                   talkCount: talkSection.talkRows.count)) {
                     ForEach(talkSection.talkRows) { talkRow in
-                        TalkRow(viewModel: talkRow)
+                        TalkRow(viewModel: talkRow) { tapped in
+                            guard let index = flatItems.firstIndex(where: { $0.id == tapped.id }) else { return }
+                            startPlayback(items: flatItems, index: index)
+                        }
                     }
                 }
             }
@@ -141,6 +153,13 @@ struct DailyTalkListView: View {
                 await viewModel.fetchData(searchText: searchText)
             }
             .listStyle(.insetGrouped)
+            .sheet(item: $playbackSession) { session in
+                AudioPlayerView(audioPlayer: session.player)
+                    .onDisappear {
+                        session.player.finishPlaying()
+                        playbackSession = nil
+                    }
+            }
         }
         .navigationBarTitle("Daily Talks", displayMode: .inline)
     }

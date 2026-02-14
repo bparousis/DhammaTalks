@@ -43,7 +43,12 @@ class FavoritesListViewModel: ObservableObject {
         return viewModel
     }
     
-    func playRandomTalk() async -> String? {
-        return await favorites.playRandom()
+    var flatPlayableItems: [TalkRowViewModel] {
+        favorites
+    }
+
+    func playRandomTalk() -> (id: String, index: Int)? {
+        guard let index = favorites.indices.randomElement() else { return nil }
+        return (favorites[index].id, index)
     }
 }

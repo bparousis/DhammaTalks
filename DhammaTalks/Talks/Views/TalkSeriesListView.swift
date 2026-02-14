@@ -13,11 +13,20 @@ struct TalkSeriesListView: View {
 
     @ObservedObject private var viewModel: TalkSeriesListViewModel
     @State private var searchText: String = ""
-    
+    @State private var playbackSession: PlaybackSession?
+
     init(viewModel: TalkSeriesListViewModel) {
         self.viewModel = viewModel
     }
-    
+
+    private func startPlayback(items: [any PlayableItem], index: Int) {
+        let player = AudioPlayer(playableItems: { items })
+        playbackSession = PlaybackSession(player: player)
+        Task {
+            await player.play(at: index)
+        }
+    }
+
     var body: some View {
         List {
             Section {
@@ -25,9 +34,13 @@ struct TalkSeriesListView: View {
                 Text(.init(viewModel.description))
             }
             ForEach(viewModel.talkSections) { section in
+                let flatItems = viewModel.flatPlayableItems
                 Section(header: TalkSectionHeader(title: section.title, talkCount: section.talkRows.count)) {
                     ForEach(section.talkRows) { talkRowViewModel in
-                        TalkRow(viewModel: talkRowViewModel)
+                        TalkRow(viewModel: talkRowViewModel) { tapped in
+                            guard let index = flatItems.firstIndex(where: { $0.id == tapped.id }) else { return }
+                            startPlayback(items: flatItems, index: index)
+                        }
                     }
                 }
             }
@@ -40,6 +53,13 @@ struct TalkSeriesListView: View {
             viewModel.fetchData(searchText: searchText)
         }
         .listStyle(.insetGrouped)
+        .sheet(item: $playbackSession) { session in
+            AudioPlayerView(audioPlayer: session.player)
+                .onDisappear {
+                    session.player.finishPlaying()
+                    playbackSession = nil
+                }
+        }
         .navigationBarTitle(viewModel.title, displayMode: .inline)
     }
 }

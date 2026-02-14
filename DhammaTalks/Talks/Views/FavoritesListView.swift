@@ -16,11 +16,20 @@ struct FavoritesListView: View {
 
     @ObservedObject private var viewModel: FavoritesListViewModel
     @State var searchText: String = ""
+    @State private var playbackSession: PlaybackSession?
 
     init(viewModel: FavoritesListViewModel) {
         self.viewModel = viewModel
     }
-    
+
+    private func startPlayback(items: [any PlayableItem], index: Int) {
+        let player = AudioPlayer(playableItems: { items })
+        playbackSession = PlaybackSession(player: player)
+        Task {
+            await player.play(at: index)
+        }
+    }
+
     @ViewBuilder
     private var favoritesListView: some View {
         if viewModel.favorites.isEmpty && searchText.isEmpty {
@@ -29,16 +38,18 @@ struct FavoritesListView: View {
             ScrollViewReader { proxy in
                 List {
                     ForEach(viewModel.favorites) { favoriteRow in
-                        TalkRow(viewModel: favoriteRow)
+                        TalkRow(viewModel: favoriteRow) { tapped in
+                            guard let index = viewModel.favorites.firstIndex(where: { $0.id == tapped.id }) else { return }
+                            startPlayback(items: viewModel.flatPlayableItems, index: index)
+                        }
                     }
                 }
                 .toolbar {
                     ToolbarItemGroup(placement: .bottomBar) {
                         Button {
-                            Task {
-                                if let id = await viewModel.playRandomTalk() {
-                                    proxy.scrollTo(id)
-                                }
+                            if let (id, index) = viewModel.playRandomTalk() {
+                                startPlayback(items: viewModel.flatPlayableItems, index: index)
+                                proxy.scrollTo(id)
                             }
                         } label: {
                             VStack {
@@ -67,6 +78,13 @@ struct FavoritesListView: View {
         }
         .task(id: searchText) {
             await viewModel.fetchFavorites(searchText: searchText)
+        }
+        .sheet(item: $playbackSession) { session in
+            AudioPlayerView(audioPlayer: session.player)
+                .onDisappear {
+                    session.player.finishPlaying()
+                    playbackSession = nil
+                }
         }
         .navigationTitle("Favorites")
     }

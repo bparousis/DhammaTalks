@@ -59,6 +59,11 @@ class AudioPlayer: ObservableObject {
     func play(at index: Int = 0) async {
 
         if status != .paused || index != playIndex {
+            if let currentItem = currentPlayerItem {
+                NotificationCenter.default.removeObserver(self,
+                                                          name: NSNotification.Name.AVPlayerItemDidPlayToEndTime,
+                                                          object: currentItem)
+            }
             let playableItems = playableItems()
             playIndex = index
             guard playableItems.indices.contains(playIndex) else { return }
@@ -81,6 +86,7 @@ class AudioPlayer: ObservableObject {
             } else {
                 player?.replaceCurrentItem(with: playerItem)
             }
+            progressTime = 0
             title = playableItem.title
             setupNowPlayingInfo()
         }
@@ -93,7 +99,10 @@ class AudioPlayer: ObservableObject {
     }
     
     @objc func playerDidFinishPlaying(sender: Notification) {
-        Task {
+        Task { @MainActor in
+            if let item = sender.object as? AVPlayerItem, let playableItem = currentPlayableItem {
+                playableItem.finishedPlaying(at: item.currentTime(), withTotal: item.duration)
+            }
             let result = await playNext()
             if !result {
                 finishPlaying()
@@ -171,13 +180,12 @@ class AudioPlayer: ObservableObject {
         guard let timeRemaining = DateComponentsFormatter.hmsFormatter.string(from: totalTimeInSeconds - currentTimeInSeconds) else {
             return nil
         }
-        return "-\(timeRemaining)"
+        return "\(timeRemaining)"
     }
 
     @MainActor
     func playNext() async -> Bool {
         if hasNext {
-            finishPlaying()
             await play(at: playIndex + 1)
             return true
         }
@@ -187,7 +195,7 @@ class AudioPlayer: ObservableObject {
     @MainActor
     func playPrevious() async -> Bool {
         if hasPrevious {
-            finishPlaying()
+            saveCurrentItemProgress()
             await play(at: playIndex - 1)
             return true
         }
@@ -197,10 +205,14 @@ class AudioPlayer: ObservableObject {
     func finishPlaying() {
         guard status != .idle else { return }
         pause()
+        saveCurrentItemProgress()
         NotificationCenter.default.removeObserver(self)
+    }
+    
+    private func saveCurrentItemProgress() {
         if let currentPlayableItem, let currentPlayerItem {
             currentPlayableItem.finishedPlaying(at: currentPlayerItem.currentTime(),
-                                                withTotal: currentPlayerItem.duration)
+                                               withTotal: currentPlayerItem.duration)
         }
     }
     

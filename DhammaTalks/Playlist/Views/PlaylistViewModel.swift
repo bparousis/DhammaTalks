@@ -61,8 +61,13 @@ class PlaylistViewModel: ObservableObject {
             }
     }
 
-    func playRandomTalk() async -> String? {
-        return await playlistItems.playRandom()
+    var flatPlayableItems: [TalkRowViewModel] {
+        playlistItems
+    }
+
+    func playRandomTalk() -> (id: String, index: Int)? {
+        guard let index = playlistItems.indices.randomElement() else { return nil }
+        return (playlistItems[index].id, index)
     }
 
     func moveItem(fromOffsets: IndexSet, toOffset: Int) {

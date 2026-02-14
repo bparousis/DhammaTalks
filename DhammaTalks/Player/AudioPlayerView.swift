@@ -9,6 +9,12 @@
 import SwiftUI
 import Combine
 
+/// Wraps an AudioPlayer for use with `.sheet(item:)` so the sheet always has a valid player (avoids blank sheet when optional is out of sync).
+struct PlaybackSession: Identifiable {
+    let id = UUID()
+    let player: AudioPlayer
+}
+
 struct AudioPlayerView: View {
     
     private struct Constants {

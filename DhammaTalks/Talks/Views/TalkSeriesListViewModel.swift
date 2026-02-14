@@ -25,7 +25,11 @@ class TalkSeriesListViewModel: ObservableObject {
     }
     
     @Published private(set) var talkSections: [TalkSectionViewModel] = []
-    
+
+    var flatPlayableItems: [TalkRowViewModel] {
+        talkSections.flatMap(\.talkRows)
+    }
+
     init(talkSeries: TalkSeries,
          talkUserInfoService: TalkUserInfoService,
          downloadManager: DownloadManager,
