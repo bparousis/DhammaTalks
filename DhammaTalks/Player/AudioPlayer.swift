@@ -9,6 +9,7 @@
 import AVKit
 import Combine
 import MediaPlayer
+import SwiftUI
 
 class AudioPlayer: ObservableObject {
     
@@ -39,6 +40,8 @@ class AudioPlayer: ObservableObject {
     var isScrubbing = false
     
     private let player: AVPlayer
+    private let networkMonitor: NetworkMonitoring
+
     private var currentPlayerItem: AVPlayerItem? {
         player.currentItem
     }
@@ -53,8 +56,10 @@ class AudioPlayer: ObservableObject {
     private var periodicTimeObserver: Any?
     private var playerObservation: NSKeyValueObservation?
     
-    init(player: AVPlayer = AVPlayer()) {
+    init(player: AVPlayer = AVPlayer(), networkMonitor: NetworkMonitoring = NetworkMonitor()) {
         self.player = player
+        self.networkMonitor = networkMonitor
+
         setupInterruptionNotification()
         setupObservations()
         setupRemoteTransportControls()
@@ -122,10 +127,18 @@ class AudioPlayer: ObservableObject {
         await play(at: playIndex)
     }
     
+    private var shouldPlayNext: Bool {
+        guard AppSettings.autoplay else {
+            return false
+        }
+
+        return networkMonitor.isWifi || (networkMonitor.isCellular && AppSettings.useCellularData)
+    }
+    
     @MainActor
     @objc func playerDidFinishPlaying(sender: Notification) {
         Task {
-            let playNext = if !AppSettings.autoplay { false } else { await playNext() }
+            let playNext = if shouldPlayNext { await playNext() } else { false }
             if !playNext {
                 isActive = false
                 finishPlaying()

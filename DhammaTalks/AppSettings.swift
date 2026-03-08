@@ -66,4 +66,14 @@ struct AppSettings {
             Current.defaults.bool(forKey: Self.autoplayKey)
         }
     }
+    
+    static var useCellularData: Bool {
+        set {
+            Current.defaults.set(newValue, forKey: Self.useCellularDataKey)
+        }
+
+        get {
+            Current.defaults.bool(forKey: Self.useCellularDataKey)
+        }
+    }
 }

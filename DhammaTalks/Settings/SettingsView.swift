@@ -32,7 +32,7 @@ struct SettingsView: View {
             
             Section("Autoplay") {
                 Toggle("Automatically Play Next Talk", isOn: $autoplay)
-                Toggle("Allow on Cellular DSata", isOn: $useCellularData)
+                Toggle("Allow on Cellular Data", isOn: $useCellularData)
             }
             
             Section {

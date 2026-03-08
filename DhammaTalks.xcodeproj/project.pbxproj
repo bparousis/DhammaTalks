@@ -61,6 +61,7 @@
 		767EEDB62744A58C0094697D /* TalkSectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 767EEDB52744A58C0094697D /* TalkSectionHeader.swift */; };
 		769B2F2E2F5A7D3200C6EBBB /* TalkIdentifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 769B2F2D2F5A7D2E00C6EBBB /* TalkIdentifier.swift */; };
 		769B2F302F5DEF0300C6EBBB /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 769B2F2F2F5DEEFC00C6EBBB /* Color.swift */; };
+		769B2F322F5E1C4200C6EBBB /* NetworkMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 769B2F312F5E1C3C00C6EBBB /* NetworkMonitor.swift */; };
 		769C76742747FA400077A5C2 /* DailyTalkCategoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 769C76732747FA400077A5C2 /* DailyTalkCategoryTests.swift */; };
 		769C76762747FFF10077A5C2 /* DhammaTalkAPITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 769C76752747FFF10077A5C2 /* DhammaTalkAPITests.swift */; };
 		769E69E12748BD2600DEC24C /* DailyTalkListViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 769E69E02748BD2600DEC24C /* DailyTalkListViewModelTests.swift */; };
@@ -204,6 +205,7 @@
 		767EEDB52744A58C0094697D /* TalkSectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TalkSectionHeader.swift; sourceTree = "<group>"; };
 		769B2F2D2F5A7D2E00C6EBBB /* TalkIdentifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TalkIdentifier.swift; sourceTree = "<group>"; };
 		769B2F2F2F5DEEFC00C6EBBB /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
+		769B2F312F5E1C3C00C6EBBB /* NetworkMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkMonitor.swift; sourceTree = "<group>"; };
 		769C76732747FA400077A5C2 /* DailyTalkCategoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyTalkCategoryTests.swift; sourceTree = "<group>"; };
 		769C76752747FFF10077A5C2 /* DhammaTalkAPITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DhammaTalkAPITests.swift; sourceTree = "<group>"; };
 		769E69E02748BD2600DEC24C /* DailyTalkListViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyTalkListViewModelTests.swift; sourceTree = "<group>"; };
@@ -527,6 +529,7 @@
 		76E064F523CA9C6C007E18C1 /* DhammaTalks */ = {
 			isa = PBXGroup;
 			children = (
+				769B2F312F5E1C3C00C6EBBB /* NetworkMonitor.swift */,
 				7629CF6B2E105D2900B63776 /* Player */,
 				76E474CD2A65D14B0057976F /* Playlist */,
 				76068C6627B2180C00726860 /* Settings */,
@@ -836,6 +839,7 @@
 				765CB6CE2AEEC0E300416B3A /* SeriesTalkData.swift in Sources */,
 				767AAC8F27572C9B0003D9AC /* TalkRowViewModel.swift in Sources */,
 				763FA1B6298F4020007844B5 /* Filter.swift in Sources */,
+				769B2F322F5E1C4200C6EBBB /* NetworkMonitor.swift in Sources */,
 				76172407275F217000757236 /* Logger.swift in Sources */,
 				762577F32AEDE5DA00E370CE /* CollectionTalkData.swift in Sources */,
 				76D064332761C75F00FBFEA6 /* FileStorage.swift in Sources */,
