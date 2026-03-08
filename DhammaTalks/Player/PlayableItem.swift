@@ -12,6 +12,7 @@ protocol PlayableItem: Identifiable {
 
     var id: String { get }
     var title: String { get }
+    var currentTime: CMTime? { get }
 
     func loadPlayerItem() async -> AVPlayerItem?
     func finishedPlaying(at time: CMTime, withTotal totalDuration: CMTime)

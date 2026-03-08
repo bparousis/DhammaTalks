@@ -10,6 +10,7 @@ import SwiftUI
 
 struct TalkGroupSelectorView: View {
 
+    @EnvironmentObject private var talkDataService: TalkDataService
     @EnvironmentObject private var talkUserInfoService: TalkUserInfoService
     @EnvironmentObject private var downloadManager: DownloadManager
     @EnvironmentObject private var playlistService: PlaylistService
@@ -19,26 +20,23 @@ struct TalkGroupSelectorView: View {
     private static let dailyTalksTag = "dailyTalks"
     private static let favoritesTag = "favorites"
     private static let playlistsTag = "playlists"
-    private let dailyTalkListViewModel: DailyTalkListViewModel
-    private let favoritesListViewModel: FavoritesListViewModel
-    private let playlistViewModel: PlaylistSelectorViewModel
 
     private var dailyTalksView: some View {
-        DailyTalkListView(viewModel: dailyTalkListViewModel)
+        DailyTalkListView(talkDataService: talkDataService, talkUserInfoService: talkUserInfoService, downloadManager: downloadManager, playlistService: playlistService)
             .onAppear {
                 AppSettings.talkGroupSelection = Self.dailyTalksTag
             }
     }
 
     private var favoritesView: some View {
-        FavoritesListView(viewModel: favoritesListViewModel)
+        FavoritesListView(talkUserInfoService: talkUserInfoService, downloadManager: downloadManager, playlistService: playlistService)
             .onAppear {
                 AppSettings.talkGroupSelection = Self.favoritesTag
             }
     }
     
     private var playlistSelectorView: some View {
-        PlaylistSelectorView(viewModel: playlistViewModel)
+        PlaylistSelectorView(playlistService: playlistService, talkUserInfoService: talkUserInfoService, downloadManager: downloadManager)
             .onAppear {
                 AppSettings.talkGroupSelection = Self.playlistsTag
             }
@@ -50,15 +48,6 @@ struct TalkGroupSelectorView: View {
     
     private var columns: [GridItem] {
         Array(repeating: GridItem(.flexible()), count: isIpad ? 4 : 2)
-    }
-    
-    init(dailyTalkListViewModel: DailyTalkListViewModel,
-         favoritesListViewModel: FavoritesListViewModel,
-         playlistViewModel: PlaylistSelectorViewModel)
-    {
-        self.dailyTalkListViewModel = dailyTalkListViewModel
-        self.favoritesListViewModel = favoritesListViewModel
-        self.playlistViewModel = playlistViewModel
     }
 
     var body: some View {
@@ -154,11 +143,10 @@ struct TalkGroupSelectorView: View {
     private func makeTalkSeriesSection(talkSeriesList: [TalkSeries], columnWidth: CGFloat) -> some View {
         Section {
             ForEach(talkSeriesList) { talkSeries in
-                let viewModel = TalkSeriesListViewModel(talkSeries: talkSeries,
-                                                        talkUserInfoService: talkUserInfoService,
-                                                        downloadManager: downloadManager,
-                                                        playlistService: playlistService)
-                let talkSeriesListView = TalkSeriesListView(viewModel: viewModel)
+                let talkSeriesListView = TalkSeriesListView(talkSeries: talkSeries,
+                                                            talkUserInfoService: talkUserInfoService,
+                                                            downloadManager: downloadManager,
+                                                            playlistService: playlistService)
                     .onAppear {
                         AppSettings.talkGroupSelection = talkSeries.title
                     }

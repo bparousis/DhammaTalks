@@ -20,9 +20,11 @@ struct AudioPlayerView: View {
     }
 
     @ObservedObject private var audioPlayer: AudioPlayer
+    private var initialPlayIndex: Int
 
-    init(audioPlayer: AudioPlayer) {
+    init(audioPlayer: AudioPlayer, playIndex: Int) {
         self.audioPlayer = audioPlayer
+        self.initialPlayIndex = playIndex
     }
 
     var sliderView: some View {
@@ -132,9 +134,13 @@ struct AudioPlayerView: View {
             sliderView
             .padding(EdgeInsets(top:50, leading: 15, bottom: 10, trailing: 15))
         }
+        .task {
+            await audioPlayer.play(at: initialPlayIndex)
+        }
         .foregroundColor(.white)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.black.edgesIgnoringSafeArea(.all))
+        .presentationDragIndicator(.visible)
         .onDisappear {
             audioPlayer.finishPlaying()
         }

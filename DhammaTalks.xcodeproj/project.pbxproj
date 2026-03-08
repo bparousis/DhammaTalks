@@ -59,6 +59,7 @@
 		767B41B92C3F8025002AB4AB /* Sort.swift in Sources */ = {isa = PBXBuildFile; fileRef = 767B41B82C3F8025002AB4AB /* Sort.swift */; };
 		767EEDB42744A55A0094697D /* TalkSeriesListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 767EEDB32744A55A0094697D /* TalkSeriesListView.swift */; };
 		767EEDB62744A58C0094697D /* TalkSectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 767EEDB52744A58C0094697D /* TalkSectionHeader.swift */; };
+		769B2F2E2F5A7D3200C6EBBB /* TalkIdentifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 769B2F2D2F5A7D2E00C6EBBB /* TalkIdentifier.swift */; };
 		769C76742747FA400077A5C2 /* DailyTalkCategoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 769C76732747FA400077A5C2 /* DailyTalkCategoryTests.swift */; };
 		769C76762747FFF10077A5C2 /* DhammaTalkAPITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 769C76752747FFF10077A5C2 /* DhammaTalkAPITests.swift */; };
 		769E69E12748BD2600DEC24C /* DailyTalkListViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 769E69E02748BD2600DEC24C /* DailyTalkListViewModelTests.swift */; };
@@ -201,6 +202,7 @@
 		767B41B82C3F8025002AB4AB /* Sort.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sort.swift; sourceTree = "<group>"; };
 		767EEDB32744A55A0094697D /* TalkSeriesListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TalkSeriesListView.swift; sourceTree = "<group>"; };
 		767EEDB52744A58C0094697D /* TalkSectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TalkSectionHeader.swift; sourceTree = "<group>"; };
+		769B2F2D2F5A7D2E00C6EBBB /* TalkIdentifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TalkIdentifier.swift; sourceTree = "<group>"; };
 		769C76732747FA400077A5C2 /* DailyTalkCategoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyTalkCategoryTests.swift; sourceTree = "<group>"; };
 		769C76752747FFF10077A5C2 /* DhammaTalkAPITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DhammaTalkAPITests.swift; sourceTree = "<group>"; };
 		769E69E02748BD2600DEC24C /* DailyTalkListViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyTalkListViewModelTests.swift; sourceTree = "<group>"; };
@@ -367,6 +369,7 @@
 		761BA31F273CCB2400F22202 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				769B2F2D2F5A7D2E00C6EBBB /* TalkIdentifier.swift */,
 				763C950327386ECC00632633 /* DailyTalkListView.swift */,
 				76F9F46027483C3600957810 /* DailyTalkListViewModel.swift */,
 				769E69E42749758400DEC24C /* MediaPlayer.swift */,
@@ -851,6 +854,7 @@
 				761218D12794DBCA00D548E5 /* AppSettings.swift in Sources */,
 				76041DB32737008A00B32362 /* TalkSeries.swift in Sources */,
 				762577F52AEDE8A700E370CE /* CollectionResponse.swift in Sources */,
+				769B2F2E2F5A7D3200C6EBBB /* TalkIdentifier.swift in Sources */,
 				767AAC9127572D7B0003D9AC /* DateFormatter.swift in Sources */,
 				762D0FF9278151BC00DB04FD /* FavoriteDetails.swift in Sources */,
 				766CA1E123D517E300A8E770 /* TalkRow.swift in Sources */,

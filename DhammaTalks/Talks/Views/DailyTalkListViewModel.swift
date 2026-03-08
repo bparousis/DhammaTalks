@@ -90,11 +90,6 @@ class DailyTalkListViewModel: ObservableObject {
         self.selectedYear = AppSettings.selectedTalkYear ?? calendar.currentYear
     }
     
-    func playRandomTalk() async -> String? {
-        guard let randomSection = talkSections.randomElement() else { return nil }
-        return await randomSection.talkRows.playRandom()
-    }
-    
     private func buildTalkSectionViewModels() -> [TalkSectionViewModel] {
         var talkSectionViewModelList: [TalkSectionViewModel] = []
         var currentTalkSection: TalkSectionViewModel?
@@ -158,5 +153,11 @@ class DailyTalkListViewModel: ObservableObject {
             self.state = .error
             showingAlert = true
         }
+    }
+}
+
+extension DailyTalkListViewModel: PlayableList {
+    var playableItems: [any PlayableItem] {
+        talkSections.flatMap(\.talkRows)
     }
 }

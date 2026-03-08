@@ -11,11 +11,15 @@ import SwiftUI
 
 struct TalkSeriesListView: View {
 
-    @ObservedObject private var viewModel: TalkSeriesListViewModel
+    @EnvironmentObject private var audioPlayer: AudioPlayer
+
+    @StateObject private var viewModel: TalkSeriesListViewModel
     @State private var searchText: String = ""
+    @State private var playIdentifier: TalkIdentifier? = nil
     
-    init(viewModel: TalkSeriesListViewModel) {
-        self.viewModel = viewModel
+    init(talkSeries: TalkSeries, talkUserInfoService: TalkUserInfoService, downloadManager: DownloadManager, playlistService: PlaylistService)
+    {
+        _viewModel = StateObject(wrappedValue: TalkSeriesListViewModel(talkSeries: talkSeries, talkUserInfoService: talkUserInfoService, downloadManager: downloadManager, playlistService: playlistService))
     }
     
     var body: some View {
@@ -27,7 +31,12 @@ struct TalkSeriesListView: View {
             ForEach(viewModel.talkSections) { section in
                 Section(header: TalkSectionHeader(title: section.title, talkCount: section.talkRows.count)) {
                     ForEach(section.talkRows) { talkRowViewModel in
-                        TalkRow(viewModel: talkRowViewModel)
+                        TalkRow(viewModel: talkRowViewModel) { tapped in
+                            guard let foundIdentifier = viewModel.playableItemWithID(tapped.id) else {
+                                return
+                            }
+                            playIdentifier = foundIdentifier
+                        }
                     }
                 }
             }
@@ -35,9 +44,18 @@ struct TalkSeriesListView: View {
         .searchable(text: $searchText)
         .task {
             viewModel.fetchData()
+            audioPlayer.playableList = viewModel
         }
         .task(id: searchText) {
             viewModel.fetchData(searchText: searchText)
+        }
+        .onReceive(audioPlayer.$isActive) { isActive in
+            if !isActive {
+                self.playIdentifier = nil
+            }
+        }
+        .sheet(item: $playIdentifier) { playIdentifier in
+            AudioPlayerView(audioPlayer: audioPlayer, playIndex: playIdentifier.index)
         }
         .listStyle(.insetGrouped)
         .navigationBarTitle(viewModel.title, displayMode: .inline)

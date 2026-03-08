@@ -6,25 +6,23 @@
 //  Copyright © 2025 Bill Parousis. All rights reserved.
 //
 
-import Combine
-
-protocol PlayableList {
-
-    var playAtIndex: Int { get set }
+protocol PlayableList: AnyObject {
     
     var playableItems: [any PlayableItem] { get }
-    var playPublisher: AnyPublisher<String, Never> { get }
-    
-    func findIndexOfPlayableItemWithID(_ id: String) -> Int?
+    func playableItemWithID(_ id: String) -> TalkIdentifier?
 }
 
 extension PlayableList {
-    func findIndexOfPlayableItemWithID(_ id: String) -> Int? {
-        for (index, playableItem) in playableItems.enumerated() {
-            if playableItem.id == id {
-                return index
-            }
+    func playableItemWithID(_ id: String) -> TalkIdentifier? {
+        guard let index = playableItems.firstIndex(where: { $0.id == id }) else {
+            return nil
         }
-        return nil
+        
+        return TalkIdentifier(id: id, index: index)
+    }
+    
+    func random() -> TalkIdentifier? {
+        guard let index = playableItems.randomIndex() else { return nil }
+        return TalkIdentifier(id: playableItems[index].id, index: index)
     }
 }

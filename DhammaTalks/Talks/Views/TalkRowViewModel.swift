@@ -11,7 +11,7 @@ import Combine
 import AVFoundation
 import os.log
 
-class TalkRowViewModel: NSObject, Identifiable, ObservableObject {
+class TalkRowViewModel: Identifiable, ObservableObject {
 
     enum DateStyle {
         case day
@@ -70,7 +70,7 @@ class TalkRowViewModel: NSObject, Identifiable, ObservableObject {
     }
     private var cancellable: AnyCancellable?
 
-    private var currentTime: CMTime? {
+    var currentTime: CMTime? {
         didSet {
             updateState()
         }
@@ -215,49 +215,6 @@ class TalkRowViewModel: NSObject, Identifiable, ObservableObject {
             try playlistService.createPlaylist(playlist)
         } catch {
             Logger.playlist.error("Error saving Playlist: \(String(describing: error))")
-        }
-    }
-
-    @MainActor
-    func play() async {
-
-        guard playerItem == nil, let playItemURL = downloadManager.downloadURL(for: talkData.filename) ?? talkData.makeURL() else { return }
-
-        if let talkUserInfo = talkUserInfoService.getTalkUserInfo(for: talkData.url) {
-            currentTime = talkUserInfo.currentTime
-            totalTime = talkUserInfo.totalTime
-        }
-        
-        let playerItem = AVPlayerItem(url: playItemURL)
-        if var currentTime = currentTime, currentTimeInSeconds > 0 {
-            if state == .played {
-                // If it's played then start it from the beginning again.
-                currentTime = CMTime(seconds: 0, preferredTimescale: currentTime.timescale)
-                self.currentTime = currentTime
-            }
-            await playerItem.seek(to: currentTime)
-        }
-        self.playerItem = playerItem
-    }
-    
-    func finishedPlaying(item: AVPlayerItem) {
-        
-        // playerItem can only be associated with a single AVPlayer.  So when we're finished playing we
-        // need to set it to nil.  A new instance will be created the next time the talk is played.
-        defer {
-            playerItem = nil
-        }
-
-        currentTime = item.currentTime()
-        totalTime = item.duration
-
-        do {
-            var talkUserInfo = fetchOrCreateTalkUserInfo(for: talkData.url)
-            talkUserInfo.currentTime = item.currentTime()
-            talkUserInfo.totalTime = item.duration
-            try talkUserInfoService.save(talkUserInfo: talkUserInfo)
-        } catch {
-            Logger.talkUserInfo.error("Error saving TalkUserInfo: \(String(describing: error))")
         }
     }
     

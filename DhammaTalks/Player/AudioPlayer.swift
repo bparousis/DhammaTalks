@@ -16,6 +16,8 @@ class AudioPlayer: ObservableObject {
     
     private let seekDuration: TimeInterval = 15
     
+    weak var playableList: PlayableList?
+    
     enum Status {
         case idle
         case playing
@@ -25,77 +27,101 @@ class AudioPlayer: ObservableObject {
     @Published var status: Status = .idle
     @Published var title: String? = nil
     @Published var progressTime: TimeInterval = 0
+    @Published var isActive: Bool = false
     
-    var playableItems: () -> [any PlayableItem]
+    private var playableItems: [any PlayableItem] {
+        guard let playableItems = playableList?.playableItems else {
+            return []
+        }
+        return playableItems
+    }
     var isScrubbing = false
     
-    private var player: AVPlayer?
+    private let player: AVPlayer
     private var currentPlayerItem: AVPlayerItem? {
-        player?.currentItem
+        player.currentItem
     }
     
     private var currentPlayableItem: (any PlayableItem)? {
-        guard playableItems().indices.contains(playIndex) else {
+        guard playableItems.indices.contains(playIndex) else {
             return nil
         }
-        return playableItems()[playIndex]
+        return playableItems[playIndex]
     }
     
     private var periodicTimeObserver: Any?
+    private var playerObservation: NSKeyValueObservation?
     
-    init(playableItems: @escaping () -> [any PlayableItem]) {
-        self.playableItems = playableItems
+    init(player: AVPlayer = AVPlayer()) {
+        self.player = player
+        setupInterruptionNotification()
+        setupObservations()
         setupRemoteTransportControls()
+        periodicTimeObserver = player.addPeriodicTimeObserver(
+            forInterval: CMTime(seconds: 0.5, preferredTimescale: CMTimeScale(1000)),
+            queue: DispatchQueue.main,
+            using: { [weak self] time in
+                self?.progressTime = time.seconds
+                self?.setupNowPlayingInfo()
+            }
+        )
     }
     
     deinit {
         if let periodicTimeObserver {
-            self.player?.removeTimeObserver(periodicTimeObserver)
+            self.player.removeTimeObserver(periodicTimeObserver)
         }
         NotificationCenter.default.removeObserver(self)
     }
     
+    func setupObservations() {
+        // Observe timeControlStatus to catch pauses from system timers/alarms
+        playerObservation = player.observe(\.timeControlStatus, options: [.old, .new]) { [weak self] player, change in
+            guard let self else {
+                return
+            }
+
+            if player.timeControlStatus == .paused {
+                if self.status != .paused {
+                    self.status = .paused
+                }
+            }
+        }
+    }
+    
     @MainActor
     func play(at index: Int = 0) async {
-
         if status != .paused || index != playIndex {
-            let playableItems = playableItems()
             playIndex = index
-            guard playableItems.indices.contains(playIndex) else { return }
-            let playableItem = playableItems[playIndex]
+            guard let playableItem = currentPlayableItem else { return }
+            if let currentTimeSeconds = playableItem.currentTime?.seconds {
+                self.progressTime = currentTimeSeconds
+            }
             let playerItem = await playableItem.loadPlayerItem()
+            NotificationCenter.default.removeObserver(self)
             NotificationCenter.default.addObserver(self,
                                                    selector: #selector(self.playerDidFinishPlaying(sender:)),
                                                    name: NSNotification.Name.AVPlayerItemDidPlayToEndTime,
                                                    object: playerItem)
-            if player == nil {
-                player = AVPlayer(playerItem: playerItem)
-                periodicTimeObserver = self.player?.addPeriodicTimeObserver(
-                    forInterval: CMTime(seconds: 0.5, preferredTimescale: CMTimeScale(1000)),
-                    queue: DispatchQueue.main,
-                    using: { time in
-                        self.progressTime = time.seconds
-                        self.setupNowPlayingInfo()
-                    }
-                )
-            } else {
-                player?.replaceCurrentItem(with: playerItem)
-            }
+            player.replaceCurrentItem(with: playerItem)
             title = playableItem.title
             setupNowPlayingInfo()
         }
-        player?.play()
+        player.play()
         status = .playing
+        isActive = true
     }
     
     func play() async {
         await play(at: playIndex)
     }
     
+    @MainActor
     @objc func playerDidFinishPlaying(sender: Notification) {
         Task {
-            let result = await playNext()
-            if !result {
+            let playNext = if !AppSettings.autoplay { false } else { await playNext() }
+            if !playNext {
+                isActive = false
                 finishPlaying()
             }
         }
@@ -103,8 +129,16 @@ class AudioPlayer: ObservableObject {
     
     func pause() {
         guard status == .playing else { return }
-        player?.pause()
+        player.pause()
         status = .paused
+    }
+    
+    @MainActor
+    func finish() {
+        guard status == .playing else { return }
+        player.pause()
+        progressTime = 0
+        status = .idle
     }
     
     func skipForward() {
@@ -130,7 +164,7 @@ class AudioPlayer: ObservableObject {
     func seekTo(seconds: TimeInterval) {
         let seekToTime = CMTimeMake(value: Int64(seconds * 1000 as Float64),
                                     timescale: 1000)
-        player?.seek(to: seekToTime, toleranceBefore: CMTime.zero, toleranceAfter: CMTime.zero)
+        player.seek(to: seekToTime, toleranceBefore: CMTime.zero, toleranceAfter: CMTime.zero)
     }
     
     var showPlayButton: Bool {
@@ -138,11 +172,11 @@ class AudioPlayer: ObservableObject {
     }
 
     var hasNext: Bool {
-        playableItems().indices.contains(playIndex + 1)
+        playableItems.indices.contains(playIndex + 1)
     }
 
     var hasPrevious: Bool {
-        playIndex > 0 && playableItems().indices.contains(playIndex - 1)
+        playIndex > 0 && playableItems.indices.contains(playIndex - 1)
     }
     
     private var currentTimeInSeconds: TimeInterval {
@@ -194,9 +228,10 @@ class AudioPlayer: ObservableObject {
         return false
     }
 
+    @MainActor
     func finishPlaying() {
         guard status != .idle else { return }
-        pause()
+        finish()
         NotificationCenter.default.removeObserver(self)
         if let currentPlayableItem, let currentPlayerItem {
             currentPlayableItem.finishedPlaying(at: currentPlayerItem.currentTime(),
@@ -258,11 +293,46 @@ class AudioPlayer: ObservableObject {
             let positionTime = changePlaybackPositionCommandEvent.positionTime
             let seekToTime = CMTimeMake(value: Int64(positionTime * 1000 as Float64),
                                         timescale: 1000)
-            self.player?.seek(to: seekToTime, toleranceBefore: CMTime.zero, toleranceAfter: CMTime.zero)
+            self.player.seek(to: seekToTime, toleranceBefore: CMTime.zero, toleranceAfter: CMTime.zero)
             return .success
         }
     }
     
+    func setupInterruptionNotification() {
+        // Register for notification
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(handleInterruption),
+                                               name: AVAudioSession.interruptionNotification,
+                                               object: AVAudioSession.sharedInstance())
+    }
+
+    @objc func handleInterruption(notification: Notification) {
+        guard let userInfo = notification.userInfo,
+              let typeValue = userInfo[AVAudioSessionInterruptionTypeKey] as? UInt,
+              let type = AVAudioSession.InterruptionType(rawValue: typeValue) else {
+            return
+        }
+
+        switch type {
+        case .began:
+            pause()
+            
+        case .ended:
+            // Interruption ended: Check if we should resume
+            print("Audio interrupted: ended")
+            if let optionsValue = userInfo[AVAudioSessionInterruptionOptionKey] as? UInt {
+                let options = AVAudioSession.InterruptionOptions(rawValue: optionsValue)
+                if options.contains(.shouldResume) {
+                    // Resume playback
+                    Task {
+                        await play()
+                    }
+                }
+            }
+        @unknown default:
+            break
+        }
+    }
     
     private func setupNowPlayingInfo() {
         var nowPlayingInfo = [String : Any]()
@@ -275,9 +345,7 @@ class AudioPlayer: ObservableObject {
         }
         nowPlayingInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = currentPlayerItem?.currentTime().seconds
         nowPlayingInfo[MPMediaItemPropertyPlaybackDuration] = currentPlayerItem?.asset.duration.seconds
-        if let player {
-            nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] = player.rate
-        }
+        nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] = player.rate
         MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
     }
 }

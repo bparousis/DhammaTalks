@@ -15,7 +15,6 @@ enum SortType {
     case name
     case createdData
     case lastModifiedDate
-    
 }
 
 class PlaylistViewModel: ObservableObject {
@@ -61,10 +60,6 @@ class PlaylistViewModel: ObservableObject {
             }
     }
 
-    func playRandomTalk() async -> String? {
-        return await playlistItems.playRandom()
-    }
-
     func moveItem(fromOffsets: IndexSet, toOffset: Int) {
         do {
             try playlistService.moveItem(fromOffsets: fromOffsets, toOffset: toOffset, playlistID: playlist.id)
@@ -92,5 +87,11 @@ class PlaylistViewModel: ObservableObject {
             }
         }
         playlistItems = searchedItems
+    }
+}
+
+extension PlaylistViewModel: PlayableList {
+    var playableItems: [any PlayableItem] {
+        playlistItems
     }
 }

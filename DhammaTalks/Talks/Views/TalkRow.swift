@@ -16,6 +16,8 @@ struct TalkRow: View {
     
     @ObservedObject var viewModel: TalkRowViewModel
 
+    let onPlay: (TalkRowViewModel) -> Void
+
     @State private var showActionSheet = false
     @State private var selectedPlaylist: Playlist? = nil
     @State private var showCreatePlaylistSheet = false
@@ -62,19 +64,6 @@ struct TalkRow: View {
             }
         case .unplayed:
             EmptyView()
-        }
-    }
-
-    @ViewBuilder
-    private func makeMediaPlayerView(item: AVPlayerItem) -> some View {
-        if isIpad {
-            MediaPlayer(playerItem: item, title: viewModel.title)
-        } else {
-            VStack {
-                swipeBar
-                MediaPlayer(playerItem: item, title: viewModel.title)
-            }
-            .padding(EdgeInsets(top: 10, leading: 0, bottom: 0, trailing: 0))
         }
     }
     
@@ -200,9 +189,7 @@ struct TalkRow: View {
 
     var body: some View {
         Button(action: {
-            Task {
-                await viewModel.play()
-            }
+            onPlay(viewModel)
         }) {
             HStack(alignment: .center, spacing: 10) {
                 VStack(alignment: .leading, spacing: 5) {
@@ -252,12 +239,6 @@ struct TalkRow: View {
                     }
             }
             .interactiveDismissDisabled()
-        }
-        .sheet(item: $viewModel.playerItem) { item in
-            makeMediaPlayerView(item: item)
-            .onDisappear {
-                viewModel.finishedPlaying(item: item)
-            }
         }
         .sheet(isPresented: $viewModel.showPlaylistSelector) {
             playlistSelectorView

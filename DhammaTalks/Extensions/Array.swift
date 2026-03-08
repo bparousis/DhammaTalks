@@ -8,12 +8,11 @@
 
 import Foundation
 
-extension Array where Element == TalkRowViewModel {
-    func playRandom() async -> String? {
-        guard let randomRow = randomElement() else {
+extension Array {
+    func randomIndex() -> Int? {
+        guard let randomIndex = indices.randomElement() else {
             return nil
         }
-        await randomRow.play()
-        return randomRow.id
+        return randomIndex
     }
 }

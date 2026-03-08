@@ -13,6 +13,15 @@ struct AppSettings {
     private static let talkGroupSelectionKey = "talkGroupSelection"
     private static let selectedTalkYearKey = "selectedTalkYear"
     private static let selectedTalkCategoryKey = "selectedTalkCategory"
+    static let autoplayKey = "autoplay"
+    static let useCellularDataKey = "useCellularData"
+    
+    static func registerDefaults() {
+        Current.defaults.register(defaults: [
+            Self.autoplayKey: true,
+            Self.useCellularDataKey: false
+        ])
+    }
 
     static var talkGroupSelection: String? {
         set {
@@ -45,6 +54,16 @@ struct AppSettings {
                 return nil
             }
             return DailyTalkCategory(rawValue: storedValue)
+        }
+    }
+    
+    static var autoplay: Bool {
+        set {
+            Current.defaults.set(newValue, forKey: Self.autoplayKey)
+        }
+
+        get {
+            Current.defaults.bool(forKey: Self.autoplayKey)
         }
     }
 }
