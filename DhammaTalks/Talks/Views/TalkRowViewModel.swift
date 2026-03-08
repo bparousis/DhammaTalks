@@ -155,11 +155,11 @@ class TalkRowViewModel: Identifiable, ObservableObject {
         return DateComponentsFormatter.hmsFormatter.string(from: currentTimeInSeconds)
     }
     
-    var timeRemainingString: String? {
-        guard let timeRemaining = DateComponentsFormatter.hmsFormatter.string(from: totalTimeInSeconds - currentTimeInSeconds) else {
+    var totalTimeString: String? {
+        guard let totalTimeString = DateComponentsFormatter.hmsFormatter.string(from: totalTimeInSeconds) else {
             return nil
         }
-        return "-\(timeRemaining)"
+        return totalTimeString
     }
 
     @Published var playerItem: AVPlayerItem?

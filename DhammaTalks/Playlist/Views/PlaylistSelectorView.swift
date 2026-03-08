@@ -51,10 +51,7 @@ struct PlaylistSelectorView: View {
                                 showSortSheet = true
                             }
                         } label: {
-                            VStack {
-                                Image(systemName: "arrow.up.arrow.down.circle")
-                                Text("Sort")
-                            }
+                            Image(systemName: "arrow.up.arrow.down.circle")
                         }
                         .confirmationDialog(Text("Sort By"), isPresented: $showSortSheet) {
                             ForEach(viewModel.sortList) { sort in

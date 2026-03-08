@@ -56,6 +56,10 @@ struct TalkSeriesListView: View {
         }
         .sheet(item: $playIdentifier) { playIdentifier in
             AudioPlayerView(audioPlayer: audioPlayer, playIndex: playIdentifier.index)
+                .onDisappear {
+                    audioPlayer.finishPlaying()
+                    self.playIdentifier = nil
+                }
         }
         .listStyle(.insetGrouped)
         .navigationBarTitle(viewModel.title, displayMode: .inline)

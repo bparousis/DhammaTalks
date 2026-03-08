@@ -57,8 +57,8 @@ struct TalkGroupSelectorView: View {
                     LazyVGrid(columns: columns, alignment: .center, spacing: 10) {
                         let width = geo.size.width * widthPercentage
                         makeMainSection(columnWidth: width)
-                        
                         if let talkSeriesList = TalkDataService.talkSeriesList {
+                            Spacer()
                             makeTalkSeriesSection(talkSeriesList: talkSeriesList, columnWidth: width)
                         }
                     }
@@ -104,18 +104,27 @@ struct TalkGroupSelectorView: View {
     }
     
     private func makeCellView(title: String, image: String, width: CGFloat) -> some View {
-        VStack {
+        ZStack(alignment: .bottom) {
             Image(image)
                 .resizable()
-                .frame(width: width, height:100, alignment:.center)
                 .aspectRatio(contentMode:.fill)
-                .cornerRadius(20)
+
+            LinearGradient(
+                colors: [
+                    .clear,
+                    .black.opacity(0.6)
+                ],
+                startPoint: .center,
+                endPoint: .bottom
+            )
+
             Text(title)
-                .bold()
-                .font(.system(size:18, weight:.bold))
-                .foregroundColor(.primary)
-                .frame(width: width, height:75, alignment:.top)
+                .font(.headline)
+                .foregroundColor(.white)
+                .padding(12)
         }
+        .frame(width: width, height:100, alignment:.center)
+        .clipShape(RoundedRectangle(cornerRadius: 18))
     }
     
     private func makeMainSection(columnWidth: CGFloat) -> some View {
@@ -157,9 +166,28 @@ struct TalkGroupSelectorView: View {
                 .id(talkSeries.title)
             }
         } header: {
-            Text("Talk Series")
-                .font(.system(size: 20))
-                .bold()
+            ZStack {
+                HStack {
+                    gradientLine
+                    Text("Series")
+                        .font(.system(size: 20))
+                        .bold()
+                    gradientLine
+                }
+            }
         }
+    }
+    
+    private var gradientLine: some View {
+        Rectangle()
+            .fill(
+                LinearGradient(
+                    gradient: Gradient(colors: [Color(UIColor.systemBackground), .primary, Color(UIColor.systemBackground)]),
+                    startPoint: .leading,
+                    endPoint: .trailing
+                )
+            )
+            .frame(height: 1)
+            .padding()
     }
 }

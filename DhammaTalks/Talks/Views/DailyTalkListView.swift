@@ -38,7 +38,6 @@ struct DailyTalkListView: View {
         } label: {
             VStack {
                 Image(systemName: viewModel.filterImageName)
-                Text(viewModel.filterTitle)
             }
         }
         .confirmationDialog(Text("Filter"), isPresented: $showFilterSheet) {
@@ -59,10 +58,7 @@ struct DailyTalkListView: View {
                 }
             }
         } label: {
-            VStack {
-                Image(systemName: "shuffle")
-                Text("Play")
-            }
+            Image(systemName: "shuffle")
         }
     }
     

@@ -22,18 +22,18 @@ struct CircularProgressBar: View {
                     Circle()
                         .stroke(lineWidth: lineWidth)
                         .opacity(0.3)
-                        .foregroundColor(Color(.systemOrange))
+                        .foregroundColor(.primaryTheme)
                     if let progress = progress {
                         Circle()
                             .trim(from: 0.0, to: CGFloat(min(progress, 1.0)))
                             .stroke(style: StrokeStyle(lineWidth: lineWidth, lineCap: .round, lineJoin: .round))
-                            .foregroundColor(Color(.systemBlue))
+                            .foregroundColor(.primaryTheme)
                             .rotationEffect(Angle(degrees: 270.0))
                         
                         let size = geo.size.width/3.0
                         Rectangle()
                             .frame(width: size, height: size, alignment: .center)
-                            .foregroundColor(Color(.systemBlue))
+                            .foregroundColor(.primaryTheme)
                     }
                 }
             }

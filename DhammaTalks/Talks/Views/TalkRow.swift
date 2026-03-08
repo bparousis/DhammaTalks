@@ -56,8 +56,9 @@ struct TalkRow: View {
                         .font(.system(size: 12))
                 }
                 ProgressView(value: viewModel.currentTimeInSeconds, total: viewModel.totalTimeInSeconds)
-                if let timeRemaining = viewModel.timeRemainingString {
-                    Text(timeRemaining)
+                    .tint(.primaryTheme)
+                if let totalTimeString = viewModel.totalTimeString {
+                    Text(totalTimeString)
                         .foregroundColor(.secondary)
                         .font(.system(size: 12))
                 }
@@ -91,7 +92,7 @@ struct TalkRow: View {
             if viewModel.isDownloadAvailable {
                 Image(systemName: "arrow.down.circle.fill")
                     .font(.system(size: iconSize))
-                    .foregroundColor(Color(.systemBlue))
+                    .foregroundColor(Color.primaryTheme)
             }
             if !viewModel.notes.isEmpty {
                 Image(systemName: "note.text")

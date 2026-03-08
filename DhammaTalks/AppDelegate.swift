@@ -8,6 +8,7 @@
 
 import UIKit
 import AVKit
+import SwiftUI
 import os.log
 
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -15,6 +16,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
         AppSettings.registerDefaults()
+        UISlider.appearance().thumbTintColor = UIColor(Color.primaryTheme)
         
         // Get the singleton instance.
         let audioSession = AVAudioSession.sharedInstance()

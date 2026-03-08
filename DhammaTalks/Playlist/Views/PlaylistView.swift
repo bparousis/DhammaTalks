@@ -61,10 +61,7 @@ struct PlaylistView: View {
                                 }
                             }
                         } label: {
-                            VStack {
-                                Image(systemName: "shuffle")
-                                Text("Play")
-                            }
+                            Image(systemName: "shuffle")
                         }
                     }
                 }
@@ -91,6 +88,10 @@ struct PlaylistView: View {
         }
         .sheet(item: $playIdentifier) { playIdentifier in
             AudioPlayerView(audioPlayer: audioPlayer, playIndex: playIdentifier.index)
+                .onDisappear {
+                    audioPlayer.finishPlaying()
+                    self.playIdentifier = nil
+                }
         }
         .navigationTitle(viewModel.title)
     }

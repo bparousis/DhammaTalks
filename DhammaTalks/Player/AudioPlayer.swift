@@ -28,6 +28,7 @@ class AudioPlayer: ObservableObject {
     @Published var title: String? = nil
     @Published var progressTime: TimeInterval = 0
     @Published var isActive: Bool = false
+    @Published var showProgress: Bool = false
     
     private var playableItems: [any PlayableItem] {
         guard let playableItems = playableList?.playableItems else {
@@ -91,6 +92,7 @@ class AudioPlayer: ObservableObject {
     
     @MainActor
     func play(at index: Int = 0) async {
+        showProgress = false
         if status != .paused || index != playIndex {
             playIndex = index
             guard let playableItem = currentPlayableItem else { return }
@@ -108,8 +110,12 @@ class AudioPlayer: ObservableObject {
             setupNowPlayingInfo()
         }
         player.play()
-        status = .playing
-        isActive = true
+        self.status = .playing
+        self.isActive = true
+        // This helps hide the initial jump of the slider thumb when it's re-adjusted for a new talk
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1, execute: {
+            self.showProgress = true
+        })
     }
     
     func play() async {
@@ -201,11 +207,11 @@ class AudioPlayer: ObservableObject {
         DateComponentsFormatter.hmsFormatter.string(from: currentTimeInSeconds > 0 ? currentTimeInSeconds : 0)
     }
     
-    var timeRemainingString: String? {
-        guard let timeRemaining = DateComponentsFormatter.hmsFormatter.string(from: totalTimeInSeconds - currentTimeInSeconds) else {
+    var totalTimeString: String? {
+        guard let totalTime = DateComponentsFormatter.hmsFormatter.string(from: totalTimeInSeconds) else {
             return nil
         }
-        return "-\(timeRemaining)"
+        return totalTime
     }
 
     @MainActor
@@ -319,7 +325,6 @@ class AudioPlayer: ObservableObject {
             
         case .ended:
             // Interruption ended: Check if we should resume
-            print("Audio interrupted: ended")
             if let optionsValue = userInfo[AVAudioSessionInterruptionOptionKey] as? UInt {
                 let options = AVAudioSession.InterruptionOptions(rawValue: optionsValue)
                 if options.contains(.shouldResume) {
@@ -337,7 +342,7 @@ class AudioPlayer: ObservableObject {
     private func setupNowPlayingInfo() {
         var nowPlayingInfo = [String : Any]()
         nowPlayingInfo[MPMediaItemPropertyTitle] = title
-        if let image = UIImage(named: "dtLogo") {
+        if let image = UIImage(named: "dtLogo-transparent") {
             nowPlayingInfo[MPMediaItemPropertyArtwork] =
                 MPMediaItemArtwork(boundsSize: image.size) { size in
                     return image
