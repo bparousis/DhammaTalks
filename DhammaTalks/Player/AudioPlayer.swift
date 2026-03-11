@@ -11,7 +11,7 @@ import Combine
 import MediaPlayer
 import SwiftUI
 
-class AudioPlayer: ObservableObject {
+class AudioPlayer: NSObject, ObservableObject {
     
     private var playIndex = 0
     
@@ -37,9 +37,38 @@ class AudioPlayer: ObservableObject {
         }
         return playableItems
     }
+
     var isScrubbing = false
     
-    private let player: AVPlayer
+    private lazy var player: AVPlayer = {
+        let player = AVPlayer()
+        periodicTimeObserver = player.addPeriodicTimeObserver(
+            forInterval: CMTime(seconds: 0.5, preferredTimescale: CMTimeScale(1000)),
+            queue: DispatchQueue.main,
+            using: { [weak self] time in
+                self?.progressTime = time.seconds
+                self?.setupNowPlayingInfo()
+            }
+        )
+        
+        playerObservation = player.observe(\.timeControlStatus, options: [.old, .new]) { [weak self] player, change in
+            guard let self else {
+                return
+            }
+            
+            switch player.timeControlStatus {
+            case .paused:
+                status = .paused
+            case .playing:
+                status = .playing
+            default:
+                status = .idle
+            }
+        }
+        
+        return player
+    }()
+
     private let networkMonitor: NetworkMonitoring
 
     private var currentPlayerItem: AVPlayerItem? {
@@ -55,22 +84,12 @@ class AudioPlayer: ObservableObject {
     
     private var periodicTimeObserver: Any?
     private var playerObservation: NSKeyValueObservation?
-    
-    init(player: AVPlayer = AVPlayer(), networkMonitor: NetworkMonitoring = NetworkMonitor()) {
-        self.player = player
-        self.networkMonitor = networkMonitor
 
+    init(networkMonitor: NetworkMonitoring = NetworkMonitor()) {
+        self.networkMonitor = networkMonitor
+        super.init()
         setupInterruptionNotification()
-        setupObservations()
         setupRemoteTransportControls()
-        periodicTimeObserver = player.addPeriodicTimeObserver(
-            forInterval: CMTime(seconds: 0.5, preferredTimescale: CMTimeScale(1000)),
-            queue: DispatchQueue.main,
-            using: { [weak self] time in
-                self?.progressTime = time.seconds
-                self?.setupNowPlayingInfo()
-            }
-        )
     }
     
     deinit {
@@ -78,21 +97,6 @@ class AudioPlayer: ObservableObject {
             self.player.removeTimeObserver(periodicTimeObserver)
         }
         NotificationCenter.default.removeObserver(self)
-    }
-    
-    func setupObservations() {
-        // Observe timeControlStatus to catch pauses from system timers/alarms
-        playerObservation = player.observe(\.timeControlStatus, options: [.old, .new]) { [weak self] player, change in
-            guard let self else {
-                return
-            }
-
-            if player.timeControlStatus == .paused {
-                if self.status != .paused {
-                    self.status = .paused
-                }
-            }
-        }
     }
     
     @MainActor
@@ -112,10 +116,11 @@ class AudioPlayer: ObservableObject {
                                                    object: playerItem)
             player.replaceCurrentItem(with: playerItem)
             title = playableItem.title
+            setupInterruptionNotification()
+            setupRemoteTransportControls()
             setupNowPlayingInfo()
         }
         player.play()
-        self.status = .playing
         self.isActive = true
         // This helps hide the initial jump of the slider thumb when it's re-adjusted for a new talk
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1, execute: {
@@ -147,15 +152,15 @@ class AudioPlayer: ObservableObject {
     }
     
     func pause() {
-        guard status == .playing else { return }
         player.pause()
-        status = .paused
     }
     
     @MainActor
     func finish() {
-        guard status == .playing else { return }
         player.pause()
+        NotificationCenter.default.removeObserver(self)
+        removeRemoteTransportControls()
+        clearNowPlayingInfo()
         progressTime = 0
         status = .idle
     }
@@ -251,7 +256,6 @@ class AudioPlayer: ObservableObject {
     func finishPlaying() {
         guard status != .idle else { return }
         finish()
-        NotificationCenter.default.removeObserver(self)
         if let currentPlayableItem, let currentPlayerItem {
             currentPlayableItem.finishedPlaying(at: currentPlayerItem.currentTime(),
                                                 withTotal: currentPlayerItem.duration)
@@ -260,62 +264,7 @@ class AudioPlayer: ObservableObject {
     
     // MARK: Private functions
     
-    private func setupRemoteTransportControls() {
-        let commandCenter = MPRemoteCommandCenter.shared()
-        
-        commandCenter.playCommand.isEnabled = true
-        commandCenter.playCommand.addTarget { [weak self] event in
-            guard let self else { return .commandFailed }
-            
-            if self.status != .playing {
-                Task {
-                    await self.play()
-                }
-                return .success
-            }
-            return .commandFailed
-        }
-        
-        commandCenter.pauseCommand.isEnabled = true
-        commandCenter.pauseCommand.addTarget { [weak self] event in
-            guard let self else { return .commandFailed }
 
-            if self.status == .playing {
-                self.pause()
-                return .success
-            }
-            return .commandFailed
-        }
-        
-        commandCenter.nextTrackCommand.isEnabled = true
-        commandCenter.nextTrackCommand.addTarget { [weak self] event in
-            guard let self else { return .commandFailed }
-            Task {
-                await self.playNext()
-            }
-            return .success
-        }
-
-        commandCenter.previousTrackCommand.isEnabled = true
-        commandCenter.previousTrackCommand.addTarget { [weak self] event in
-            guard let self else { return .commandFailed }
-            Task {
-                await self.playPrevious()
-            }
-            return .success
-        }
-        
-        commandCenter.changePlaybackPositionCommand.addTarget { [weak self] (event) -> MPRemoteCommandHandlerStatus in
-            guard let self, let changePlaybackPositionCommandEvent =
-                    event as? MPChangePlaybackPositionCommandEvent else { return .commandFailed }
-            
-            let positionTime = changePlaybackPositionCommandEvent.positionTime
-            let seekToTime = CMTimeMake(value: Int64(positionTime * 1000 as Float64),
-                                        timescale: 1000)
-            self.player.seek(to: seekToTime, toleranceBefore: CMTime.zero, toleranceAfter: CMTime.zero)
-            return .success
-        }
-    }
     
     func setupInterruptionNotification() {
         // Register for notification
@@ -352,6 +301,96 @@ class AudioPlayer: ObservableObject {
         }
     }
     
+    // Handlers for the remote commands
+    @objc func handlePlayCommand(event: MPRemoteCommandEvent) -> MPRemoteCommandHandlerStatus {
+        if status != .playing {
+            Task {
+                await play()
+            }
+            return .success
+        }
+        return .commandFailed
+    }
+    
+    @objc func handlePauseCommand(event: MPRemoteCommandEvent) -> MPRemoteCommandHandlerStatus {
+        if status == .playing {
+            pause()
+            return .success
+        }
+        return .commandFailed
+    }
+    
+    @objc func handleNextCommand(event: MPRemoteCommandEvent) -> MPRemoteCommandHandlerStatus {
+        guard hasNext else {
+            return .noSuchContent
+        }
+
+        Task {
+            await playNext()
+        }
+        return .success
+    }
+    
+    @objc func handlePreviousCommand(event: MPRemoteCommandEvent) -> MPRemoteCommandHandlerStatus {
+        guard hasPrevious else {
+            return .noSuchContent
+        }
+        
+        Task {
+            await playPrevious()
+        }
+        return .success
+    }
+    
+    @objc func handleChangePlaybackPositionCommand(event: MPRemoteCommandEvent) -> MPRemoteCommandHandlerStatus {
+        guard let changePlaybackPositionCommandEvent =
+                event as? MPChangePlaybackPositionCommandEvent else { return .commandFailed }
+
+        let positionTime = changePlaybackPositionCommandEvent.positionTime
+        let seekToTime = CMTimeMake(value: Int64(positionTime * 1000 as Float64),
+                                    timescale: 1000)
+        player.seek(to: seekToTime, toleranceBefore: CMTime.zero, toleranceAfter: CMTime.zero)
+        return .success
+    }
+}
+
+// MARK: - Remote Command Center
+
+extension AudioPlayer {
+
+    private func setupRemoteTransportControls() {
+        let commandCenter = MPRemoteCommandCenter.shared()
+        
+        commandCenter.playCommand.isEnabled = true
+        commandCenter.playCommand.addTarget(self, action: #selector(handlePlayCommand(event:)))
+        
+        commandCenter.pauseCommand.isEnabled = true
+        commandCenter.pauseCommand.addTarget(self, action: #selector(handlePauseCommand(event:)))
+        
+        commandCenter.nextTrackCommand.isEnabled = true
+        commandCenter.nextTrackCommand.addTarget(self, action: #selector(handleNextCommand(event:)))
+
+        commandCenter.previousTrackCommand.isEnabled = true
+        commandCenter.previousTrackCommand.addTarget(self, action: #selector(handlePreviousCommand(event:)))
+        
+        commandCenter.changePlaybackPositionCommand.isEnabled = true
+        commandCenter.changePlaybackPositionCommand.addTarget(self, action: #selector(handleChangePlaybackPositionCommand(event:)))
+    }
+    
+    private func removeRemoteTransportControls() {
+        let commandCenter = MPRemoteCommandCenter.shared()
+        commandCenter.playCommand.removeTarget(self)
+        commandCenter.pauseCommand.removeTarget(self)
+        commandCenter.nextTrackCommand.removeTarget(self)
+        commandCenter.previousTrackCommand.removeTarget(self)
+        commandCenter.changePlaybackPositionCommand.removeTarget(self)
+    }
+}
+
+// MARK: - Now Playing Info
+
+extension AudioPlayer {
+    
     private func setupNowPlayingInfo() {
         var nowPlayingInfo = [String : Any]()
         nowPlayingInfo[MPMediaItemPropertyTitle] = title
@@ -366,6 +405,10 @@ class AudioPlayer: ObservableObject {
         nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] = player.rate
         MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
     }
+    
+    private func clearNowPlayingInfo() {
+        MPNowPlayingInfoCenter.default().nowPlayingInfo = nil
+    }
 }
 
 private extension TimeInterval {
@@ -376,3 +419,4 @@ private extension TimeInterval {
         self <= 0 ? Self.lowerBound : self
     }
 }
+

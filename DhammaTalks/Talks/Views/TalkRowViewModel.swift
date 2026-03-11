@@ -200,7 +200,7 @@ class TalkRowViewModel: Identifiable, ObservableObject {
     }
 
     func addToPlaylist(_ playlist: Playlist) {
-        try? playlistService.addTalkData(talkData, toPlaylistWithID: playlist.id)
+        _ = try? playlistService.addTalkData(talkData, toPlaylistWithID: playlist.id)
     }
     
     func createPlaylist(title: String, description: String?) {
@@ -315,6 +315,7 @@ class TalkRowViewModel: Identifiable, ObservableObject {
 
 extension TalkRowViewModel: PlayableItem {
     
+    @MainActor
     func loadPlayerItem() async -> AVPlayerItem? {
         if let playerItem {
             return playerItem

@@ -54,8 +54,17 @@ struct TalkGroupSelectorView: View {
         GeometryReader { geo in
             ScrollView {
                 ScrollViewReader { proxy in
+                    let width = geo.size.width * widthPercentage
+                    if !isIpad {
+                        NavigationLink(destination: dailyTalksView, tag: Self.dailyTalksTag, selection: $selection)
+                        {
+                            makeCellView(title: "Daily Talks", image: "water8",
+                                         width: (width * 2) + 10, height: 115)
+                        }
+                        .id(Self.dailyTalksTag)
+                    }
+
                     LazyVGrid(columns: columns, alignment: .center, spacing: 10) {
-                        let width = geo.size.width * widthPercentage
                         makeMainSection(columnWidth: width)
                         if let talkSeriesList = TalkDataService.talkSeriesList {
                             Spacer()
@@ -103,11 +112,10 @@ struct TalkGroupSelectorView: View {
         }
     }
     
-    private func makeCellView(title: String, image: String, width: CGFloat) -> some View {
+    private func makeCellView(title: String, image: String, width: CGFloat, height: CGFloat = 100) -> some View {
         ZStack(alignment: .bottom) {
             Image(image)
                 .resizable()
-                .aspectRatio(contentMode:.fill)
 
             LinearGradient(
                 colors: [
@@ -123,17 +131,19 @@ struct TalkGroupSelectorView: View {
                 .foregroundColor(.white)
                 .padding(12)
         }
-        .frame(width: width, height:100, alignment:.center)
+        .frame(width: width, height: height)
         .clipShape(RoundedRectangle(cornerRadius: 18))
     }
     
     private func makeMainSection(columnWidth: CGFloat) -> some View {
         Section {
-            NavigationLink(destination: dailyTalksView, tag: Self.dailyTalksTag, selection: $selection)
-            {
-                makeCellView(title: "Daily Talks", image: "water8", width: columnWidth)
+            if isIpad {
+                NavigationLink(destination: dailyTalksView, tag: Self.dailyTalksTag, selection: $selection)
+                {
+                    makeCellView(title: "Daily Talks", image: "water8", width: columnWidth)
+                }
+                .id(Self.dailyTalksTag)
             }
-            .id(Self.dailyTalksTag)
             
             NavigationLink(destination: favoritesView, tag: Self.favoritesTag, selection: $selection)
             {

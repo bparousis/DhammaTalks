@@ -35,12 +35,14 @@ struct AudioPlayerView: View {
                 if let currentTimeString = audioPlayer.currentTimeString {
                     Text(currentTimeString)
                         .font(.system(size: 12))
+                        .opacity(0.85)
                         .padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: Constants.timeDisplayPadding))
                 }
             } maximumValueLabel: {
                 if let totalTimeString = audioPlayer.totalTimeString {
                     Text(totalTimeString)
                         .font(.system(size: 12))
+                        .opacity(0.85)
                         .padding(EdgeInsets(top: 0, leading: Constants.timeDisplayPadding, bottom: 0, trailing: 0))
                 }
             } onEditingChanged: { scrubStarted in

@@ -134,10 +134,6 @@ struct PlaylistSelectorView: View {
     
     @ViewBuilder
     private func createPlaylistView(playlist: Playlist) -> some View {
-        let playlistViewModel = PlaylistViewModel(playlist: playlist,
-                                                  talkUserInfoService: viewModel.talkUserInfoService,
-                                                  downloadManager: viewModel.downloadManager,
-                                                  playlistService: viewModel.playlistService)
         PlaylistView(playlist: playlist,
                      talkUserInfoService: viewModel.talkUserInfoService,
                      downloadManager: viewModel.downloadManager,

@@ -86,12 +86,12 @@ struct PlaylistView: View {
                 self.playIdentifier = nil
             }
         }
-        .sheet(item: $playIdentifier) { playIdentifier in
+        .sheet(item: $playIdentifier,
+               onDismiss: {
+            audioPlayer.finishPlaying()
+            self.playIdentifier = nil
+        }) { playIdentifier in
             AudioPlayerView(audioPlayer: audioPlayer, playIndex: playIdentifier.index)
-                .onDisappear {
-                    audioPlayer.finishPlaying()
-                    self.playIdentifier = nil
-                }
         }
         .navigationTitle(viewModel.title)
     }
