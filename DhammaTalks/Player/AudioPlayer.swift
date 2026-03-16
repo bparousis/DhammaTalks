@@ -40,6 +40,7 @@ class AudioPlayer: NSObject, ObservableObject {
 
     var isScrubbing = false
     
+    // TODO: Abstract out AVPlayer so that this code can be more easily mocked for unit testing.
     private lazy var player: AVPlayer = {
         let player = AVPlayer()
         periodicTimeObserver = player.addPeriodicTimeObserver(
@@ -84,9 +85,11 @@ class AudioPlayer: NSObject, ObservableObject {
     
     private var periodicTimeObserver: Any?
     private var playerObservation: NSKeyValueObservation?
+    private let dispatcher: Dispatcher
 
-    init(networkMonitor: NetworkMonitoring = NetworkMonitor()) {
+    init(networkMonitor: NetworkMonitoring = NetworkMonitor(), dispatcher: Dispatcher = DispatchQueue.main) {
         self.networkMonitor = networkMonitor
+        self.dispatcher = dispatcher
         super.init()
         setupInterruptionNotification()
         setupRemoteTransportControls()
@@ -101,6 +104,11 @@ class AudioPlayer: NSObject, ObservableObject {
     
     @MainActor
     func play(at index: Int = 0) async {
+        
+        guard playableItems.indices.contains(index) else {
+            return
+        }
+        
         showProgress = false
         if status != .paused || index != playIndex {
             playIndex = index
@@ -123,7 +131,7 @@ class AudioPlayer: NSObject, ObservableObject {
         player.play()
         self.isActive = true
         // This helps hide the initial jump of the slider thumb when it's re-adjusted for a new talk
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1, execute: {
+        dispatcher.asyncAfter(deadline: .now() + 0.1, execute: {
             self.showProgress = true
         })
     }

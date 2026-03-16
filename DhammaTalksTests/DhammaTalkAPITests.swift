@@ -62,36 +62,6 @@ class DhammaTalkAPITests: XCTestCase {
     }
 }
 
-
-private class MockFileStorage: FileStorage {
-    
-    private let localStorage = LocalFileStorage()
-    var saveURL: URL?
-    var performedRemoveFilename: String?
-    var didSaveData = false
-    
-    func save(at url: URL, withFilename filename: String) throws {
-        saveURL = url
-    }
-    
-    func remove(filename: String) throws {
-        performedRemoveFilename = filename
-    }
-    
-    func exists(filename: String) -> Bool {
-        return localStorage.exists(filename: filename)
-    }
-    
-    func createURL(for filename: String) -> URL {
-        return localStorage.createURL(for: filename)
-    }
-    
-    func saveData(_ data: Data, withFilename filename: String) throws {
-        didSaveData = true
-    }
-}
-
-
 struct JSONTestData {
 
     static let invalidJSONContent = "ABCDEFG"
