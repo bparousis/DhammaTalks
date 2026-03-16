@@ -88,7 +88,7 @@ struct PlaylistView: View {
         }
         .sheet(item: $playIdentifier,
                onDismiss: {
-            audioPlayer.finishPlaying()
+            audioPlayer.finish()
             self.playIdentifier = nil
         }) { playIdentifier in
             AudioPlayerView(audioPlayer: audioPlayer, playIndex: playIdentifier.index)

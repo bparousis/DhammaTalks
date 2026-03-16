@@ -146,7 +146,7 @@ class AudioPlayer: NSObject, ObservableObject {
             let playNext = if shouldPlayNext { await playNext() } else { false }
             if !playNext {
                 isActive = false
-                finishPlaying()
+                finish()
             }
         }
     }
@@ -158,11 +158,16 @@ class AudioPlayer: NSObject, ObservableObject {
     @MainActor
     func finish() {
         player.pause()
+        isScrubbing = false
         NotificationCenter.default.removeObserver(self)
         removeRemoteTransportControls()
         clearNowPlayingInfo()
         progressTime = 0
         status = .idle
+        if let currentPlayableItem, let currentPlayerItem {
+            currentPlayableItem.finishedPlaying(at: currentPlayerItem.currentTime(),
+                                                withTotal: currentPlayerItem.duration)
+        }
     }
     
     func skipForward() {
@@ -192,7 +197,7 @@ class AudioPlayer: NSObject, ObservableObject {
     }
     
     var showPlayButton: Bool {
-        status != .playing || isScrubbing
+        status != .playing
     }
 
     var hasNext: Bool {
@@ -235,7 +240,7 @@ class AudioPlayer: NSObject, ObservableObject {
     @MainActor
     func playNext() async -> Bool {
         if hasNext {
-            finishPlaying()
+            finish()
             await play(at: playIndex + 1)
             return true
         }
@@ -245,27 +250,15 @@ class AudioPlayer: NSObject, ObservableObject {
     @MainActor
     func playPrevious() async -> Bool {
         if hasPrevious {
-            finishPlaying()
+            finish()
             await play(at: playIndex - 1)
             return true
         }
         return false
     }
-
-    @MainActor
-    func finishPlaying() {
-        guard status != .idle else { return }
-        finish()
-        if let currentPlayableItem, let currentPlayerItem {
-            currentPlayableItem.finishedPlaying(at: currentPlayerItem.currentTime(),
-                                                withTotal: currentPlayerItem.duration)
-        }
-    }
     
     // MARK: Private functions
-    
 
-    
     func setupInterruptionNotification() {
         // Register for notification
         NotificationCenter.default.addObserver(self,

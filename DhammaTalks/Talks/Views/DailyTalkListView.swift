@@ -33,17 +33,20 @@ struct DailyTalkListView: View {
             if viewModel.selectedFilter == .empty {
                 showFilterSheet = true
             } else {
-                viewModel.selectedFilter = .empty
+                withAnimation {
+                    viewModel.selectedFilter = .empty
+                }
             }
         } label: {
-            VStack {
-                Image(systemName: viewModel.filterImageName)
-            }
+            Image(systemName: viewModel.filterImageName)
+                .transition(.opacity)
         }
         .confirmationDialog(Text("Filter"), isPresented: $showFilterSheet) {
             ForEach(viewModel.filters) { filter in
                 Button(filter.title) {
-                    viewModel.selectedFilter = filter
+                    withAnimation {
+                        viewModel.selectedFilter = filter
+                    }
                 }
             }
         }
@@ -154,7 +157,7 @@ struct DailyTalkListView: View {
             }
             .sheet(item: $playIdentifier,
                    onDismiss: {
-                audioPlayer.finishPlaying()
+                audioPlayer.finish()
                 self.playIdentifier = nil
             }) { playIdentifier in
                 AudioPlayerView(audioPlayer: audioPlayer, playIndex: playIdentifier.index)

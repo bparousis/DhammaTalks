@@ -48,10 +48,12 @@ struct AudioPlayerView: View {
             } onEditingChanged: { scrubStarted in
                 if scrubStarted {
                     audioPlayer.isScrubbing = true
-                    self.audioPlayer.pause()
+                    if audioPlayer.status == .playing {
+                        self.audioPlayer.pause()
+                    }
                 } else {
                     audioPlayer.isScrubbing = false
-                    self.audioPlayer.seekTo(seconds: audioPlayer.progressTime <= 0 ? 1 : audioPlayer.progressTime)
+                    self.audioPlayer.seekTo(seconds: audioPlayer.progressTime <= 0 ? 0 : audioPlayer.progressTime)
                     Task {
                         await self.audioPlayer.play()
                     }
@@ -173,8 +175,5 @@ struct AudioPlayerView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color(UIColor.systemBackground).edgesIgnoringSafeArea(.all))
         .presentationDragIndicator(.visible)
-        .onDisappear {
-            audioPlayer.finishPlaying()
-        }
     }
 }
