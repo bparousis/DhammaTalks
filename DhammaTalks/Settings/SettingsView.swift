@@ -15,6 +15,10 @@ struct SettingsView: View {
     @State private var showMailView: Bool = false
     @State private var showMailAlert: Bool = false
     @State var result: Result<MFMailComposeResult, Error>? = nil
+    
+    // The value will be stored in UserDefaults with the key "isDarkModeEnabled"
+    @AppStorage(AppSettings.autoplayKey) private var autoplay: Bool = true
+    @AppStorage(AppSettings.useCellularDataKey) private var useCellularData: Bool = false
 
     var body: some View {
         Form {
@@ -24,6 +28,11 @@ struct SettingsView: View {
                     Spacer()
                     Text(Bundle.appVersion)
                 }
+            }
+            
+            Section("Autoplay") {
+                Toggle("Automatically Play Next Talk", isOn: $autoplay)
+                Toggle("Allow on Cellular Data", isOn: $useCellularData)
             }
             
             Section {

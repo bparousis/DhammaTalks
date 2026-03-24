@@ -11,7 +11,7 @@ import Foundation
 extension PlaylistMO {
     func toDomainModel() -> Playlist {
         var playlistItemList: [TalkData] = []
-        if let playlistItems = playlistItems as? NSOrderedSet {
+        if let playlistItems {
             for item in playlistItems {
                 if let playlistItem = item as? PlaylistItemMO,
                    let title = playlistItem.title, let url = playlistItem.url {

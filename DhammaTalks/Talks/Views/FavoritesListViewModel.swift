@@ -42,8 +42,10 @@ class FavoritesListViewModel: ObservableObject {
         viewModel.dateStyle = .full
         return viewModel
     }
-    
-    func playRandomTalk() async -> String? {
-        return await favorites.playRandom()
+}
+
+extension FavoritesListViewModel: PlayableList {
+    var playableItems: [any PlayableItem] {
+        favorites
     }
 }

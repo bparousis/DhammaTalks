@@ -13,10 +13,4 @@ extension View {
     var isIpad: Bool {
         UIDevice.current.userInterfaceIdiom == .pad
     }
-
-    var swipeBar: some View {
-        Color.secondary.ignoresSafeArea()
-            .cornerRadius(8.0)
-            .frame(width: 100, height: 5, alignment: .center)
-    }
 }

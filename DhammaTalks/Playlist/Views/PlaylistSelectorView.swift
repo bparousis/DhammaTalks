@@ -11,8 +11,16 @@ import CoreData
 import Combine
 
 struct PlaylistSelectorView: View {
+    
+    @StateObject private var viewModel: PlaylistSelectorViewModel
+    
+    init (playlistService: PlaylistService, talkUserInfoService: TalkUserInfoService, downloadManager: DownloadManager)
+    {
+        _viewModel = StateObject(wrappedValue: PlaylistSelectorViewModel(playlistService: playlistService,
+                                                                         talkUserInfoService: talkUserInfoService,
+                                                                         downloadManager: downloadManager))
+    }
 
-    @ObservedObject private var viewModel: PlaylistSelectorViewModel
     @State private var showCreatePlaylistSheet = false
     @State private var presentDeleteAlert = false
     @State private var title: String = ""
@@ -20,10 +28,6 @@ struct PlaylistSelectorView: View {
     @State private var deleteOffsets: IndexSet?
     @State private var showSortSheet = false
 
-    init(viewModel: PlaylistSelectorViewModel) {
-        self.viewModel = viewModel
-    }
-    
     @ViewBuilder
     private var playlistSelectorView: some View {
         ScrollViewReader { _ in
@@ -47,10 +51,7 @@ struct PlaylistSelectorView: View {
                                 showSortSheet = true
                             }
                         } label: {
-                            VStack {
-                                Image(systemName: "arrow.up.arrow.down.circle")
-                                Text("Sort")
-                            }
+                            Image(systemName: "arrow.up.arrow.down.circle")
                         }
                         .confirmationDialog(Text("Sort By"), isPresented: $showSortSheet) {
                             ForEach(viewModel.sortList) { sort in
@@ -133,11 +134,10 @@ struct PlaylistSelectorView: View {
     
     @ViewBuilder
     private func createPlaylistView(playlist: Playlist) -> some View {
-        let playlistViewModel = PlaylistViewModel(playlist: playlist,
-                                                  talkUserInfoService: viewModel.talkUserInfoService,
-                                                  downloadManager: viewModel.downloadManager,
-                                                  playlistService: viewModel.playlistService)
-        PlaylistView(viewModel: playlistViewModel)
+        PlaylistView(playlist: playlist,
+                     talkUserInfoService: viewModel.talkUserInfoService,
+                     downloadManager: viewModel.downloadManager,
+                     playlistService: viewModel.playlistService)
     }
 }
 

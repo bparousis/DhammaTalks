@@ -8,16 +8,22 @@
 
 import UIKit
 import AVKit
+import SwiftUI
 import os.log
 
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        
+        AppSettings.registerDefaults()
+        UISlider.appearance().thumbTintColor = UIColor(Color.primaryTheme)
+        
         // Get the singleton instance.
         let audioSession = AVAudioSession.sharedInstance()
         do {
             // Set the audio session category, mode, and options.
-            try audioSession.setCategory(.playback, mode: .spokenAudio, options: [])
+            try audioSession.setCategory(.playback, mode: .spokenAudio)
+            try AVAudioSession.sharedInstance().setActive(true)
         } catch {
             Logger.audio.error("Failed to set audio session category: \(String(describing: error))")
         }

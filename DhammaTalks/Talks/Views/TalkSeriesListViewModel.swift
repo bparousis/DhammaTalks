@@ -64,3 +64,9 @@ class TalkSeriesListViewModel: ObservableObject {
         self.talkSections = talkSectionViewModelList
     }
 }
+
+extension TalkSeriesListViewModel: PlayableList {
+    var playableItems: [any PlayableItem] {
+        talkSections.flatMap(\.talkRows)
+    }
+}

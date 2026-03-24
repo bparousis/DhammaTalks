@@ -17,20 +17,9 @@ struct ContentView: View {
     @EnvironmentObject private var playlistService: PlaylistService
 
     var body: some View {
+        
         NavigationView {
-            let dailyTalkListViewModel = DailyTalkListViewModel(talkDataService: talkDataService,
-                                                                talkUserInfoService: talkUserInfoService,
-                                                                downloadManager: downloadManager,
-                                                                playlistService: playlistService)
-            let favoritesListViewModel = FavoritesListViewModel(talkUserInfoService: talkUserInfoService,
-                                                                downloadManager: downloadManager,
-                                                                playlistService: playlistService)
-            let playlistsViewModel = PlaylistSelectorViewModel(playlistService: playlistService,
-                                                               talkUserInfoService: talkUserInfoService,
-                                                               downloadManager: downloadManager)
-            TalkGroupSelectorView(dailyTalkListViewModel: dailyTalkListViewModel,
-                                  favoritesListViewModel: favoritesListViewModel,
-                                  playlistViewModel: playlistsViewModel)
+            TalkGroupSelectorView()
         }
         .navigationViewStyle(.stack)
     }

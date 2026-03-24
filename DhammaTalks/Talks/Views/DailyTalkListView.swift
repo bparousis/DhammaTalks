@@ -9,15 +9,14 @@
 import SwiftUI
 
 struct DailyTalkListView: View {
-    
-    @ObservedObject private var viewModel: DailyTalkListViewModel
-    
+
+    @EnvironmentObject private var audioPlayer: AudioPlayer
+
+    @StateObject private var viewModel: DailyTalkListViewModel
+
     @State private var searchText = ""
     @State private var showFilterSheet = false
-
-    init(viewModel: DailyTalkListViewModel) {
-        self.viewModel = viewModel
-    }
+    @State private var playIdentifier: TalkIdentifier? = nil
     
     private var datePickerView: some View {
         Section {
@@ -34,18 +33,20 @@ struct DailyTalkListView: View {
             if viewModel.selectedFilter == .empty {
                 showFilterSheet = true
             } else {
-                viewModel.selectedFilter = .empty
+                withAnimation {
+                    viewModel.selectedFilter = .empty
+                }
             }
         } label: {
-            VStack {
-                Image(systemName: viewModel.filterImageName)
-                Text(viewModel.filterTitle)
-            }
+            Image(systemName: viewModel.filterImageName)
+                .transition(.opacity)
         }
         .confirmationDialog(Text("Filter"), isPresented: $showFilterSheet) {
             ForEach(viewModel.filters) { filter in
                 Button(filter.title) {
-                    viewModel.selectedFilter = filter
+                    withAnimation {
+                        viewModel.selectedFilter = filter
+                    }
                 }
             }
         }
@@ -54,16 +55,24 @@ struct DailyTalkListView: View {
     private func randomPlayButton(proxy: ScrollViewProxy) -> some View {
         Button {
             Task {
-                if let id = await viewModel.playRandomTalk() {
-                    proxy.scrollTo(id)
+                if let talkIdentifier = viewModel.random() {
+                    proxy.scrollTo(talkIdentifier.id)
+                    playIdentifier = talkIdentifier
                 }
             }
         } label: {
-            VStack {
-                Image(systemName: "shuffle")
-                Text("Play")
-            }
+            Image(systemName: "shuffle")
         }
+    }
+    
+    init(talkDataService: TalkDataService,
+         talkUserInfoService: TalkUserInfoService,
+         downloadManager: DownloadManager,
+         playlistService: PlaylistService)
+    {
+        _viewModel = StateObject(
+            wrappedValue: DailyTalkListViewModel(talkDataService: talkDataService, talkUserInfoService: talkUserInfoService, downloadManager: downloadManager, playlistService: playlistService)
+        )
     }
     
     @ViewBuilder
@@ -72,31 +81,37 @@ struct DailyTalkListView: View {
             Text(viewModel.selectedFilter.emptyListText)
                 .frame(maxWidth: .infinity, alignment: .center)
         } else {
-            ForEach(talkSections) { talkSection in
-                Section(header: TalkSectionHeader(title: talkSection.title,
-                                                  talkCount: talkSection.talkRows.count)) {
-                    ForEach(talkSection.talkRows) { talkRow in
-                        TalkRow(viewModel: talkRow)
+            List {
+                datePickerView
+                ForEach(talkSections) { talkSection in
+                    Section(header: TalkSectionHeader(title: talkSection.title,
+                                                      talkCount: talkSection.talkRows.count)) {
+                        ForEach(talkSection.talkRows) { talkRow in
+                            TalkRow(viewModel: talkRow) { tapped in
+                                guard let foundIdentifier = viewModel.playableItemWithID(tapped.id) else {
+                                    return
+                                }
+                                playIdentifier = foundIdentifier
+                            }
+                        }
                     }
                 }
             }
         }
     }
     
+    @ViewBuilder
     private var listView: some View {
-        List {
-            switch viewModel.state {
-            // For error showingAlert will be true, which will cause an alert to be shown.
-            case .initial, .error:
-                EmptyView()
-            case .loading:
-                Section {
-                    ProgressView()
-                }
-            case .loaded(let sections):
-                datePickerView
-                createTalkSectionsView(sections)
+        switch viewModel.state {
+        // For error showingAlert will be true, which will cause an alert to be shown.
+        case .initial, .error:
+            EmptyView()
+        case .loading:
+            Section {
+                ProgressView()
             }
+        case .loaded(let sections):
+            createTalkSectionsView(sections)
         }
     }
 
@@ -135,9 +150,22 @@ struct DailyTalkListView: View {
             }, message: {
                 Text("Please update your application to a newer version as we stopped supporting this version.  We're sorry for any inconvenience.")
             })
+            .onReceive(audioPlayer.$isActive) { isActive in
+                if !isActive {
+                    self.playIdentifier = nil
+                }
+            }
+            .sheet(item: $playIdentifier,
+                   onDismiss: {
+                audioPlayer.finish()
+                self.playIdentifier = nil
+            }) { playIdentifier in
+                AudioPlayerView(audioPlayer: audioPlayer, playIndex: playIdentifier.index)
+            }
             .task(id: DailyTalkQuery(category: viewModel.selectedCategory,
                                      year: viewModel.selectedYear,
                                      searchText:searchText)) {
+                audioPlayer.playableList = viewModel
                 await viewModel.fetchData(searchText: searchText)
             }
             .listStyle(.insetGrouped)

@@ -10,6 +10,7 @@ import SwiftUI
 
 struct TalkGroupSelectorView: View {
 
+    @EnvironmentObject private var talkDataService: TalkDataService
     @EnvironmentObject private var talkUserInfoService: TalkUserInfoService
     @EnvironmentObject private var downloadManager: DownloadManager
     @EnvironmentObject private var playlistService: PlaylistService
@@ -19,26 +20,23 @@ struct TalkGroupSelectorView: View {
     private static let dailyTalksTag = "dailyTalks"
     private static let favoritesTag = "favorites"
     private static let playlistsTag = "playlists"
-    private let dailyTalkListViewModel: DailyTalkListViewModel
-    private let favoritesListViewModel: FavoritesListViewModel
-    private let playlistViewModel: PlaylistSelectorViewModel
 
     private var dailyTalksView: some View {
-        DailyTalkListView(viewModel: dailyTalkListViewModel)
+        DailyTalkListView(talkDataService: talkDataService, talkUserInfoService: talkUserInfoService, downloadManager: downloadManager, playlistService: playlistService)
             .onAppear {
                 AppSettings.talkGroupSelection = Self.dailyTalksTag
             }
     }
 
     private var favoritesView: some View {
-        FavoritesListView(viewModel: favoritesListViewModel)
+        FavoritesListView(talkUserInfoService: talkUserInfoService, downloadManager: downloadManager, playlistService: playlistService)
             .onAppear {
                 AppSettings.talkGroupSelection = Self.favoritesTag
             }
     }
     
     private var playlistSelectorView: some View {
-        PlaylistSelectorView(viewModel: playlistViewModel)
+        PlaylistSelectorView(playlistService: playlistService, talkUserInfoService: talkUserInfoService, downloadManager: downloadManager)
             .onAppear {
                 AppSettings.talkGroupSelection = Self.playlistsTag
             }
@@ -51,25 +49,25 @@ struct TalkGroupSelectorView: View {
     private var columns: [GridItem] {
         Array(repeating: GridItem(.flexible()), count: isIpad ? 4 : 2)
     }
-    
-    init(dailyTalkListViewModel: DailyTalkListViewModel,
-         favoritesListViewModel: FavoritesListViewModel,
-         playlistViewModel: PlaylistSelectorViewModel)
-    {
-        self.dailyTalkListViewModel = dailyTalkListViewModel
-        self.favoritesListViewModel = favoritesListViewModel
-        self.playlistViewModel = playlistViewModel
-    }
 
     var body: some View {
         GeometryReader { geo in
             ScrollView {
                 ScrollViewReader { proxy in
+                    let width = geo.size.width * widthPercentage
+                    if !isIpad {
+                        NavigationLink(destination: dailyTalksView, tag: Self.dailyTalksTag, selection: $selection)
+                        {
+                            makeCellView(title: "Daily Talks", image: "water8",
+                                         width: (width * 2) + 10, height: 115)
+                        }
+                        .id(Self.dailyTalksTag)
+                    }
+
                     LazyVGrid(columns: columns, alignment: .center, spacing: 10) {
-                        let width = geo.size.width * widthPercentage
                         makeMainSection(columnWidth: width)
-                        
                         if let talkSeriesList = TalkDataService.talkSeriesList {
+                            Spacer()
                             makeTalkSeriesSection(talkSeriesList: talkSeriesList, columnWidth: width)
                         }
                     }
@@ -114,28 +112,38 @@ struct TalkGroupSelectorView: View {
         }
     }
     
-    private func makeCellView(title: String, image: String, width: CGFloat) -> some View {
-        VStack {
+    private func makeCellView(title: String, image: String, width: CGFloat, height: CGFloat = 100) -> some View {
+        ZStack(alignment: .bottom) {
             Image(image)
                 .resizable()
-                .frame(width: width, height:100, alignment:.center)
-                .aspectRatio(contentMode:.fill)
-                .cornerRadius(20)
+
+            LinearGradient(
+                colors: [
+                    .clear,
+                    .black.opacity(0.6)
+                ],
+                startPoint: .center,
+                endPoint: .bottom
+            )
+
             Text(title)
-                .bold()
-                .font(.system(size:18, weight:.bold))
-                .foregroundColor(.primary)
-                .frame(width: width, height:75, alignment:.top)
+                .font(.headline)
+                .foregroundColor(.white)
+                .padding(12)
         }
+        .frame(width: width, height: height)
+        .clipShape(RoundedRectangle(cornerRadius: 18))
     }
     
     private func makeMainSection(columnWidth: CGFloat) -> some View {
         Section {
-            NavigationLink(destination: dailyTalksView, tag: Self.dailyTalksTag, selection: $selection)
-            {
-                makeCellView(title: "Daily Talks", image: "water8", width: columnWidth)
+            if isIpad {
+                NavigationLink(destination: dailyTalksView, tag: Self.dailyTalksTag, selection: $selection)
+                {
+                    makeCellView(title: "Daily Talks", image: "water8", width: columnWidth)
+                }
+                .id(Self.dailyTalksTag)
             }
-            .id(Self.dailyTalksTag)
             
             NavigationLink(destination: favoritesView, tag: Self.favoritesTag, selection: $selection)
             {
@@ -154,11 +162,10 @@ struct TalkGroupSelectorView: View {
     private func makeTalkSeriesSection(talkSeriesList: [TalkSeries], columnWidth: CGFloat) -> some View {
         Section {
             ForEach(talkSeriesList) { talkSeries in
-                let viewModel = TalkSeriesListViewModel(talkSeries: talkSeries,
-                                                        talkUserInfoService: talkUserInfoService,
-                                                        downloadManager: downloadManager,
-                                                        playlistService: playlistService)
-                let talkSeriesListView = TalkSeriesListView(viewModel: viewModel)
+                let talkSeriesListView = TalkSeriesListView(talkSeries: talkSeries,
+                                                            talkUserInfoService: talkUserInfoService,
+                                                            downloadManager: downloadManager,
+                                                            playlistService: playlistService)
                     .onAppear {
                         AppSettings.talkGroupSelection = talkSeries.title
                     }
@@ -169,9 +176,28 @@ struct TalkGroupSelectorView: View {
                 .id(talkSeries.title)
             }
         } header: {
-            Text("Talk Series")
-                .font(.system(size: 20))
-                .bold()
+            ZStack {
+                HStack {
+                    gradientLine
+                    Text("Series")
+                        .font(.system(size: 20))
+                        .bold()
+                    gradientLine
+                }
+            }
         }
+    }
+    
+    private var gradientLine: some View {
+        Rectangle()
+            .fill(
+                LinearGradient(
+                    gradient: Gradient(colors: [Color(UIColor.systemBackground), .primary, Color(UIColor.systemBackground)]),
+                    startPoint: .leading,
+                    endPoint: .trailing
+                )
+            )
+            .frame(height: 1)
+            .padding()
     }
 }

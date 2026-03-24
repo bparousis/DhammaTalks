@@ -56,52 +56,7 @@ class TalkRowViewModelTests: XCTestCase {
         XCTAssertEqual(sut.title, "Title")
         XCTAssertNil(sut.formattedDate)
     }
-    
-    func testPlayWithTalkUserInfo() async {
-        let talkData = TalkData(id: "1", title: "Title", url: "about:blank")
-        
-        self.context.performAndWait {
-            let userInfo = TalkUserInfoMO(context: self.context)
-            userInfo.url = "about:blank"
-            userInfo.totalTimeScale = 1000000000
-            userInfo.totalTimeValue = 14193277562
-            userInfo.currentTimeScale = 1000000000
-            userInfo.currentTimeValue = 2193277562
-            try? self.context.save()
-        }
-        
-        sut = TalkRowViewModel(talkData: talkData,
-                               talkUserInfoService: talkUserInfoService,
-                               downloadManager: downloadManager,
-                               playlistService: playlistService)
-        XCTAssertEqual(sut.state, .unplayed)
-        XCTAssertNil(sut.playerItem)
-        await sut.play()
-        XCTAssertEqual(sut.state, .inProgress)
-        XCTAssertNotNil(sut.playerItem)
-        
-        // Test that seek was performed.
-        XCTAssertEqual(sut.playerItem!.currentTime().value, 2193277562)
-        XCTAssertEqual(sut.playerItem!.currentTime().timescale, 1000000000)
-        XCTAssertEqual(sut.currentTimeString, "00:02")
-        XCTAssertEqual(sut.timeRemainingString, "-00:12")
-    }
-    
-    func testPlayWithoutTalkUserInfo() async {
-        
-        let talkData = TalkData(id: "1", title: "Title", url: "about:blank")
-        
-        sut = TalkRowViewModel(talkData: talkData,
-                               talkUserInfoService: talkUserInfoService,
-                               downloadManager: downloadManager,
-                               playlistService: playlistService)
-        XCTAssertNil(sut.playerItem)
-        await sut.play()
-        XCTAssertNotNil(sut.playerItem)
 
-        XCTAssertEqual(sut.playerItem!.currentTime().value, 0)
-    }
-    
     func testFinishedPlayingUpdatesUserInfo() async {
         let talkData = TalkData(id: "1", title: "Title", url: "about:blank")
         
@@ -119,20 +74,19 @@ class TalkRowViewModelTests: XCTestCase {
                                talkUserInfoService: talkUserInfoService,
                                downloadManager: downloadManager,
                                playlistService: playlistService)
-        await sut.play()
         
         let beforeFinished = talkUserInfoService.getTalkUserInfo(for: "about:blank")
         XCTAssertNotNil(beforeFinished)
         XCTAssertEqual(beforeFinished?.currentTime, CMTime(value: 2193277562, timescale: 1000000000))
         
         let item = AVPlayerItem(url: URL(string:"about:blank")!)
-        let cmTime = CMTime(value: 8495278262, timescale: 1000000000)
-        await item.seek(to: cmTime)
-        sut.finishedPlaying(item: item)
+        let finishTime = CMTime(value: 8495278262, timescale: 1000000000)
+        await item.seek(to: finishTime)
+        sut.finishedPlaying(at: finishTime, withTotal: CMTime(value: 14193277562, timescale: 1000000000))
         
         let afterFinished = talkUserInfoService.getTalkUserInfo(for: "about:blank")
         XCTAssertNotNil(afterFinished)
-        XCTAssertEqual(afterFinished?.currentTime, cmTime)
+        XCTAssertEqual(afterFinished?.currentTime, finishTime)
     }
     
     func testFinishedPlayingAddsUserInfo() async {
@@ -142,19 +96,18 @@ class TalkRowViewModelTests: XCTestCase {
                                talkUserInfoService: talkUserInfoService,
                                downloadManager: downloadManager,
                                playlistService: playlistService)
-        await sut.play()
-        
+
         let beforeFinished = talkUserInfoService.getTalkUserInfo(for: "about:blank")
         XCTAssertNil(beforeFinished)
         
         let item = AVPlayerItem(url: URL(string:"about:blank")!)
-        let cmTime = CMTime(value: 8495278262, timescale: 1000000000)
-        await item.seek(to: cmTime)
-        sut.finishedPlaying(item: item)
+        let finishTime = CMTime(value: 8495278262, timescale: 1000000000)
+        await item.seek(to: finishTime)
+        sut.finishedPlaying(at: finishTime, withTotal: CMTime(value: 14193277562, timescale: 1000000000))
         
         let afterFinished = talkUserInfoService.getTalkUserInfo(for: "about:blank")
         XCTAssertNotNil(afterFinished)
-        XCTAssertEqual(afterFinished?.currentTime, cmTime)
+        XCTAssertEqual(afterFinished?.currentTime, finishTime)
     }
     
     func testFetchTime() async {
@@ -179,7 +132,6 @@ class TalkRowViewModelTests: XCTestCase {
         XCTAssertEqual(sut.currentTimeInSeconds, 8.495278262)
         XCTAssertEqual(sut.totalTimeInSeconds, 154.433577362)
         XCTAssertEqual(sut.currentTimeString, "00:08")
-        XCTAssertEqual(sut.timeRemainingString, "-02:25")
     }
     
     func testAddToPlaylist() async {
@@ -377,30 +329,5 @@ class TalkRowViewModelTests: XCTestCase {
         sut.playlist = Playlist(id: UUID(), title: "Playlist", desc: nil, createdDate: Date(), lastModifiedDate: Date(), playlistItems: [talkData])
         XCTAssertTrue(sut.isInPlaylist)
         XCTAssertFalse(sut.actions.contains(.addToPlaylist))
-    }
-}
-
-private class MockFileStorage: FileStorage {
-    var saveURL: URL?
-    var performedRemoveFilename: String?
-    var exists = true
-    
-    func save(at url: URL, withFilename filename: String) throws {
-        saveURL = url
-    }
-    
-    func remove(filename: String) throws {
-        performedRemoveFilename = filename
-    }
-    
-    func exists(filename: String) -> Bool {
-        return exists
-    }
-    
-    func createURL(for filename: String) -> URL {
-        return URL(string: "http://google.com")!
-    }
-    
-    func saveData(_ data: Data, withFilename filename: String) throws {
     }
 }

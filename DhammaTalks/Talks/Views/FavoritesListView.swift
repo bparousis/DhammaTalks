@@ -14,11 +14,16 @@ import Combine
 
 struct FavoritesListView: View {
 
-    @ObservedObject private var viewModel: FavoritesListViewModel
-    @State var searchText: String = ""
+    @EnvironmentObject private var audioPlayer: AudioPlayer
+    
+    @StateObject private var viewModel: FavoritesListViewModel
 
-    init(viewModel: FavoritesListViewModel) {
-        self.viewModel = viewModel
+    @State var searchText: String = ""
+    @State var playIdentifier: TalkIdentifier? = nil
+    
+    init(talkUserInfoService: TalkUserInfoService, downloadManager: DownloadManager, playlistService: PlaylistService)
+    {
+        _viewModel = StateObject(wrappedValue: FavoritesListViewModel(talkUserInfoService: talkUserInfoService, downloadManager: downloadManager, playlistService: playlistService))
     }
     
     @ViewBuilder
@@ -29,22 +34,25 @@ struct FavoritesListView: View {
             ScrollViewReader { proxy in
                 List {
                     ForEach(viewModel.favorites) { favoriteRow in
-                        TalkRow(viewModel: favoriteRow)
+                        TalkRow(viewModel: favoriteRow) { tapped in
+                            guard let foundIdentifier = viewModel.playableItemWithID(tapped.id) else {
+                                return
+                            }
+                            playIdentifier = foundIdentifier
+                        }
                     }
                 }
                 .toolbar {
                     ToolbarItemGroup(placement: .bottomBar) {
                         Button {
                             Task {
-                                if let id = await viewModel.playRandomTalk() {
-                                    proxy.scrollTo(id)
+                                if let talkIdentifier = viewModel.random() {
+                                    proxy.scrollTo(talkIdentifier.id)
+                                    playIdentifier = talkIdentifier
                                 }
                             }
                         } label: {
-                            VStack {
-                                Image(systemName: "shuffle")
-                                Text("Play")
-                            }
+                            Image(systemName: "shuffle")
                         }
                     }
                 }
@@ -64,9 +72,22 @@ struct FavoritesListView: View {
         }
         .task {
             await viewModel.fetchFavorites(searchText: searchText)
+            audioPlayer.playableList = viewModel
         }
         .task(id: searchText) {
             await viewModel.fetchFavorites(searchText: searchText)
+        }
+        .onReceive(audioPlayer.$isActive) { isActive in
+            if !isActive {
+                self.playIdentifier = nil
+            }
+        }
+        .sheet(item: $playIdentifier,
+               onDismiss: {
+            audioPlayer.finish()
+            self.playIdentifier = nil
+        }) { playIdentifier in
+            AudioPlayerView(audioPlayer: audioPlayer, playIndex: playIdentifier.index)
         }
         .navigationTitle("Favorites")
     }
