@@ -321,28 +321,6 @@ class AudioPlayer: NSObject, ObservableObject {
         return .commandFailed
     }
     
-    @objc func handleNextCommand(event: MPRemoteCommandEvent) -> MPRemoteCommandHandlerStatus {
-        guard hasNext else {
-            return .noSuchContent
-        }
-
-        Task {
-            await playNext()
-        }
-        return .success
-    }
-    
-    @objc func handlePreviousCommand(event: MPRemoteCommandEvent) -> MPRemoteCommandHandlerStatus {
-        guard hasPrevious else {
-            return .noSuchContent
-        }
-        
-        Task {
-            await playPrevious()
-        }
-        return .success
-    }
-    
     @objc func handleChangePlaybackPositionCommand(event: MPRemoteCommandEvent) -> MPRemoteCommandHandlerStatus {
         guard let changePlaybackPositionCommandEvent =
                 event as? MPChangePlaybackPositionCommandEvent else { return .commandFailed }
@@ -351,6 +329,16 @@ class AudioPlayer: NSObject, ObservableObject {
         let seekToTime = CMTimeMake(value: Int64(positionTime * 1000 as Float64),
                                     timescale: 1000)
         player.seek(to: seekToTime, toleranceBefore: CMTime.zero, toleranceAfter: CMTime.zero)
+        return .success
+    }
+    
+    @objc func handleSkipForwardCommand(event: MPRemoteCommandEvent) -> MPRemoteCommandHandlerStatus {
+        skipForward()
+        return .success
+    }
+    
+    @objc func handleSkipBackwardCommand(event: MPRemoteCommandEvent) -> MPRemoteCommandHandlerStatus {
+        skipBackward()
         return .success
     }
 }
@@ -368,23 +356,25 @@ extension AudioPlayer {
         commandCenter.pauseCommand.isEnabled = true
         commandCenter.pauseCommand.addTarget(self, action: #selector(handlePauseCommand(event:)))
         
-        commandCenter.nextTrackCommand.isEnabled = true
-        commandCenter.nextTrackCommand.addTarget(self, action: #selector(handleNextCommand(event:)))
-
-        commandCenter.previousTrackCommand.isEnabled = true
-        commandCenter.previousTrackCommand.addTarget(self, action: #selector(handlePreviousCommand(event:)))
-        
         commandCenter.changePlaybackPositionCommand.isEnabled = true
         commandCenter.changePlaybackPositionCommand.addTarget(self, action: #selector(handleChangePlaybackPositionCommand(event:)))
+        
+        commandCenter.skipForwardCommand.isEnabled = true
+        commandCenter.skipForwardCommand.preferredIntervals = [15]
+        commandCenter.skipForwardCommand.addTarget(self, action: #selector(handleSkipForwardCommand(event:)))
+        
+        commandCenter.skipBackwardCommand.isEnabled = true
+        commandCenter.skipBackwardCommand.preferredIntervals = [15]
+        commandCenter.skipBackwardCommand.addTarget(self, action: #selector(handleSkipBackwardCommand(event:)))
     }
     
     private func removeRemoteTransportControls() {
         let commandCenter = MPRemoteCommandCenter.shared()
         commandCenter.playCommand.removeTarget(self)
         commandCenter.pauseCommand.removeTarget(self)
-        commandCenter.nextTrackCommand.removeTarget(self)
-        commandCenter.previousTrackCommand.removeTarget(self)
         commandCenter.changePlaybackPositionCommand.removeTarget(self)
+        commandCenter.skipForwardCommand.removeTarget(self)
+        commandCenter.skipBackwardCommand.removeTarget(self)
     }
 }
 
