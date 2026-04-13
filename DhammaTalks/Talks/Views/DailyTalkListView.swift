@@ -119,11 +119,6 @@ struct DailyTalkListView: View {
         ScrollViewReader { proxy in
             listView
             .searchable(text: $searchText)
-            .refreshable {
-                if viewModel.isRefreshable {
-                    await viewModel.fetchData()
-                }
-            }
             .toolbar {
                 ToolbarItemGroup(placement: .bottomBar) {
                     Spacer()

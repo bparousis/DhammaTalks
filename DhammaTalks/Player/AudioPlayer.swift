@@ -30,12 +30,26 @@ class AudioPlayer: NSObject, ObservableObject {
     @Published var progressTime: TimeInterval = 0
     @Published var isActive: Bool = false
     @Published var showProgress: Bool = false
+
+    private var itemStatusObservation: NSKeyValueObservation?
     
     private var playableItems: [any PlayableItem] {
         guard let playableItems = playableList?.playableItems else {
             return []
         }
         return playableItems
+    }
+    
+    static var playbackSpeeds: [Float] {
+        [0.75, 0.85, 1.0, 1.15]
+    }
+    
+    static var maxPlaybackSpeed: Float {
+        playbackSpeeds.last ?? 1.0
+    }
+    
+    static var minPlaybackSpeed: Float {
+        playbackSpeeds.first ?? 1.0
     }
 
     var isScrubbing = false
@@ -44,7 +58,7 @@ class AudioPlayer: NSObject, ObservableObject {
     private lazy var player: AVPlayer = {
         let player = AVPlayer()
         periodicTimeObserver = player.addPeriodicTimeObserver(
-            forInterval: CMTime(seconds: 0.5, preferredTimescale: CMTimeScale(1000)),
+            forInterval: CMTime(seconds: 1.0, preferredTimescale: CMTimeScale(1000)),
             queue: DispatchQueue.main,
             using: { [weak self] time in
                 self?.progressTime = time.seconds
@@ -109,8 +123,8 @@ class AudioPlayer: NSObject, ObservableObject {
             return
         }
         
-        showProgress = false
         if status != .paused || index != playIndex {
+            showProgress = false
             playIndex = index
             guard let playableItem = currentPlayableItem else { return }
             if let currentTimeSeconds = playableItem.currentTime?.seconds {
@@ -122,18 +136,31 @@ class AudioPlayer: NSObject, ObservableObject {
                                                    selector: #selector(self.playerDidFinishPlaying(sender:)),
                                                    name: NSNotification.Name.AVPlayerItemDidPlayToEndTime,
                                                    object: playerItem)
+            
             player.replaceCurrentItem(with: playerItem)
+
+            itemStatusObservation = playerItem?.observe(\.status, options: [.initial, .new]) { [weak self] item, _ in
+                guard let self else { return }
+                if item.status == .readyToPlay {
+                    self.player.playImmediately(atRate: AppSettings.playbackRate)
+                    self.isActive = true
+                    self.dispatcher.asyncAfter(deadline: .now() + 0.1) {
+                        self.showProgress = true
+                    }
+                    self.setupNowPlayingInfo()
+                }
+            }
+            
             title = playableItem.title
             setupInterruptionNotification()
             setupRemoteTransportControls()
             setupNowPlayingInfo()
         }
-        player.play()
-        self.isActive = true
-        // This helps hide the initial jump of the slider thumb when it's re-adjusted for a new talk
-        dispatcher.asyncAfter(deadline: .now() + 0.1, execute: {
-            self.showProgress = true
-        })
+        else {
+            // Resuming from pause
+            player.playImmediately(atRate: AppSettings.playbackRate)
+            setupNowPlayingInfo()
+        }
     }
     
     func play() async {
@@ -161,6 +188,7 @@ class AudioPlayer: NSObject, ObservableObject {
     
     func pause() {
         player.pause()
+        setupNowPlayingInfo()
     }
     
     @MainActor
@@ -265,6 +293,16 @@ class AudioPlayer: NSObject, ObservableObject {
         return false
     }
     
+    // MARK: - Public Methods
+    
+    func setPlaybackRate(_ rate: Float) {
+        AppSettings.playbackRate = rate
+        if status == .playing {
+            player.rate = AppSettings.playbackRate
+            setupNowPlayingInfo()
+        }
+    }
+    
     // MARK: Private functions
 
     func setupInterruptionNotification() {
@@ -292,9 +330,8 @@ class AudioPlayer: NSObject, ObservableObject {
                 let options = AVAudioSession.InterruptionOptions(rawValue: optionsValue)
                 if options.contains(.shouldResume) {
                     // Resume playback
-                    Task {
-                        await play()
-                    }
+                    player.playImmediately(atRate: AppSettings.playbackRate)
+                    setupNowPlayingInfo()
                 }
             }
         @unknown default:
@@ -393,7 +430,7 @@ extension AudioPlayer {
         }
         nowPlayingInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = currentPlayerItem?.currentTime().seconds
         nowPlayingInfo[MPMediaItemPropertyPlaybackDuration] = currentPlayerItem?.asset.duration.seconds
-        nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] = player.rate
+        nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] = (status == .playing) ? AppSettings.playbackRate : 0.0
         MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
     }
     
