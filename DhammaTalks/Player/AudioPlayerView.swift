@@ -6,8 +6,9 @@
 //  Copyright © 2025 Bill Parousis. All rights reserved.
 //
 
-import SwiftUI
 import Combine
+import SwiftUI
+import UIKit
 
 struct AudioPlayerView: View {
     
@@ -175,7 +176,7 @@ struct AudioPlayerView: View {
                     .foregroundColor(.brown.opacity(0.85))
                     .padding(.vertical, 6)
                     .padding(.horizontal, 10)
-                    .background(Color.white.opacity(0.10))
+                    .background(Color(UIColor.secondarySystemFill))
                     .clipShape(Capsule())
             }
             sliderView
