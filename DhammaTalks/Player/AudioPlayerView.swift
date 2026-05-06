@@ -6,8 +6,9 @@
 //  Copyright © 2025 Bill Parousis. All rights reserved.
 //
 
-import SwiftUI
 import Combine
+import SwiftUI
+import UIKit
 
 struct AudioPlayerView: View {
     
@@ -20,6 +21,8 @@ struct AudioPlayerView: View {
     }
 
     @ObservedObject private var audioPlayer: AudioPlayer
+    
+    @State private var showSpeedPicker = false
     private var initialPlayIndex: Int
 
     init(audioPlayer: AudioPlayer, playIndex: Int) {
@@ -164,12 +167,49 @@ struct AudioPlayerView: View {
                 .disabled(!audioPlayer.showProgress)
                 .padding(EdgeInsets(top: 0, leading: Constants.seekPadding, bottom: 0, trailing: Constants.seekPadding))
             }
-            .padding()
+            .padding(EdgeInsets(top: 0, leading: 10, bottom: 5, trailing: 10))
+            Button {
+                showSpeedPicker = true
+            } label: {
+                Text("\(AppSettings.playbackRate.formatted(.number.precision(.fractionLength(1...2))))x")
+                    .font(.subheadline)
+                    .foregroundColor(.brown.opacity(0.85))
+                    .padding(.vertical, 6)
+                    .padding(.horizontal, 10)
+                    .background(Color(UIColor.secondarySystemFill))
+                    .clipShape(Capsule())
+            }
             sliderView
-            .padding(EdgeInsets(top:50, leading: 40, bottom: 10, trailing: 40))
+            .padding(EdgeInsets(top:35, leading: 40, bottom: 10, trailing: 40))
         }
         .task {
             await audioPlayer.play(at: initialPlayIndex)
+        }
+        .sheet(isPresented: $showSpeedPicker) {
+            VStack(spacing: 20) {
+                Text("Playback Speed")
+                    .font(.headline)
+                List {
+                    let currentPlaybackRate = AppSettings.playbackRate
+                    ForEach(AudioPlayer.playbackSpeeds, id: \.self) { rate in
+                        Button {
+                            audioPlayer.setPlaybackRate(rate)
+                            showSpeedPicker = false
+                        } label: {
+                            HStack {
+                                Text("\(rate.formatted(.number.precision(.fractionLength(1...2))))x")
+                                    .font(.title3)
+                                if rate == currentPlaybackRate {
+                                    Spacer()
+                                    Image(systemName: "checkmark")
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            .presentationDetents([.medium, .large])
+            .padding()
         }
         .foregroundColor(.primary)
         .frame(maxWidth: .infinity, maxHeight: .infinity)

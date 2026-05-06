@@ -30,12 +30,26 @@ class AudioPlayer: NSObject, ObservableObject {
     @Published var progressTime: TimeInterval = 0
     @Published var isActive: Bool = false
     @Published var showProgress: Bool = false
+
+    private var itemStatusObservation: NSKeyValueObservation?
     
     private var playableItems: [any PlayableItem] {
         guard let playableItems = playableList?.playableItems else {
             return []
         }
         return playableItems
+    }
+    
+    static var playbackSpeeds: [Float] {
+        [0.75, 0.85, 1.0, 1.15]
+    }
+    
+    static var maxPlaybackSpeed: Float {
+        playbackSpeeds.last ?? 1.0
+    }
+    
+    static var minPlaybackSpeed: Float {
+        playbackSpeeds.first ?? 1.0
     }
 
     var isScrubbing = false
@@ -44,7 +58,7 @@ class AudioPlayer: NSObject, ObservableObject {
     private lazy var player: AVPlayer = {
         let player = AVPlayer()
         periodicTimeObserver = player.addPeriodicTimeObserver(
-            forInterval: CMTime(seconds: 0.5, preferredTimescale: CMTimeScale(1000)),
+            forInterval: CMTime(seconds: 1.0, preferredTimescale: CMTimeScale(1000)),
             queue: DispatchQueue.main,
             using: { [weak self] time in
                 self?.progressTime = time.seconds
@@ -109,8 +123,8 @@ class AudioPlayer: NSObject, ObservableObject {
             return
         }
         
-        showProgress = false
         if status != .paused || index != playIndex {
+            showProgress = false
             playIndex = index
             guard let playableItem = currentPlayableItem else { return }
             if let currentTimeSeconds = playableItem.currentTime?.seconds {
@@ -122,18 +136,31 @@ class AudioPlayer: NSObject, ObservableObject {
                                                    selector: #selector(self.playerDidFinishPlaying(sender:)),
                                                    name: NSNotification.Name.AVPlayerItemDidPlayToEndTime,
                                                    object: playerItem)
+            
             player.replaceCurrentItem(with: playerItem)
+
+            itemStatusObservation = playerItem?.observe(\.status, options: [.initial, .new]) { [weak self] item, _ in
+                guard let self else { return }
+                if item.status == .readyToPlay {
+                    self.player.playImmediately(atRate: AppSettings.playbackRate)
+                    self.isActive = true
+                    self.dispatcher.asyncAfter(deadline: .now() + 0.1) {
+                        self.showProgress = true
+                    }
+                    self.setupNowPlayingInfo()
+                }
+            }
+            
             title = playableItem.title
             setupInterruptionNotification()
             setupRemoteTransportControls()
             setupNowPlayingInfo()
         }
-        player.play()
-        self.isActive = true
-        // This helps hide the initial jump of the slider thumb when it's re-adjusted for a new talk
-        dispatcher.asyncAfter(deadline: .now() + 0.1, execute: {
-            self.showProgress = true
-        })
+        else {
+            // Resuming from pause
+            player.playImmediately(atRate: AppSettings.playbackRate)
+            setupNowPlayingInfo()
+        }
     }
     
     func play() async {
@@ -161,6 +188,7 @@ class AudioPlayer: NSObject, ObservableObject {
     
     func pause() {
         player.pause()
+        setupNowPlayingInfo()
     }
     
     @MainActor
@@ -265,6 +293,16 @@ class AudioPlayer: NSObject, ObservableObject {
         return false
     }
     
+    // MARK: - Public Methods
+    
+    func setPlaybackRate(_ rate: Float) {
+        AppSettings.playbackRate = rate
+        if status == .playing {
+            player.rate = AppSettings.playbackRate
+            setupNowPlayingInfo()
+        }
+    }
+    
     // MARK: Private functions
 
     func setupInterruptionNotification() {
@@ -292,9 +330,8 @@ class AudioPlayer: NSObject, ObservableObject {
                 let options = AVAudioSession.InterruptionOptions(rawValue: optionsValue)
                 if options.contains(.shouldResume) {
                     // Resume playback
-                    Task {
-                        await play()
-                    }
+                    player.playImmediately(atRate: AppSettings.playbackRate)
+                    setupNowPlayingInfo()
                 }
             }
         @unknown default:
@@ -321,28 +358,6 @@ class AudioPlayer: NSObject, ObservableObject {
         return .commandFailed
     }
     
-    @objc func handleNextCommand(event: MPRemoteCommandEvent) -> MPRemoteCommandHandlerStatus {
-        guard hasNext else {
-            return .noSuchContent
-        }
-
-        Task {
-            await playNext()
-        }
-        return .success
-    }
-    
-    @objc func handlePreviousCommand(event: MPRemoteCommandEvent) -> MPRemoteCommandHandlerStatus {
-        guard hasPrevious else {
-            return .noSuchContent
-        }
-        
-        Task {
-            await playPrevious()
-        }
-        return .success
-    }
-    
     @objc func handleChangePlaybackPositionCommand(event: MPRemoteCommandEvent) -> MPRemoteCommandHandlerStatus {
         guard let changePlaybackPositionCommandEvent =
                 event as? MPChangePlaybackPositionCommandEvent else { return .commandFailed }
@@ -351,6 +366,16 @@ class AudioPlayer: NSObject, ObservableObject {
         let seekToTime = CMTimeMake(value: Int64(positionTime * 1000 as Float64),
                                     timescale: 1000)
         player.seek(to: seekToTime, toleranceBefore: CMTime.zero, toleranceAfter: CMTime.zero)
+        return .success
+    }
+    
+    @objc func handleSkipForwardCommand(event: MPRemoteCommandEvent) -> MPRemoteCommandHandlerStatus {
+        skipForward()
+        return .success
+    }
+    
+    @objc func handleSkipBackwardCommand(event: MPRemoteCommandEvent) -> MPRemoteCommandHandlerStatus {
+        skipBackward()
         return .success
     }
 }
@@ -368,23 +393,25 @@ extension AudioPlayer {
         commandCenter.pauseCommand.isEnabled = true
         commandCenter.pauseCommand.addTarget(self, action: #selector(handlePauseCommand(event:)))
         
-        commandCenter.nextTrackCommand.isEnabled = true
-        commandCenter.nextTrackCommand.addTarget(self, action: #selector(handleNextCommand(event:)))
-
-        commandCenter.previousTrackCommand.isEnabled = true
-        commandCenter.previousTrackCommand.addTarget(self, action: #selector(handlePreviousCommand(event:)))
-        
         commandCenter.changePlaybackPositionCommand.isEnabled = true
         commandCenter.changePlaybackPositionCommand.addTarget(self, action: #selector(handleChangePlaybackPositionCommand(event:)))
+        
+        commandCenter.skipForwardCommand.isEnabled = true
+        commandCenter.skipForwardCommand.preferredIntervals = [15]
+        commandCenter.skipForwardCommand.addTarget(self, action: #selector(handleSkipForwardCommand(event:)))
+        
+        commandCenter.skipBackwardCommand.isEnabled = true
+        commandCenter.skipBackwardCommand.preferredIntervals = [15]
+        commandCenter.skipBackwardCommand.addTarget(self, action: #selector(handleSkipBackwardCommand(event:)))
     }
     
     private func removeRemoteTransportControls() {
         let commandCenter = MPRemoteCommandCenter.shared()
         commandCenter.playCommand.removeTarget(self)
         commandCenter.pauseCommand.removeTarget(self)
-        commandCenter.nextTrackCommand.removeTarget(self)
-        commandCenter.previousTrackCommand.removeTarget(self)
         commandCenter.changePlaybackPositionCommand.removeTarget(self)
+        commandCenter.skipForwardCommand.removeTarget(self)
+        commandCenter.skipBackwardCommand.removeTarget(self)
     }
 }
 
@@ -403,7 +430,7 @@ extension AudioPlayer {
         }
         nowPlayingInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = currentPlayerItem?.currentTime().seconds
         nowPlayingInfo[MPMediaItemPropertyPlaybackDuration] = currentPlayerItem?.asset.duration.seconds
-        nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] = player.rate
+        nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] = (status == .playing) ? AppSettings.playbackRate : 0.0
         MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
     }
     

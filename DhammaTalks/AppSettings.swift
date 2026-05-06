@@ -13,13 +13,15 @@ struct AppSettings {
     private static let talkGroupSelectionKey = "talkGroupSelection"
     private static let selectedTalkYearKey = "selectedTalkYear"
     private static let selectedTalkCategoryKey = "selectedTalkCategory"
+    private static let playbackRateKey = "playbackRate"
     static let autoplayKey = "autoplay"
     static let useCellularDataKey = "useCellularData"
     
     static func registerDefaults() {
         Current.defaults.register(defaults: [
             Self.autoplayKey: true,
-            Self.useCellularDataKey: false
+            Self.useCellularDataKey: false,
+            Self.playbackRateKey: 1.0
         ])
     }
 
@@ -74,6 +76,18 @@ struct AppSettings {
 
         get {
             Current.defaults.bool(forKey: Self.useCellularDataKey)
+        }
+    }
+
+    static var playbackRate: Float {
+        set {
+            let value = max(AudioPlayer.minPlaybackSpeed, min(newValue, AudioPlayer.maxPlaybackSpeed))
+            Current.defaults.set(value, forKey: Self.playbackRateKey)
+        }
+
+        get {
+            let value = Current.defaults.float(forKey: Self.playbackRateKey)
+            return max(AudioPlayer.minPlaybackSpeed, min(value, AudioPlayer.maxPlaybackSpeed))
         }
     }
 }
