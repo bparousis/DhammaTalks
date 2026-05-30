@@ -37,6 +37,7 @@
 		763717B127B0434D007DF19A /* Array.swift in Sources */ = {isa = PBXBuildFile; fileRef = 763717B027B0434D007DF19A /* Array.swift */; };
 		7637DBE7276E862800D2ACEC /* DhammaTalksApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7637DBE6276E862800D2ACEC /* DhammaTalksApp.swift */; };
 		7637DBE9276E865000D2ACEC /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7637DBE8276E865000D2ACEC /* CoreDataStack.swift */; };
+		763BE1312FCB37F800D6D6A3 /* PlaybackSpeed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 763BE1302FCB37F200D6D6A3 /* PlaybackSpeed.swift */; };
 		763C950227383D4A00632633 /* UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 763C950127383D4A00632633 /* UIImage.swift */; };
 		763C950427386ECC00632633 /* DailyTalkListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 763C950327386ECC00632633 /* DailyTalkListView.swift */; };
 		763E52BE27645A0B000DCF7B /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 763E52BD27645A0B000DCF7B /* String.swift */; };
@@ -187,6 +188,7 @@
 		763717B027B0434D007DF19A /* Array.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Array.swift; sourceTree = "<group>"; };
 		7637DBE6276E862800D2ACEC /* DhammaTalksApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DhammaTalksApp.swift; sourceTree = "<group>"; };
 		7637DBE8276E865000D2ACEC /* CoreDataStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
+		763BE1302FCB37F200D6D6A3 /* PlaybackSpeed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaybackSpeed.swift; sourceTree = "<group>"; };
 		763C950127383D4A00632633 /* UIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImage.swift; sourceTree = "<group>"; };
 		763C950327386ECC00632633 /* DailyTalkListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyTalkListView.swift; sourceTree = "<group>"; };
 		763E52BD27645A0B000DCF7B /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
@@ -433,6 +435,7 @@
 		7629CF6B2E105D2900B63776 /* Player */ = {
 			isa = PBXGroup;
 			children = (
+				763BE1302FCB37F200D6D6A3 /* PlaybackSpeed.swift */,
 				7629CF702E105EE500B63776 /* PlayableItem.swift */,
 				7629CF722E105F0400B63776 /* PlayableList.swift */,
 				7629CF6E2E105EB100B63776 /* AudioPlayerView.swift */,
@@ -855,6 +858,7 @@
 				763717AF27B0431B007DF19A /* FavoritesListViewModel.swift in Sources */,
 				76AB4D45279C995200C83F8D /* DownloadManager.swift in Sources */,
 				765CB6CE2AEEC0E300416B3A /* SeriesTalkData.swift in Sources */,
+				763BE1312FCB37F800D6D6A3 /* PlaybackSpeed.swift in Sources */,
 				767AAC8F27572C9B0003D9AC /* TalkRowViewModel.swift in Sources */,
 				763FA1B6298F4020007844B5 /* Filter.swift in Sources */,
 				769B2F322F5E1C4200C6EBBB /* NetworkMonitor.swift in Sources */,
@@ -1092,7 +1096,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 19;
+				CURRENT_PROJECT_VERSION = 20;
 				DEVELOPMENT_ASSET_PATHS = "\"DhammaTalks/Preview Content\"";
 				DEVELOPMENT_TEAM = QF6M4CC7RV;
 				ENABLE_PREVIEWS = YES;
@@ -1102,7 +1106,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.1.0;
+				MARKETING_VERSION = 2.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.bparousis.DhammaTalks;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -1116,7 +1120,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 19;
+				CURRENT_PROJECT_VERSION = 20;
 				DEVELOPMENT_ASSET_PATHS = "\"DhammaTalks/Preview Content\"";
 				DEVELOPMENT_TEAM = QF6M4CC7RV;
 				ENABLE_PREVIEWS = YES;
@@ -1126,7 +1130,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.1.0;
+				MARKETING_VERSION = 2.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.bparousis.DhammaTalks;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;

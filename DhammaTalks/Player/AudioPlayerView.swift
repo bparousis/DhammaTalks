@@ -23,6 +23,8 @@ struct AudioPlayerView: View {
     @ObservedObject private var audioPlayer: AudioPlayer
     
     @State private var showSpeedPicker = false
+    @State private var autoplay = AppSettings.autoplay
+    
     private var initialPlayIndex: Int
 
     init(audioPlayer: AudioPlayer, playIndex: Int) {
@@ -92,7 +94,7 @@ struct AudioPlayerView: View {
     }
 
     var body: some View {
-        VStack {
+        VStack(spacing: 10) {
             if let title = audioPlayer.title {
                 Text(title)
                     .foregroundStyle(Color.primaryTheme)
@@ -168,17 +170,68 @@ struct AudioPlayerView: View {
                 .padding(EdgeInsets(top: 0, leading: Constants.seekPadding, bottom: 0, trailing: Constants.seekPadding))
             }
             .padding(EdgeInsets(top: 0, leading: 10, bottom: 5, trailing: 10))
-            Button {
-                showSpeedPicker = true
-            } label: {
-                Text("\(AppSettings.playbackRate.formatted(.number.precision(.fractionLength(1...2))))x")
-                    .font(.subheadline)
+            
+            VStack(spacing: 10) {
+
+                HStack(spacing: 10) {
+
+                    Button {
+                        showSpeedPicker = true
+                    } label: {
+                        Text(AppSettings.playbackRate.pillLabel)
+                            .font(.subheadline)
+                            .foregroundColor(.brown.opacity(0.85))
+                            .padding(.vertical, 6)
+                            .padding(.horizontal, 10)
+                            .background(Color(UIColor.secondarySystemFill))
+                            .clipShape(Capsule())
+                    }
+
+                    HStack(spacing: 6) {
+                        if autoplay {
+                            Image(systemName: "checkmark")
+                                .font(.caption.weight(.bold))
+                        }
+
+                        Text("Continuous")
+                    }
                     .foregroundColor(.brown.opacity(0.85))
+                    .font(.subheadline)
                     .padding(.vertical, 6)
                     .padding(.horizontal, 10)
                     .background(Color(UIColor.secondarySystemFill))
                     .clipShape(Capsule())
+                    .animation(.easeInOut(duration: 0.25), value: autoplay)
+                    .onTapGesture {
+                        autoplay.toggle()
+                        AppSettings.autoplay = autoplay
+                    }
+                }
+                .frame(maxWidth: .infinity)
+
+                if let nextPlayableItem = audioPlayer.nextPlayableItem,
+                   autoplay {
+
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("Up next")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+
+                        Text(nextPlayableItem.title)
+                            .font(.subheadline)
+                            .lineLimit(2)
+                            .truncationMode(.tail)
+                    }
+                    .padding(.top, 10)
+                    .foregroundColor(.brown.opacity(0.85))
+                    .frame(maxWidth: 220, alignment: .leading)
+                    .transition(
+                        .opacity.combined(with: .move(edge: .top))
+                    )
+                }
             }
+            .animation(.easeInOut(duration: 0.25), value: autoplay)
+
             sliderView
             .padding(EdgeInsets(top:35, leading: 40, bottom: 10, trailing: 40))
         }
@@ -191,15 +244,15 @@ struct AudioPlayerView: View {
                     .font(.headline)
                 List {
                     let currentPlaybackRate = AppSettings.playbackRate
-                    ForEach(AudioPlayer.playbackSpeeds, id: \.self) { rate in
+                    ForEach(AudioPlayer.playbackSpeeds, id: \.self) { playbackSpeed in
                         Button {
-                            audioPlayer.setPlaybackRate(rate)
+                            audioPlayer.setPlaybackSpeed(playbackSpeed)
                             showSpeedPicker = false
                         } label: {
                             HStack {
-                                Text("\(rate.formatted(.number.precision(.fractionLength(1...2))))x")
+                                Text(playbackSpeed.label)
                                     .font(.title3)
-                                if rate == currentPlaybackRate {
+                                if playbackSpeed == currentPlaybackRate {
                                     Spacer()
                                     Image(systemName: "checkmark")
                                 }
