@@ -31,7 +31,7 @@ struct SettingsView: View {
             }
             
             Section("Continuous Playback") {
-                Toggle("Automatically Play Next Talk", isOn: $autoplay)
+                Toggle("Continue Playing Talks", isOn: $autoplay)
                 Toggle("Allow on Cellular Data", isOn: $useCellularData)
             }
             
