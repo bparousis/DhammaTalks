@@ -40,16 +40,8 @@ class AudioPlayer: NSObject, ObservableObject {
         return playableItems
     }
     
-    static var playbackSpeeds: [Float] {
-        [0.75, 0.85, 1.0, 1.15]
-    }
-    
-    static var maxPlaybackSpeed: Float {
-        playbackSpeeds.last ?? 1.0
-    }
-    
-    static var minPlaybackSpeed: Float {
-        playbackSpeeds.first ?? 1.0
+    static var playbackSpeeds: [PlaybackSpeed] {
+        PlaybackSpeed.allCases
     }
 
     var isScrubbing = false
@@ -142,7 +134,7 @@ class AudioPlayer: NSObject, ObservableObject {
             itemStatusObservation = playerItem?.observe(\.status, options: [.initial, .new]) { [weak self] item, _ in
                 guard let self else { return }
                 if item.status == .readyToPlay {
-                    self.player.playImmediately(atRate: AppSettings.playbackRate)
+                    self.player.playImmediately(atRate: AppSettings.playbackRate.rawValue)
                     self.isActive = true
                     self.dispatcher.asyncAfter(deadline: .now() + 0.1) {
                         self.showProgress = true
@@ -158,7 +150,7 @@ class AudioPlayer: NSObject, ObservableObject {
         }
         else {
             // Resuming from pause
-            player.playImmediately(atRate: AppSettings.playbackRate)
+            player.playImmediately(atRate: AppSettings.playbackRate.rawValue)
             setupNowPlayingInfo()
         }
     }
@@ -244,6 +236,12 @@ class AudioPlayer: NSObject, ObservableObject {
         playIndex > 0 && playableItems.indices.contains(playIndex - 1)
     }
     
+    var nextPlayableItem: PlayableItem? {
+        guard hasNext else { return nil }
+        let nextIndex = playIndex + 1
+        return playableItems[nextIndex]
+    }
+    
     private var currentTimeInSeconds: TimeInterval {
         if isScrubbing {
             return progressTime.lowerBoundedValue()
@@ -295,10 +293,10 @@ class AudioPlayer: NSObject, ObservableObject {
     
     // MARK: - Public Methods
     
-    func setPlaybackRate(_ rate: Float) {
-        AppSettings.playbackRate = rate
+    func setPlaybackSpeed(_ playbackSpeed: PlaybackSpeed) {
+        AppSettings.playbackRate = playbackSpeed
         if status == .playing {
-            player.rate = AppSettings.playbackRate
+            player.rate = AppSettings.playbackRate.rawValue
             setupNowPlayingInfo()
         }
     }
@@ -330,7 +328,7 @@ class AudioPlayer: NSObject, ObservableObject {
                 let options = AVAudioSession.InterruptionOptions(rawValue: optionsValue)
                 if options.contains(.shouldResume) {
                     // Resume playback
-                    player.playImmediately(atRate: AppSettings.playbackRate)
+                    player.playImmediately(atRate: AppSettings.playbackRate.rawValue)
                     setupNowPlayingInfo()
                 }
             }

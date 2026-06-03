@@ -79,15 +79,14 @@ struct AppSettings {
         }
     }
 
-    static var playbackRate: Float {
+    static var playbackRate: PlaybackSpeed {
         set {
-            let value = max(AudioPlayer.minPlaybackSpeed, min(newValue, AudioPlayer.maxPlaybackSpeed))
+            let value = max(PlaybackSpeed.slowest.rawValue, min(newValue.rawValue, PlaybackSpeed.fastest.rawValue))
             Current.defaults.set(value, forKey: Self.playbackRateKey)
         }
 
         get {
-            let value = Current.defaults.float(forKey: Self.playbackRateKey)
-            return max(AudioPlayer.minPlaybackSpeed, min(value, AudioPlayer.maxPlaybackSpeed))
+            return PlaybackSpeed(rawValue: Current.defaults.float(forKey: Self.playbackRateKey)) ?? PlaybackSpeed.normal
         }
     }
 }
