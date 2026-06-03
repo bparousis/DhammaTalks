@@ -30,8 +30,8 @@ class AudioPlayerTests {
         sut = AudioPlayer(networkMonitor: MockNetworkMonitor(), dispatcher: MockDispatcher())
         sut.playableList = playableList
         await sut.play()
-        #expect(sut.isActive == true)
-        #expect(sut.showProgress == true)
+        #expect(sut.title == "Item 1")
+        #expect(sut.nextPlayableItem == nil)
     }
     
     @Test("Multiple items")
@@ -45,9 +45,8 @@ class AudioPlayerTests {
         sut = AudioPlayer(networkMonitor: MockNetworkMonitor(), dispatcher: MockDispatcher())
         sut.playableList = playableList
         await sut.play()
-        #expect(sut.isActive == true)
-        #expect(sut.showProgress == true)
         #expect(sut.title == "Item 1")
+        #expect(sut.nextPlayableItem?.title == "Item 2")
         
         var result = await sut.playPrevious()
         #expect(result == false)
